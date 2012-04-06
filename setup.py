@@ -27,5 +27,9 @@ setup(name = "vvv",
       # -*- Entry points: -*-
       [vvv]
       tabs=vvv.tabs:TabsPlugin
+
+      [console_scripts]
+      vvv = vvv.main:entry_point
+      git-pre-commit-hook = vvv.git:precommit
       """,        
 ) 

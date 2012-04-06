@@ -27,6 +27,7 @@ class TabsPlugin(Plugin):
 
 	def validate(self, fname):
 		"""
+		Tabs validator code runs in-line.
 		"""
 
 		errors = False
@@ -37,7 +38,7 @@ class TabsPlugin(Plugin):
 			i += 1
 			if "\t" in line:
 				errors = True
-				self.reporter.report_detailed(fname, logging.ERROR, None, "Line contains tabs", None)
+				self.reporter.report_detailed(fname, logging.ERROR, None, "Line contains hard tabs", None)
 		f.close()
 
 		return not errors

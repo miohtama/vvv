@@ -4,9 +4,17 @@
 
 """
 
+
+# Python imports
+import fnmatch
+import re
+
+# Third party
 import yaml
 
-def match_file(fullpath, whitelist, blacklist):
+
+
+def match_file(logger, fullpath, whitelist, blacklist):
 	"""
 	Do matching of a File
 
@@ -17,13 +25,14 @@ def match_file(fullpath, whitelist, blacklist):
 	- else ignore
 	"""
 	for e in blacklist:
-		if fnmatch(fullpath, e):
-			self.logger.debug("File %s blacklisted by pattern %s" % (fullpath, e))
+
+		if re.search(fnmatch.translate(e), fullpath):
+			logger.debug("File %s blacklisted by pattern %s" % (fullpath, e))
 			return False
 			
 	for e in whitelist:
-		if fnmatch(fullpath, e):
-			self.logger.debug("File %s whitelisted by pattern %s" % (fullpath, e))
+		if re.search(fnmatch.translate(e), fullpath):
+			logger.debug("File %s whitelisted by pattern %s" % (fullpath, e))
 			return True	
 
 	return False

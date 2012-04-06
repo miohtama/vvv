@@ -16,19 +16,16 @@ Benefits
   Automatically guide committers to the policy guidelines and let them fix errors themselves, instead of having
   post-commit personal coaching.
 
-* Install VVV locally for your cloned Git repository with UNIX shell one-liner. 
+* Install for your project code repository with UNIX shell one-liner
 
-* Run VVV as continuous integration service with systems like Travis CI or Jenkins
+* Provide sane default validation and linting options for all popular programming languages and file formats
 
-* Provide sane default validation and liting options for all popular programming languages and file formats
+* Run VVV as continuous integration service with systems like Travis CI or Jenkins and shoot down bad code push ins
 
-No-goals
-==========
+What vvv doesn't do
 
 * This is not automated testing services. We just scan files for **policy** violations, not for
-  programming errors. 
-
-Validation source me
+  programming errors. For this, use proper unit testing facilities.
 
 Features
 =========
@@ -41,6 +38,12 @@ Features
 
 Installation and running
 ============================
+
+Prerequisites
+----------------
+
+Runs on OSX and Linux. Windows is not (yet) supported. 
+Requires Python 3 environment to run. 
 
 Installing locally
 --------------------------------------
@@ -55,8 +58,7 @@ Installing prerequisites (Ubuntu)::
 Installing prerequisites (OSX, `Macports <http://www.macports.org>`_)::
 
 	sudo port install python32 	
-	sudo port install py32-distribute
-	sudo port install py32-virtualenv
+	sudo port install py32-distribute py32-virtualenv py32-pip
 
 Then create environment e.g. in your home folder::
 
@@ -67,8 +69,24 @@ Then create environment e.g. in your home folder::
 
 	easy_install vvv
 
-Running by hand
+Running 
 --------------------------------------
+
+VVV will run and try to download, detects validators by filetype
+in your source code repository and will try to download
+needed validators automatically if they are not installed.
+Installation is on-demand - if your project does not 
+contain PHP files no PHP validator will be installed.
+
+However sometimes automatic installation is little bit
+tricky in which case you'll get an error message 
+with a link to friendly installation instructions for a specific validator.
+
+Running by hand
+==================
+
+Here are instructions how to execute VVV in your 
+project folder manually.
 
 * Go to your source folder::
 
@@ -80,6 +98,13 @@ Running by hand
 
 Tada. That's it, assuming the sane defaults work for you.
 
+Command line options
+--------------------------
+
+Please use ``--help`` switch to see up-to-date command line help::
+
+	~/vvv-venv/bin/vvv --help
+
 Configuration
 --------------------------------------
 
@@ -87,12 +112,37 @@ Configuration files are in your project folder root.
 
 Configuration files are specified in `YAML syntax <http://ess.khhq.net/wiki/YAML_Tutorial>`_.
 
-Configuration options
+Configuration file
 +++++++++++++++++++++++++
 
 In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below. 
 
 ``validation-options.yaml`` example::
+
+	tabs:
+
+		# Disable hard tab rejector for this project
+		enable: false
+
+	css:
+
+		hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.
+
+
+Available configuration file options
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The configuration file has one section per each validator.
+
+Each validator can has its own settings, but there exist some options which are available for each validator.
+
+**Global options**
+
+*enable*: true or false. Default true. Whether globally enable a validator in your project.
+
+*hint*: Helpful message printed user if this validator fails. Can be multiline.
+
+For validator specific options please consult validators manual. 
 
 File whitelisting and blacklisting
 ++++++++++++++++++++++++++++++++++++++
@@ -136,7 +186,17 @@ Validators won't try to process binary files.
 Integrating with local Git repository
 --------------------------------------
 
-TODO
+Here are instructions how to set-up pre-commit hook with Git.
+This prevents you to commit files violating policy.
+
+If you have a local installation using virtualenv::
+
+	cd ~/yourprojectrepo
+	ln -s hooks/pre-commit/vvv ~/vvv-virtualenv/scripts/git-pre-commit-hook
+
+More info 
+
+* http://book.git-scm.com/5_git_hooks.html
 
 Integrating with Travis CI
 --------------------------------------
@@ -190,6 +250,8 @@ Creating plug-in
 -------------------
 
 Each entry point is a Python module with certain format.
+
+See ``plugin.py`` for more information.
 
 Other
 -----

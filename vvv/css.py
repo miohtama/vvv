@@ -51,6 +51,9 @@ class CSSPlugin(Plugin):
 		# Extra options passed to the validator
 		self.css_options = get_string_option(self.options, self.id, "extra", None)
 
+		if not self.hint:
+			self.hint = "CSS source code did not pass W3C validator http://jigsaw.w3.org/css-validator/"
+
 	def get_default_whitelist(self):
 		"""
 		These files require hard tabs

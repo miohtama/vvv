@@ -116,7 +116,7 @@ class VVV(object):
 		for root, dirs, files in os.walk(top, topdown=False):
 		    for name in files:
 		        fpath = os.path.join(root, name)
-		        if match_file(fpath, self.whitelist, self.blacklist):
+		        if match_file(logger, fpath, self.whitelist, self.blacklist):
 					self.run(fpath)		        	
 
 	def read_config(self):
@@ -228,7 +228,7 @@ def main(
 	):
 	""" 
 
-	Parse command line arguments using plac.
+	Application starting point without parsing the command line.
 
 	http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
 	"""
@@ -236,6 +236,13 @@ def main(
 	vvv.run()
 
 
+def entry_point():
+	"""
+	Application starting point which parses command line.
+
+	Can be used from other modules too.
+	"""
+	import plac; plac.call(main)
 
 if __name__ == "__main__":
-	import plac; plac.call(main)
+	entry_point()

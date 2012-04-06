@@ -12,16 +12,18 @@ import subprocess
 from fnmatch import fnmatch
 
 # Local imports
-from utils import is_binary_file, get_boolean_option, get_string_option
+from utils import is_binary_file, get_boolean_option, get_string_option, match_file
 
 
 class Plugin(metaclass=ABCMeta):
 	"""
-	Base class for VVV plug-ins.
+	Base class for VVV plug-ins. Inherit from this class to add a new validator to VVV.
 
 	Use self.logger for debug output.
 
 	Use self.reporter for user visible output.
+
+	Methods you should override are ``validate()`` and ``setup_local_options()``.
 	"""
 		
 	def init(self, id, main, reporter, options, violations, installation_path):
@@ -69,6 +71,7 @@ class Plugin(metaclass=ABCMeta):
 		"""
 		Check if a path matches plug-in filtering options.
 		"""
+		return match_file(self.logger, fullpath, self.whitelist, self.blacklist)
 				 
 	def setup_options(self):
 		"""
@@ -131,6 +134,9 @@ class Plugin(metaclass=ABCMeta):
 		"""
 
 	def install_on_demand(self):
+		"""
+		See if we are already installed. If not install required binary blobs and other crap to run this validator.
+		"""
 		if self.check_install():
 			self.check_requirements()
 			self.init_installation()
