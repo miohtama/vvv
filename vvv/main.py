@@ -10,6 +10,7 @@ import os
 import logging
 from traceback import format_exception
 import sys
+import shutil
 
 # Third party
 from pkg_resources import iter_entry_points
@@ -36,6 +37,16 @@ DEFAULT_WHITELIST = [
 class VVV(object):
 	""" 
 	Vi like this main class vor this project.
+
+	Load plug-ins based on Python setup.py entry point information.
+
+	Parse options.
+
+	Initialize plug-ins.
+
+	Run project walker.
+
+	For each file run validator, the validator will install own binaries if needed.
 	"""
 
 	def __init__(**kwargs):
@@ -76,13 +87,16 @@ class VVV(object):
 		for id, instance in self.plugins.items():
 			
 			try:
+
+				plugin_installation = os.path.join(self.installation, id)
+		
 				instance.init(
 					id = id,
 					main = self,
 					reporter = self.reporter,
 					options = self.options_data,
 					violations = self.violations_data,
-					installation_path = self.installation
+					installation_path = self.plugin_installation
 				)
 
 				instance.setup_options()
@@ -156,7 +170,14 @@ class VVV(object):
 
 		if self.installation is None:
 			self.installation = os.path.join(self.project, ".vvv")
-	
+
+	def nuke(self):
+		"""
+		Purge all downloads etc. by deleting the installation folder.
+		"""
+		logger.info("Removing existing downloads and installations")
+		shutil.rmtree(self.installation)
+
 	def run(self):
 		""" """
 
@@ -175,6 +196,9 @@ class VVV(object):
 
 		self.init_plugins()
 
+		if self.reinstall:
+			self.nuke()
+
 		self.reporter = Reporter()
 
 		self.walk(self.project)
@@ -186,6 +210,7 @@ class VVV(object):
 		Give output what we found and set sys exit code.
 		"""
 		text = self.reporter.get_output_as_text()
+
 		if text != "":
 			print(text)
 			sys.exit(2)
@@ -197,8 +222,9 @@ def main(
 	options : ("Validation options file. Default is validation-options.yaml", 'option', 'c'),
 	violations : ("Validation allowed violations list file. Default is validation-violations.yaml", "option", "b"),
 	verbose : ("Give verbose output", "flag", "v"),
-	project : ("Path to a project folder. Defaults to the current working directory.", "option", "p")
-	installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i")
+	project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
+	installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
+	reinstall : ("Redownload and configure all validation software", "flag", "r")
 	):
 	""" 
 
@@ -206,7 +232,7 @@ def main(
 
 	http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
 	"""
-	vvv = VVV(options=options, violations=violations, verbose=verbose, project=project, installation=installation)
+	vvv = VVV(options=options, violations=violations, verbose=verbose, project=project, installation=installation, reinstall=reinstall)
 	vvv.run()
 
 

@@ -49,6 +49,10 @@ def get_list_option(yaml, section, entry, default=[]):
 def get_boolean_option(yaml, section, entry, default=False):
 	return get_yaml_option(yaml, section, entry, default)
 
+def get_string_option(yaml, section, entry, default=""):
+	return get_yaml_option(yaml, section, entry, default)
+
+
 def load_yaml_file(fpath):
 	
 	f = open(fpath, rt)

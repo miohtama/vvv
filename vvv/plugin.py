@@ -4,12 +4,15 @@
 
 """
 
+# Python imports
 from abc import ABCMeta, abstractmethod
 import logging
-
+import os
+import subprocess
 from fnmatch import fnmatch
 
-from utils import is_binary_file, get_boolean_option, get_list_option
+# Local imports
+from utils import is_binary_file, get_boolean_option, get_string_option
 
 
 class Plugin(metaclass=ABCMeta):
@@ -50,19 +53,22 @@ class Plugin(metaclass=ABCMeta):
 		"""
 		return False
 
-	def get_whitelist(self):
+	def get_default_whitelist(self):
 		"""
+		Plug-in specific whitelist
 		"""
+		return []
 
-	def get_blacklist(self):
+	def get_default_blacklist(self):
 		"""
+		Plug-in specific blacklist
 		"""
+		return []
 
 	def match(self, fullpath):		
 		"""
 		Check if a path matches plug-in filtering options.
 		"""
-
 				 
 	def setup_options(self):
 		"""
@@ -86,8 +92,12 @@ class Plugin(metaclass=ABCMeta):
 		"""
 
 		self.enabled = get_boolean_option(self.options, self.id, "enabled", False)		
-		self.whitelist = get_list_option(self.violations, self.id, "whitelist", False)		
-		self.blacklist = get_list_option(self.violations, self.id, "blacklist", False)		
+		self.whitelist = get_list_option(self.violations, self.id, "whitelist", self.get_default_whitelist())		
+		self.blacklist = get_list_option(self.violations, self.id, "blacklist", self.get_default_blacklist())		
+
+		# Hint message how to fix errors
+		self.hint = get_string_option(self.options, self.id, "hint", None)		
+
 
 	def setup_local_options(self):
 		"""
@@ -103,25 +113,47 @@ class Plugin(metaclass=ABCMeta):
 		:return: True if install must be called
 		"""
 
-	def install(self, installation_path):
+	def check_requirements(self):
+		""" Check that system has necessary facilities (like java) to run the validator.
+
+		Throw any exception if something is missing.
+		"""		
+
+
+	def init_installation(self):
+		"""
+		"""
+		os.makedirs(self.installation)
+
+	def install(self):
 		"""
 		Download & install the validator app.
-
 		"""
 
 	def install_on_demand(self):
 		if self.check_install():
+			self.check_requirements()
+			self.init_installation()
 			self.install()		
 
-
 	@abstractmethod
-	def validate(self, fullpath)
+	def validate(self, fullpath):
 		"""
 		Run the validator against a file.
 
 		Output results to the self.reporter.
+
+		:return: True if the validation success
 		"""
 		raise NotImplementedError("Subclass must implement")
+
+	def hint_to_fix_errors(self):
+		"""
+		Give user the note how to fix errors after a failed validation.
+		"""
+
+		if self.hint:
+			self.reporter.hint_user(self.hint)
 
 	def run(self, fullpath):
 		"""
@@ -140,10 +172,28 @@ class Plugin(metaclass=ABCMeta):
 
 		self.install_on_demand()
 
-		return self.validate(fullpath)
+		if self.validate(fullpath):
+			self.hint_to_fix_errors()
 
-	def run_command_line(self, cmdline):
+	def run_command_line(self, cmdline, env):
 		"""
 		Run a command line command and capture output to the reporter.
+
+		:param cmdline: List of arguments
 		"""
 
+		cmdline = " ".join(cmdline)
+
+		success = True
+
+		try:
+			out = subprocess.check_output(cmdline, stderr=subprocess.STDOUT)
+		except subprocess.CalledProcessError, e:
+			out = e.output
+			success = False
+
+		if not success:
+			self.reporter.report_unstructured(self.id, out)
+			self.hint_to_fix_errors()
+
+		return success

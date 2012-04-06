@@ -14,7 +14,8 @@ setup(name = "vvv",
     url = "",
     install_requires = ["setuptools", 
         "PyYAML==3.10",
-        "plac==0.9.0"
+        "plac==0.9.0",
+        "requests==0.11.1"
     ],
     packages = ['vvv'],
     classifiers=[

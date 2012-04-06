@@ -11,11 +11,18 @@ class Reporter:
 
 	def __init__(self):
 
-		# List of output lines or line blocks
+		#: List of output lines or line blocks
 		self.raw_output = []
 
-	def report_detailed(self, severity, path, line, id, msg, details):
+		
+		#: List of hints to fix errors - outputted as last
+		self.hints = []
+
+
+	def report_detailed(self, plugin_id, severity, path, line, id, msg, details):
 		"""
+
+		:param plugin_id: Which validator failed - later used to display hint message to the user
 
 		:param path: File path relative to the repo root as string
 
@@ -29,13 +36,12 @@ class Reporter:
 
 		:param details: Multi-line error messags like a traceback (usually hidden in details view) or None
 		"""
-
 		if id is None:
 			id = "validation error"
 
 		self.raw_output.append("%s %d: [%s] %s" % (path, line, id, msg))
 		
-	def report_unstructured(self, output):
+	def report_unstructured(self, plugin_id, output):
 		"""
 		Dump text output as is from the validator
 		"""
@@ -44,6 +50,8 @@ class Reporter:
 	def report_internal_error(self, plugin_id, msg):
 		"""
 		Report exception fired from a plug-in.
+
+		Internal error message does not trigger user hint message.
 		"""
 
 		msg = "Internal error occured when running validator %s\n" % plugin_id
@@ -51,5 +59,13 @@ class Reporter:
 
 		self.report_unstructured(msg)
 
+	def hint_user(self, hint_message):
+		"""
+		Give user a hint how to proceed to fix the errors.
+
+		:param hint_message: Hinting info as multi-line string
+		"""
+		self.hints.append(hint_message)
+
 	def get_output_as_text(self):
-		return "\n".join(self.raw_output)
+		return "\n".join(self.raw_output) + "\n".join(self.hints)
