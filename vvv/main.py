@@ -11,6 +11,7 @@ import logging
 from traceback import format_exception
 import sys
 import shutil
+import fnmatch
 
 # Third party
 from pkg_resources import iter_entry_points
@@ -24,18 +25,10 @@ logger = logging.getLogger("vvv")
 
 #: Ignore known common project, temp, etc. files by default
 DEFAULT_MATCHLIST = [
-
-    # Blacklist all UNIX hidden files
-    "!.*",
-
-    # Python 3k generated files
-    "!__pycache__",
-
-    # Python 2 generated files
-    "!*.pyc",
-
-    # Match everything
-    "*"
+  r"*",
+  r"!RE:.*.vvv.*",
+  r"!RE:.*venv.*",
+  r"!RE:.*__pycache__.*"
 ]
 
 class VVV(object):
@@ -129,7 +122,14 @@ class VVV(object):
 
         for root, dirs, files in os.walk(path, topdown=False):
             for name in files:
+
                 fpath = os.path.join(root, name)
+
+                if self.include:
+                    if not fnmatch.fnmatch(name, self.include):
+                        #logger.debug("%s ignored by command-line override" % fpath)
+                        continue                
+
                 if match_file(logger, fpath, self.matchlist):
                     if self.process(fpath):
                         return True
@@ -250,9 +250,10 @@ def main(
     files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f"),
     verbose : ("Give verbose output", "flag", "v"),
     project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
-    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
+    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "if"),
     reinstall : ("Redownload and configure all validation software", "flag", "r"),
-    suicidal : ("Die on first error", "flag", "s")
+    suicidal : ("Die on first error", "flag", "s"),
+    include : ("Include only files matching this spec", "option", "inc")
     ):
     """ 
 
@@ -262,7 +263,7 @@ def main(
     """
     vvv = VVV(options=options, files=files, verbose=verbose, project=project, 
               installation=installation, reinstall=reinstall, 
-              suicidal=suicidal)
+              suicidal=suicidal, include = include)
     vvv.run()
 
 

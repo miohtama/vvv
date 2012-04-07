@@ -196,6 +196,10 @@ class Plugin(metaclass=ABCMeta):
 
         subenv = os.environ.copy()
         subenv.update(env)
+
+        self.logger.debug("Running command line: %s" % cmdline)
+        self.logger.debug("Env: %s" % subenv)
+
         process = subprocess.Popen(cmdline, env=subenv)
 
         out, err = process.communicate()
