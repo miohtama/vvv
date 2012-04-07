@@ -6,7 +6,12 @@
 
 """
 
+# Python imports
 import os
+import subprocess
+
+# Local imports
+from .utils import shell
 
 class HasNotCommand(Exception):
     """
@@ -51,3 +56,34 @@ def has_node(needer_for):
 
 def has_spidermoney(needed_for):
     return has_exe("js", needed_for)
+
+def has_virtualenv(needed_for):
+    return has_exe("virtualenv", needed_for)
+
+def virtualenv_exists(target):
+    """
+    Check if a specific virtualenv is installed
+
+    :param target: Path to a virtualenv 
+    """
+    target = "%s/bin/activate" % target
+    return os.path.exists(target)
+
+def create_virtualenv(logger, target, egg_spec):
+    """
+    Creates a Python virtualenv and installs a single package there with dependencies.
+    
+    :param target: Target folder
+
+    :param egg_spec: Egg specification, name or name with version. E.g. pylint==0.25.1
+    """
+
+    if os.path.exists(target):
+        return
+
+    shell("virtualenv %s" % target, raise_error=True)
+
+    shell('source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
+
+def run_virtualenv_command(logger, target, command):
+    shell('source %s/bin/activate ; %s' % (target, command), raise_error=True)

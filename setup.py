@@ -30,6 +30,7 @@ setup(name = "vvv",
       linelength = vvv.validators.linelength:LineLengthPlugin
       css = vvv.validators.css:CSSPlugin
       jslint = vvv.validators.jslint:JSLintPlugin
+      pylint = vvv.validators.pylint:PylintPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point

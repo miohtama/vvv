@@ -12,9 +12,10 @@ import os
 
 # Third party
 import yaml
-
-
 from .bzrlib.globster import ExceptionGlobster
+
+class ShellCommandFailed(Exception):
+    """ Executing a shell command failed """
 
 def match_file(logger, fullpath, matchlist):
     """
@@ -115,3 +116,30 @@ def is_binary_file(fpath):
         fin.close()
 
     return False
+
+def shell(logger, cmd, raise_error=False):
+    """
+    Run a shell command.
+
+    :param cmd: Shell line to be executed
+
+    :return: Tuple (return code, interleaved stdout and stderr output as string)
+    """    
+
+    self.logger.debug("Running command line: %s" % cmd)
+
+    process = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+
+    # XXX: Support stderr interleaving
+    out, err = process.communicate()
+
+    out = out.decode("utf-8")
+    err = err.decode("utf-8")
+
+    if raise_error and process.returncode != 0:
+        logger.error("Command output:")
+        logger.error(out + err)
+        raise ShellCommandFailed("The following command did not succeed: %s" % cmd)
+
+    return (process.returncode, out + err)    
+

@@ -81,7 +81,7 @@ class CSSPlugin(Plugin):
 
     def get_default_matchlist(self):
         """
-        These files require hard tabs
+        These files go into the validator.
         """
         return [
             "*.css",
