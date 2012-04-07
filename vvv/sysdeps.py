@@ -1,16 +1,16 @@
 """
 
-	System-wide dependency checker.
+    System-wide dependency checker.
 
-	Check for things like is Java present, is node present, etc.
+    Check for things like is Java present, is node present, etc.
 
 """
 
 import os
 
 class HasNotCommand(Exception):
-	"""
-	"""
+    """
+    """
 
 def which(program):
     """
@@ -33,21 +33,21 @@ def which(program):
     return None
 
 def has_exe(name, needed_for="validator", instructions=""):
-	"""
-	Check whether a command is installed on the system or not and provide user friendly failure.
-	"""
-	if not which(name):     
-		raise HasNotCommand("Your system does not have %s installed which is needed to run %s. %s" % (name, needed_for, install_instructions))
+    """
+    Check whether a command is installed on the system or not and provide user friendly failure.
+    """
+    if not which(name):     
+        raise HasNotCommand("Your system does not have %s installed which is needed to run %s. %s" % (name, needed_for, install_instructions))
 
 def has_java(needed_for):
-	"""
-	"""
-	return has_exe("java", needed_for)
+    """
+    """
+    return has_exe("java", needed_for)
 
 def has_node(needer_for):
-	"""
-	"""
-	return has_exe("nodejs", needed_for, "Install Node.js using your OS package manager https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager")
+    """
+    """
+    return has_exe("nodejs", needed_for, "Install Node.js using your OS package manager https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager")
 
 def has_spidermoney(needed_for):
-	return has_exe("js", needed_for)
+    return has_exe("js", needed_for)

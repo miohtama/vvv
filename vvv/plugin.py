@@ -182,6 +182,7 @@ class Plugin(metaclass=ABCMeta):
         self.logger.debug("Applying plug-in %s on %s" % (self.id, fullpath))
 
         if not self.validate(fullpath):
+            print("Failed:" + fullpath)
             self.hint_to_fix_errors()
 
     def run_command_line(self, cmdline):

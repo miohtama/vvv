@@ -240,7 +240,10 @@ class Globster(object):
         try:
             for regex, patterns in self._regex_patterns:
                 match = regex.match(filename)
+                #print("Matching %s %s" % (regex._real_regex.pattern, filename))
+
                 if match:
+                    #print("Hit")
                     return patterns[match.lastindex -1]
         except Exception as e:
             # We can't show the default e.msg to the user as thats for
@@ -255,6 +258,7 @@ class Globster(object):
                         bad_patterns += ('\n  %s' % p)
             e.msg += bad_patterns
             raise e
+        #print("Miss")
         return None
 
     @staticmethod
@@ -318,12 +322,18 @@ class ExceptionGlobster(object):
 
         :return A matching pattern or None if there is no matching pattern.
         """
+        #print("Matching:"+filename)
+        #print("Ignores: %s" % self._ignores[1]._regex_patterns)
+        #print("Ignores: %s" % type(self._ignores[1]))
+        
         double_neg = self._ignores[2].match(filename)
         if double_neg:
             return "!!%s" % double_neg
         elif self._ignores[1].match(filename):
+            #print("Ignores")
             return None
         else:
+            #print("Normal match")
             return self._ignores[0].match(filename)
 
 class _OrderedGlobster(Globster):
