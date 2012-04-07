@@ -209,7 +209,7 @@ class VVV(object):
         if self.verbose:
             logging.basicConfig(level=logging.DEBUG)
         else:
-            logging.basicConfig(level=logging.WARN)
+            logging.basicConfig(level=logging.INFO)
 
         self.post_process_options()
 

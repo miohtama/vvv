@@ -68,7 +68,7 @@ class Reporter:
         
         self.check_seppuku()
 
-    def report_internal_error(self, plugin_id, msg):
+    def report_internal_error(self, plugin_id, excerpt):
         """
         Report exception fired from a plug-in.
 
@@ -76,7 +76,7 @@ class Reporter:
         """
 
         msg = "Internal error occured when running validator %s\n" % plugin_id
-        msg += msg
+        msg += excerpt
 
         self.report_unstructured(plugin_id, msg)
 

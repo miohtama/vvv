@@ -53,21 +53,21 @@ where **vvv** and all it dependencies are downloaded from `PyPi <http://pypi.pyt
 
 Installing prerequisites (Ubuntu)::
 
-	TODO
+    TODO
 
 Installing prerequisites (OSX, `Macports <http://www.macports.org>`_)::
 
-	sudo port install python32 	
-	sudo port install py32-distribute py32-virtualenv py32-pip
+    sudo port install python32  
+    sudo port install py32-distribute py32-virtualenv py32-pip
 
 Then create environment e.g. in your home folder::
 
-	# Use Py3.2 - not default Python version which tends to be py2
-	cd ~
-	virtualenv-3.2 vvv-venv
-	source vvv-venv/bin/activate
+    # Use Py3.2 - not default Python version which tends to be py2
+    cd ~
+    virtualenv-3.2 vvv-venv
+    source vvv-venv/bin/activate
 
-	easy_install vvv
+    easy_install vvv
 
 Running 
 --------------------------------------
@@ -90,11 +90,11 @@ project folder manually.
 
 * Go to your source folder::
 
-	cd ~/mycodeproject
+    cd ~/mycodeproject
 
 * Execute command from your virtualenv::
 
-	~/vvv/scripts/vvv 
+    ~/vvv/scripts/vvv 
 
 Tada. That's it, assuming the sane defaults work for you.
 
@@ -103,7 +103,7 @@ Command line options
 
 Please use ``--help`` switch to see up-to-date command line help::
 
-	~/vvv-venv/bin/vvv --help
+    ~/vvv-venv/bin/vvv --help
 
 Configuration
 --------------------------------------
@@ -119,14 +119,14 @@ In your project root add ``validation-options.yaml``. If this file does not exis
 
 ``validation-options.yaml`` example::
 
-	tabs:
+    tabs:
 
-		# Disable hard tab rejector for this project
-		enable: false
+        # Disable hard tab rejector for this project
+        enable: false
 
-	css:
+    css:
 
-		hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.
+        hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.
 
 
 Available configuration file options
@@ -158,19 +158,19 @@ There is one global ``all`` section with blacklist and whitelist and then valida
 
 Example::
 
-	all:
-		whitelist: 
-			*
-		blacklist:  
-			.svn
-			.git
-			.DS_Store
-			*.egg-info
-			.metadata
+    all:
+        whitelist: 
+            *
+        blacklist:  
+            .svn
+            .git
+            .DS_Store
+            *.egg-info
+            .metadata
 
-	css:
-		whitelist:
-			*.css
+    css:
+        whitelist:
+            *.css
 
 The order of rules
 
@@ -192,8 +192,8 @@ This prevents you to commit files violating policy.
 
 If you have a local installation using virtualenv::
 
-	cd ~/yourprojectrepo
-	ln -s hooks/pre-commit/vvv ~/vvv-virtualenv/scripts/git-pre-commit-hook
+    cd ~/yourprojectrepo
+    ln -s hooks/pre-commit/vvv ~/vvv-virtualenv/scripts/git-pre-commit-hook
 
 More info 
 
@@ -237,15 +237,15 @@ Python 3.2 needed + setuptools + virtualenv needed, as instructed in Installatio
 
 Setting up VVV in development mode::
 
-	source venv/bin/activate
-	python setup.py develop
+    source venv/bin/activate
+    python setup.py develop
 
 Running VVV in development mode::
 
-	source venv/bin/activate
-	cd ~/repo
-	vvv
-	
+    source venv/bin/activate
+    cd ~/repo
+    vvv
+    
 
 Creating plug-in
 -------------------
@@ -261,5 +261,5 @@ Other
 
  
 
-	
+    
 

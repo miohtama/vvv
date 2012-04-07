@@ -1,6 +1,4 @@
-all:
-    .git
-    .*
-    __pycache__
-    *.pyc
-    venv
+all: |
+  * 
+  !RE:.*\.git.*
+  !RE:.*venv.*

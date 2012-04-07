@@ -6,9 +6,13 @@
 
 """
 
+# Python imports
+import os
+import tarfile
+
+# Third party
 import requests
 
-import tarfile
 
 def download(logger, towhere, url):
     """ Download file to a specific location on the disk.
@@ -59,9 +63,13 @@ def download_and_extract_java_dep(logger, towhere, url):
     # Extract path
     path = os.path.dirname(towhere)
     fname = os.path.basename(towhere)
+    folder, ext = os.path.splitext(path) 
 
-    if towhere.endswith(".gz") and not os.path.exists(path):
+    if towhere.endswith(".gz") and not os.path.exists(folder):
         logger.info("Extracting tar archive: %s" % fname)
+
+        os.makedirs(folder)
+
         tar = tarfile.open(towhere)
-        tar.extractall(path=path)
+        tar.extractall(path=folder)
         tar.close()

@@ -126,7 +126,8 @@ class Plugin(metaclass=ABCMeta):
     def init_installation(self):
         """
         """
-        os.makedirs(self.installation)
+        if not os.path.exists(self.installation_path):
+            os.makedirs(self.installation_path)
 
     def install(self):
         """
@@ -182,28 +183,27 @@ class Plugin(metaclass=ABCMeta):
         self.logger.debug("Applying plug-in %s on %s" % (self.id, fullpath))
 
         if not self.validate(fullpath):
-            print("Failed:" + fullpath)
             self.hint_to_fix_errors()
 
-    def run_command_line(self, cmdline):
+    def run_command_line(self, cmdline, env={}):
         """
         Run a command line command and capture output to the reporter.
 
         :param cmdline: List of arguments
         """
 
-        cmdline = " ".join(cmdline)
-
         success = True
 
-        try:
-            out = subprocess.check_output(cmdline, stderr=subprocess.STDOUT)
-        except subprocess.CalledProcessError as e:
-            out = e.output
-            success = False
+        subenv = os.environ.copy()
+        subenv.update(env)
+        process = subprocess.Popen(cmdline, env=subenv)
+
+        out, err = process.communicate()
 
         if not success:
-            self.reporter.report_unstructured(self.id, out)
-            self.hint_to_fix_errors()
+            if out != "":
+                self.reporter.report_unstructured(self.id, out)
+            if err != "":
+                self.reporter.report_unstructured(self.id, err)
 
         return success
