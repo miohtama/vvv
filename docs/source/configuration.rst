@@ -16,7 +16,9 @@ VVV can be configuredin two ways
 
 Configuration files are specified in `YAML syntax <http://ess.khhq.net/wiki/YAML_Tutorial>`_.
 
+The recommended policy is to indent YAML files with two spaces (not checked though, a suitable validator does not exist yet...)
 Configuration file
+
 +++++++++++++++++++++++++
 
 In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below. 

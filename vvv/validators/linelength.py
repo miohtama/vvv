@@ -1,6 +1,40 @@
 """
 
-    Check that line length does not exceed certain threshold.
+Line length
+====================
+
+Validator name: ``linelength``
+
+Check that that text file lines are not too long.
+
+Prerequisites
+----------------
+
+Built-in - no external software needed.
+
+Supported files
+----------------
+
+* All text files.
+
+Options
+-----------
+
+length
++++++++
+
+Set maximum allowed line length. Defaults to ``80`` columns.
+
+Example ``validator-options.yaml``::
+
+    # Allow long text lines
+    linelength:
+        length: 250
+
+More info
+------------
+
+* http://www.kernel.org/doc/Documentation/CodingStyle
 
 """
 
@@ -19,7 +53,7 @@ class LineLengthPlugin(Plugin):
 
     def setup_local_options(self):
 
-        self.line_length = get_int_option(self.options, self.id, "length", 76)
+        self.line_length = get_int_option(self.options, self.id, "length", 80)
 
         if not self.hint:
             self.hint = "Text file line length must not exceed %d characteres per line" % self.line_length

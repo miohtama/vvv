@@ -1,24 +1,40 @@
 """
 
-    Javascript validation via jslint.
+Javascript (jslint)
+====================
 
-"""
+Validator name: ``jslint``
 
-"""
+Validate Javascript files using Douglas Crockford's jslint.js.
 
-    CSS validation using W3C validator.
+Prerequisites
+----------------
+      
+Your system supports Node.js.      
 
-    Requirements: 
+Please see :doc:`prerequisites </prerequisites>`.
 
-    http://www.codestyle.org/css/tools/W3C-CSS-Validator.shtml
+Installation
+----------------
 
-    http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz
+You must use Node ``npm`` to install ``node-jslinst`` package.
 
-    http://www.nic.funet.fi/pub/mirrors/apache.org//velocity/engine/1.7/velocity-1.7.tar.gz
+* https://github.com/reid/node-jslint
 
-    http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz
+Supported files
+----------------
 
+* \*.js
 
+Options
+-----------
+
+No options.
+
+More info
+------------
+
+* http://www.jslint.com/
 
 """
 
@@ -54,7 +70,6 @@ class JSLintPlugin(Plugin):
         """
         sysdeps.has_node(needed_for="Node.js must be installed in order to run JSLint Javascript validator")
 
-        import pdb ; pdb.set_trace()
         sysdeps.has_exe("jslint", 
                         "jslint must be installed via npm in order to run Javascript validation", 
                         "Install jslint: https://github.com/reid/node-jslint"

@@ -1,4 +1,5 @@
 .. VVV documentation master file, created by
+
 VVV provides easy to integrate validation and linting tools to prevent bad stuff committed in your software project.
 
 Contents:
@@ -9,8 +10,11 @@ Contents:
    installation
    configuration
    integration
+   validators
+   prerequisites
    guidelines
    develop
+
 
 Indices and tables
 ==================

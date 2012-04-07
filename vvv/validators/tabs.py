@@ -1,6 +1,39 @@
 """
 
-    Check tab policy.
+Tab policy
+====================
+
+Validator name:: ``tabs``
+
+Do not allow hard tabs in committed files.
+Instead, use soft tabs and spaces.
+
+
+To allow hard tabs in any file add the following in your ``validator-options.yaml``::
+
+    tabs:
+        enable: false
+
+To allow hard tabs in specific files use ``validator-files.yaml``::
+
+    tabs:
+      Makefile
+      *.mk 
+        
+Supported files
+----------------
+
+* All text files, Makefiles are excluded by default
+
+Options
+-----------
+
+No options.
+
+More info
+------------
+
+* http://dougneiner.com/post/641596410/tabs-vs-spaces
 
 """
 

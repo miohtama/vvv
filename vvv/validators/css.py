@@ -1,18 +1,39 @@
 """
 
-    CSS validation using W3C validator.
+CSS
+====================
 
-    Requirements: 
+Validator name: ``css``
 
-    http://www.codestyle.org/css/tools/W3C-CSS-Validator.shtml
+Validate CSS files against W3C CSS validator.
 
-    http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz
+Prerequisites
+----------------
+      
+Your system supports ``java`` command.      
 
-    http://www.nic.funet.fi/pub/mirrors/apache.org//velocity/engine/1.7/velocity-1.7.tar.gz
+Please see :doc:`prerequisites </prerequisites>`.
 
-    http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz
+Installation
+----------------
 
+CSS validator is Java executable and bunch of JAR files
+which are downloaded and installed automatically.
 
+Supported files
+----------------
+
+* \*.css
+
+Options
+-----------
+
+No options.
+
+More info
+------------
+
+* http://jigsaw.w3.org/css-validator/
 
 """
 

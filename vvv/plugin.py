@@ -1,6 +1,6 @@
 """
 
-    VVV plug-in base.
+    VVV plug-in base code which all plug-ins should extend and utilize.
 
 """
 
@@ -84,11 +84,11 @@ class Plugin(metaclass=ABCMeta):
         """
         Set-up options global to all plug-ins
 
-        * is enabled
+        * plug-in is enabled
 
-        * whitelist 
+        * plug-in file match list 
 
-        * blacklist
+        * plug-in failed hint text 
         """
 
         self.enabled = get_boolean_option(self.options, self.id, "enabled", True)      

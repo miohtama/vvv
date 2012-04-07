@@ -36,3 +36,12 @@ Then create environment e.g. in your home folder::
     source vvv-venv/bin/activate
 
     easy_install vvv
+
+Per-validator prerequisites
+--------------------------------------
+
+Each target programming language may have its own system-wide
+dependencies before you can run the validtor.
+You'll get an error message when running VVV if you are lacking something.
+If you get such an error for more information installing 
+the dependencies please see :doc:`prerequisites </prerequisites>`. 

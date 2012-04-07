@@ -26,13 +26,13 @@ setup(name = "vvv",
     entry_points="""
       # -*- Entry points: -*-
       [vvv]
-      tabs=vvv.tabs:TabsPlugin
-      linelength = vvv.linelength:LineLengthPlugin
-      css = vvv.css:CSSPlugin
-      jslint = vvv.jslint:JSLintPlugin
+      tabs=vvv.validators.tabs:TabsPlugin
+      linelength = vvv.validators.linelength:LineLengthPlugin
+      css = vvv.validators.css:CSSPlugin
+      jslint = vvv.validators.jslint:JSLintPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point
-      git-pre-commit-hook = vvv.git:precommit
+      git-pre-commit-hook = vvv.hooks.git:precommit
       """,        
 ) 
