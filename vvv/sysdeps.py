@@ -13,10 +13,10 @@ class HasNotCommand(Exception):
 	"""
 
 def which(program):
-	"""
-	http://stackoverflow.com/a/377028/315168
-	"""
-    
+    """
+    http://stackoverflow.com/a/377028/315168
+    """
+
     def is_exe(fpath):
         return os.path.exists(fpath) and os.access(fpath, os.X_OK)
 
@@ -36,7 +36,7 @@ def has_exe(name, needed_for="validator", instructions=""):
 	"""
 	Check whether a command is installed on the system or not and provide user friendly failure.
 	"""
-	if not which(name):
+	if not which(name):     
 		raise HasNotCommand("Your system does not have %s installed which is needed to run %s. %s" % (name, needed_for, install_instructions))
 
 def has_java(needed_for):

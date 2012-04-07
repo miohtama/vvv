@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """
 
-	vvv entrypoint
+    vvv entrypoint
 
 """
 
@@ -17,232 +17,261 @@ from pkg_resources import iter_entry_points
 import yaml
 
 # Local imports
-from reporter import Reporter
-from utils import load_yaml_file, get_list_option, match_file, 
+from .reporter import Reporter, FirstError
+from .utils import load_yaml_file, get_list_option, match_file, get_match_option
 
 logger = logging.getLogger("vvv")
 
 #: Ignore known common project, temp, etc. files by default
-DEFAULT_BLACKLIST = [
-	".git",
-	".svn",
-	".bzr",
-	".DS_Store"
-]
+DEFAULT_MATCHLIST = [
 
-DEFAULT_WHITELIST = [
-	"*"
+    # Blacklist all UNIX hidden files
+    "!.*",
+
+    # Python 3k generated files
+    "!__pycache__",
+
+    # Python 2 generated files
+    "!*.pyc",
+
+    # Match everything
+    "*"
 ]
 
 class VVV(object):
-	""" 
-	Vi like this main class vor this project.
+    """ 
+    Vi like this main class vor this project.
 
-	Load plug-ins based on Python setup.py entry point information.
+    Load plug-ins based on Python setup.py entry point information.
 
-	Parse options.
+    Parse options.
 
-	Initialize plug-ins.
+    Initialize plug-ins.
 
-	Run project walker.
+    Run project walker.
 
-	For each file run validator, the validator will install own binaries if needed.
-	"""
+    For each file run validator, the validator will install own binaries if needed.
+    """
 
-	def __init__(**kwargs):
-		# Copy in all arguments given to the constructor
-		self.__dict.__update(kwargs)
+    def __init__(self, **kwargs):
+        # Copy in all arguments given to the constructor
+        self.__dict__.update(kwargs)
 
-		# Map of plug-ins id -> plugin instance
-		self.plugins = dict()
+        # Map of plug-ins id -> plugin instance
+        self.plugins = dict()
 
-	def load_config(self):
-		"""
-		"""
-		self.options_data = load_yaml_file(self.options)
+    def load_config(self):
+        """
+        """
+        self.options_data = load_yaml_file(self.options)
 
-	def find_plugins(self):
-		""" 
-		Scan all system installed eggs for plug-ins.
+    def find_plugins(self):
+        """ 
+        Scan all system installed eggs for plug-ins.
 
-		We use entry point "vvv" where each entry point points to a constructor of a plug-in.
+        We use entry point "vvv" where each entry point points to a constructor of a plug-in.
 
-		http://wiki.pylonshq.com/display/pylonscookbook/Using+Entry+Points+to+Write+Plugins
-		"""
+        http://wiki.pylonshq.com/display/pylonscookbook/Using+Entry+Points+to+Write+Plugins
+        """
 
-	    for loader in iter_entry_points(group='vvv', name=None):
-	        
-	        try:
-	        	# Construct the plug-in instance
-	        	plugin = loader()
-	        	logger.debug("Loaded plug-in: %s", loader)
-	        	self.plugins.append(plugin)
-	        except Exception, e:
-	        	logger.error("Could not load plug-in: %s", loader)
-	        	raise e
+        for loader in iter_entry_points(group='vvv', name=None):
+            
+            #import pdb; pdb.set_trace()
+            try:
+                # Construct the plug-in instance
+                name = loader.name
+                klass = loader.load()
+                instance = klass()
+                logger.debug("Loaded plug-in: %s", name)
+                self.plugins[name] = instance
+            except Exception as e:
+                logger.error("Could not load plug-in: %s", loader)
+                raise e
 
-	def init_plugins(self):
-		"""
-		"""
-		for id, instance in self.plugins.items():
-			
-			try:
+    def init_plugins(self):
+        """
+        Initialize all plug-ins.
 
-				plugin_installation = os.path.join(self.installation, id)
-		
-				instance.init(
-					id = id,
-					main = self,
-					reporter = self.reporter,
-					options = self.options_data,
-					violations = self.violations_data,
-					installation_path = self.plugin_installation
-				)
+        Set plug-in data installation path inside local .vvv installation folder.
 
-				instance.setup_options()
-	        except Exception, e:
-	        	logger.error("Could not initialize plug-in: %s", id)
-	        	raise e				
+        Allow plug-in to read its own options.
+        """
+        for id, instance in self.plugins.items():
+            
+            try:
 
-	def walk(self, path):
-		"""
-		Walk a project tree and run plug-ins.
-		
-		http://docs.python.org/library/os.html?highlight=walk#os.walk
-		"""
+                plugin_installation = os.path.join(self.installation, id)
+        
+                instance.init(
+                    id = id,
+                    main = self,
+                    reporter = self.reporter,
+                    options = self.options_data,
+                    violations = self.violations_data,
+                    installation_path = plugin_installation
+                )
 
-		# XXX: Optimize this to not to walk into folders which are blacklisted
+                instance.setup_options()
+            except Exception as e:
+                logger.error("Could not initialize plug-in: %s", id)
+                raise e             
 
-		for root, dirs, files in os.walk(top, topdown=False):
-		    for name in files:
-		        fpath = os.path.join(root, name)
-		        if match_file(logger, fpath, self.whitelist, self.blacklist):
-					self.run(fpath)		        	
+    def walk(self, path):
+        """
+        Walk a project tree and run plug-ins.
+        
+        http://docs.python.org/library/os.html?highlight=walk#os.walk
+        """
 
-	def read_config(self):
-		"""
-		Load config files.
-		"""
-		self.options_data = load_yaml_file(self.options)
-		self.violations_data = load_yaml_file(self.violations)
+        # XXX: Optimize this to not to walk into folders which are blacklisted
 
-	def process(self, fpath):
-		"""
-		Run validators against a file.
-		"""
+        for root, dirs, files in os.walk(path, topdown=False):
+            for name in files:
+                fpath = os.path.join(root, name)
+                if match_file(logger, fpath, self.matchlist):
+                    if self.process(fpath):
+                        return True
+                        
+        return False                 
 
-		for id, p in self.plugins.items():
-			try:
-				p.validate(fpath)
-			except Exception, e:
+    def read_config(self):
+        """
+        Load config files.
+        """
+        
+        logger.debug("Using options config file: %s" % self.options)
+        self.options_data = load_yaml_file(self.options)
+        if self.options_data == {}:
+            logger.debug("No options config file found")
 
-				etype, value, tb = sys.exc_info()
-			    msg = ''.join(format_exception(etype, value, tb, limit))
-				self.reporter.internal_error(id, msg)
+        logger.debug("Using violations config file: %s" % self.violations)
+        self.violations_data = load_yaml_file(self.violations)
+        if self.violations_data == {}:
+            logger.debug("No violations config file found")
 
-	def setup_options(self):
-		"""
-		"""
+    def process(self, fpath):
+        """
+        Run all validators against one file.
 
-		# Set-up global whitelist and blacklist
-		self.blacklist = get_yaml_list_option(self.violations_data, "all", "blacklist")
-		self.whitelist = get_yaml_list_option(self.violations_data, "all", "whitelist")
+        :return True: if the process should be aborted
+        """
 
-		if self.blacklist == []:
-			self.blacklist = DEFAULT_BLACKLIST
+        for id, p in self.plugins.items():
+            try:
+                p.run(fpath)
+            except FirstError as fe:
+                logger.info("Aborting on the first error")
+                return True
+            except Exception as e:
+                etype, value, tb = sys.exc_info()
+                msg = ''.join(format_exception(etype, value, tb))
+                self.reporter.report_internal_error(id, msg)
+                
+                if self.suicidal:
+                    raise e
 
-		if self.whitelist == []:
-			self.whitelist = DEFAULT_WHITELIST
+        return False
 
-	def post_process_options(self):
-		"""
-		Set option defaults.
-		"""
+    def setup_options(self):
+        """
+        """
 
-		if self.project is None:
-			self.project = os.getcwd()
+        # Set-up global whitelist and blacklist
+        self.matchlist = get_match_option(self.violations_data, "all", default=DEFAULT_MATCHLIST)
 
-		if self.options is None:
-			self.options = os.path.join(self.project, "validation-options.yaml")
+    def post_process_options(self):
+        """
+        Set option defaults.
+        """
 
-		if self.violations is None:
-			self.violations = os.path.join(self.violations, "validation-violations.yaml")
+        if self.project is None:
+            self.project = os.getcwd()
 
-		if self.installation is None:
-			self.installation = os.path.join(self.project, ".vvv")
+        if self.options is None:
+            self.options = os.path.join(self.project, "validation-options.yaml")
 
-	def nuke(self):
-		"""
-		Purge all downloads etc. by deleting the installation folder.
-		"""
-		logger.info("Removing existing downloads and installations")
-		shutil.rmtree(self.installation)
+        if self.violations is None:
+            self.violations = os.path.join(self.project, "validation-violations.yaml")
 
-	def run(self):
-		""" """
+        if self.installation is None:
+            self.installation = os.path.join(self.project, ".vvv")
 
-		if self.verbose:
-			logging.basicConfig(level=logging.DEBUG)
-		else:
-			logging.basicConfig(level=logging.WARN)
+    def nuke(self):
+        """
+        Purge all downloads etc. by deleting the installation folder.
+        """
+        logger.info("Removing existing downloads and installations")
+        shutil.rmtree(self.installation)
 
-		self.post_process_options()
+    def run(self):
+        """ """
 
-		self.setup_options()
+        if self.verbose:
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.WARN)
 
-		self.read_config()
+        self.post_process_options()
 
-		self.find_plugins()
+        self.read_config()
 
-		self.init_plugins()
+        self.setup_options()
 
-		if self.reinstall:
-			self.nuke()
+        self.find_plugins()
 
-		self.reporter = Reporter()
+        self.reporter = Reporter(suicidal=self.suicidal)
 
-		self.walk(self.project)
+        self.init_plugins()
 
-		self.report()
+        if self.reinstall:
+            self.nuke()
 
-	def report(self):
-		"""
-		Give output what we found and set sys exit code.
-		"""
-		text = self.reporter.get_output_as_text()
+        self.walk(self.project)
 
-		if text != "":
-			print(text)
-			sys.exit(2)
-		else:
-			sys.exit(0)
+        self.report()
+
+    def report(self):
+        """
+        Give output what we found and set sys exit code.
+        """
+        text = self.reporter.get_output_as_text()
+
+        if text != "":
+            print(text)
+            sys.exit(2)
+        else:
+            sys.exit(0)
 
 
 def main(
-	options : ("Validation options file. Default is validation-options.yaml", 'option', 'c'),
-	violations : ("Validation allowed violations list file. Default is validation-violations.yaml", "option", "b"),
-	verbose : ("Give verbose output", "flag", "v"),
-	project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
-	installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
-	reinstall : ("Redownload and configure all validation software", "flag", "r")
-	):
-	""" 
+    options : ("Validation options file. Default is validation-options.yaml", 'option', 'c'),
+    violations : ("Validation allowed violations list file. Default is validation-violations.yaml", "option", "b"),
+    verbose : ("Give verbose output", "flag", "v"),
+    project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
+    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
+    reinstall : ("Redownload and configure all validation software", "flag", "r"),
+    suicidal : ("Die on first error", "flag")
+    ):
+    """ 
 
-	Application starting point without parsing the command line.
+    Application starting point without parsing the command line.
 
-	http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
-	"""
-	vvv = VVV(options=options, violations=violations, verbose=verbose, project=project, installation=installation, reinstall=reinstall)
-	vvv.run()
+    http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
+    """
+    vvv = VVV(options=options, violations=violations, verbose=verbose, project=project, 
+              installation=installation, reinstall=reinstall, 
+              suicidal=suicidal)
+    vvv.run()
 
 
 def entry_point():
-	"""
-	Application starting point which parses command line.
+    """
+    Application starting point which parses command line.
 
-	Can be used from other modules too.
-	"""
-	import plac; plac.call(main)
+    Can be used from other modules too.
+    """
+    import plac; plac.call(main)
 
 if __name__ == "__main__":
-	entry_point()
+    print("foo")
+    entry_point()

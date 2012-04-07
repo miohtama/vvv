@@ -13,10 +13,10 @@
 	http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz
 
 
-
 """
 
-from collections import OrderedDict
+import logging
+import collections import OrderedDict
 
 from vvv.plugin import Plugin
 from vvv.utils import get_string_option
@@ -53,7 +53,7 @@ class CSSPlugin(Plugin):
 		if not self.hint:
 			self.hint = "CSS source code did not pass W3C validator http://jigsaw.w3.org/css-validator/"
 
-	def get_default_matchlist(self):
+	def get_default_whitelist(self):
 		"""
 		These files require hard tabs
 		"""

@@ -47,3 +47,4 @@ docs/apidocs/*
 *.db
 *.jar
 venv
+__pycache__

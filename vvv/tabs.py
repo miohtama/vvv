@@ -16,13 +16,14 @@ class TabsPlugin(Plugin):
 		if not self.hint:
 			self.hint = "Adjust your text editor settings to save tabs as spaces.\nhttp://dougneiner.com/post/641596410/tabs-vs-spaces"
 
-	def get_default_blacklist(self):
+	def get_default_matchlist(self):
 		"""
 		These files require hard tabs
 		"""
 		return [
-			"Makefile",
-			"*.mk"
+			"*",
+			"!Makefile",
+			"!*.mk"
 		]
 
 	def validate(self, fname):
@@ -38,7 +39,7 @@ class TabsPlugin(Plugin):
 			i += 1
 			if "\t" in line:
 				errors = True
-				self.reporter.report_detailed(fname, logging.ERROR, None, "Line contains hard tabs", None)
+				self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains hard tabs", excerpt=line)
 		f.close()
 
 		return not errors

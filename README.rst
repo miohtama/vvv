@@ -79,7 +79,7 @@ Installation is on-demand - if your project does not
 contain PHP files no PHP validator will be installed.
 
 However sometimes automatic installation is little bit
-tricky in which case you'll get an error message 
+tricky in which case yo'll get an error message 
 with a link to friendly installation instructions for a specific validator.
 
 Running by hand
@@ -147,7 +147,8 @@ For validator specific options please consult validators manual.
 File whitelisting and blacklisting
 ++++++++++++++++++++++++++++++++++++++
 
-``validation-violations.yaml`` allows you to flag files for validation or to be ignored.
+``validation-violations.yaml`` allows you to flag files for going for validation or to be ignored.
+It's main purpose is to ignore files which do not conform your policies 100%.
 This is e.g. useful if your source code repository contains third party library files which 
 do not inherit your project coding conventions.
 
@@ -226,25 +227,25 @@ Developing
 Extending
 --------------------------------------
 
-vvv accepts plug-ins as Python eggs. You'll declare plug-in integration points in your egg setup.py ``entry_points`` section.
+vvv accepts plug-ins as Python eggs. Yo'll declare plug-in integration points in your egg setup.py ``entry_points`` section.
 Then just install your eggs in the same virtualenv with **vvv** and it will automatically pick them up.
 
 Setting up development environment
 --------------------------------------
 
-Python 3.2 needed + setuptools + virtualenv needed.
+Python 3.2 needed + setuptools + virtualenv needed, as instructed in Installation section.
 
-Setting up requirements (OSX, Macports)::
+Setting up VVV in development mode::
 
-	sudo port install python32 	
-	sudo port install py32-distribute
-	sudo port install py32-virtualenv
-
-Example::
-
-	# Use Py3.2 - not default Python version which tends to be py2
-	virtualenv-3.2 venv
 	source venv/bin/activate
+	python setup.py develop
+
+Running VVV in development mode::
+
+	source venv/bin/activate
+	cd ~/repo
+	vvv
+	
 
 Creating plug-in
 -------------------

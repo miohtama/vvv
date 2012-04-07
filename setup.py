@@ -4,7 +4,7 @@
 
 """
 
-from distutils.core import setup
+from setuptools import setup
 
 setup(name = "vvv",
     version = "0.0",
@@ -21,12 +21,15 @@ setup(name = "vvv",
     classifiers=[
         "Programming Language :: Python",
     ],     
-    license="MIT",
+    license="GPL",
     include_package_data = True,
     entry_points="""
       # -*- Entry points: -*-
       [vvv]
       tabs=vvv.tabs:TabsPlugin
+      linelength = vvv.linelength:LineLengthPlugin
+      css = vvv.css:CSSPlugin
+      jslint = vvv.jslint:JSLintPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point

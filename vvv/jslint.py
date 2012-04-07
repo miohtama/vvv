@@ -22,8 +22,6 @@
 
 """
 
-import collections import OrderedDict
-
 from vvv.plugin import Plugin
 from vvv.utils import get_string_option
 
@@ -43,7 +41,7 @@ class JSLintPlugin(Plugin):
 		if not self.hint:
 			self.hint = "Javascript source code did not pass JSLint validator - http://www.jslint.com/"
 
-	def get_default_whitelist(self):
+	def get_default_matchlist(self):
 		"""
 		These files require hard tabs
 		"""
@@ -55,6 +53,8 @@ class JSLintPlugin(Plugin):
 		"""
 		"""
 		sysdeps.has_node(needed_for="Node.js must be installed in order to run JSLint Javascript validator")
+
+		import pdb ; pdb.set_trace()
 		sysdeps.has_exe("jslint", 
 						"jslint must be installed via npm in order to run Javascript validation", 
 						"Install jslint: https://github.com/reid/node-jslint"
@@ -64,4 +64,4 @@ class JSLintPlugin(Plugin):
 		"""
 		Run installed jslint against a file.
 		"""
-		return self.run_command_line("jslint %s" % (fname))
+		return self.run_command_line(["jslint", fname])
