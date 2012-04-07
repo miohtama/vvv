@@ -63,10 +63,14 @@ def download_and_extract_java_dep(logger, towhere, url):
     # Extract path
     path = os.path.dirname(towhere)
     fname = os.path.basename(towhere)
-    folder, ext = os.path.splitext(path) 
+    base, ext = os.path.splitext(fname)
+    folder = os.path.join(path, base) 
+
+    # XXX: Argh do this again with less coffee more sleep
+    folder = folder.replace(".tar", "")
 
     if towhere.endswith(".gz") and not os.path.exists(folder):
-        logger.info("Extracting tar archive: %s" % fname)
+        logger.info("Extracting tar archive: %s to %s" % (fname, folder))
 
         os.makedirs(folder)
 

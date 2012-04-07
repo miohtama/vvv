@@ -107,7 +107,7 @@ class VVV(object):
                     main = self,
                     reporter = self.reporter,
                     options = self.options_data,
-                    violations = self.violations_data,
+                    files = self.files_data,
                     installation_path = plugin_installation
                 )
 
@@ -124,6 +124,8 @@ class VVV(object):
         """
 
         # XXX: Optimize this to not to walk into folders which are blacklisted
+
+        logger.info("Running vvv validation against %s" % path)
 
         for root, dirs, files in os.walk(path, topdown=False):
             for name in files:
@@ -144,10 +146,10 @@ class VVV(object):
         if self.options_data == {}:
             logger.debug("No options config file found")
 
-        logger.debug("Using violations config file: %s" % self.violations)
-        self.violations_data = load_yaml_file(self.violations)
-        if self.violations_data == {}:
-            logger.debug("No violations config file found")
+        logger.debug("Using files config file: %s" % self.files)
+        self.files_data = load_yaml_file(self.files)
+        if self.files_data == {}:
+            logger.debug("No files config file found")
 
     def process(self, fpath):
         """
@@ -177,7 +179,7 @@ class VVV(object):
         """
 
         # Set-up global whitelist and blacklist
-        self.matchlist = get_match_option(self.violations_data, "all", default=DEFAULT_MATCHLIST)
+        self.matchlist = get_match_option(self.files_data, "all", default=DEFAULT_MATCHLIST)
 
     def post_process_options(self):
         """
@@ -190,8 +192,8 @@ class VVV(object):
         if self.options is None:
             self.options = os.path.join(self.project, "validation-options.yaml")
 
-        if self.violations is None:
-            self.violations = os.path.join(self.project, "validation-violations.yaml")
+        if self.files is None:
+            self.files = os.path.join(self.project, "validation-files.yaml")
 
         if self.installation is None:
             self.installation = os.path.join(self.project, ".vvv")
@@ -245,12 +247,12 @@ class VVV(object):
 
 def main(
     options : ("Validation options file. Default is validation-options.yaml", 'option', 'c'),
-    violations : ("Validation allowed violations list file. Default is validation-violations.yaml", "option", "b"),
+    files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f"),
     verbose : ("Give verbose output", "flag", "v"),
     project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
     installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
     reinstall : ("Redownload and configure all validation software", "flag", "r"),
-    suicidal : ("Die on first error", "flag")
+    suicidal : ("Die on first error", "flag", "s")
     ):
     """ 
 
@@ -258,7 +260,7 @@ def main(
 
     http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
     """
-    vvv = VVV(options=options, violations=violations, verbose=verbose, project=project, 
+    vvv = VVV(options=options, files=files, verbose=verbose, project=project, 
               installation=installation, reinstall=reinstall, 
               suicidal=suicidal)
     vvv.run()

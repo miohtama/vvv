@@ -29,13 +29,13 @@ from vvv import download
 
 # JAR madness... This is why PyPi rocks
 download_and_extract = [
-    ("jigsaw", "http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz"),
-    ("velocity", "http://www.nic.funet.fi/pub/mirrors/apache.org//velocity/engine/1.7/velocity-1.7.tar.gz"),
-    ("xerces", "http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz"),
-    ("commons-lang", "http://www.nic.funet.fi/pub/mirrors/apache.org//commons/lang/binaries/commons-lang3-3.1-bin.tar.gz"),
-    ("commons-collections", "http://archive.apache.org/dist/commons/collections/binaries/commons-collections-3.2.1-bin.tar.gz"),
-    ("tagsoup", "http://ccil.org/~cowan/XML/tagsoup/tagsoup-1.2.1.jar"),
-    ("css-validator", "http://www.w3.org/QA/Tools/css-validator/css-validator.jar"),
+    ("jigsaw.tar.gz", "http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz"),
+    ("velocity.tar.gz", "http://www.nic.funet.fi/pub/mirrors/apache.org//velocity/engine/1.7/velocity-1.7.tar.gz"),
+    ("xerces.tar.gz", "http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz"),
+    ("commons-lang.tar.gz", "http://www.nic.funet.fi/pub/mirrors/apache.org//commons/lang/binaries/commons-lang3-3.1-bin.tar.gz"),
+    ("commons-collections.tar.gz", "http://archive.apache.org/dist/commons/collections/binaries/commons-collections-3.2.1-bin.tar.gz"),
+    ("tagsoup.jar", "http://ccil.org/~cowan/XML/tagsoup/tagsoup-1.2.1.jar"),
+    ("css-validator.jar", "http://www.w3.org/QA/Tools/css-validator/css-validator.jar"),
 ]
 
 download_and_extract = OrderedDict(download_and_extract)

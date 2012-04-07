@@ -26,7 +26,7 @@ class Plugin(metaclass=ABCMeta):
     Methods you should override are ``validate()`` and ``setup_local_options()``.
     """
         
-    def init(self, id, main, reporter, options, violations, installation_path):
+    def init(self, id, main, reporter, options, files, installation_path):
         """
 
         :param id: internal id is externally set and comes from setup.py entry point name 
@@ -35,12 +35,12 @@ class Plugin(metaclass=ABCMeta):
 
         :param options: Validation options file
 
-        :param violations: Validation violations file
+        :param files: Validation files file
         """
         self.id = id
         self.main = main
         self.options = options
-        self.violations = violations
+        self.files = files
         self.logger = logging.getLogger("vvv")
         self.reporter = reporter
         self.installation_path = installation_path      
@@ -92,7 +92,7 @@ class Plugin(metaclass=ABCMeta):
         """
 
         self.enabled = get_boolean_option(self.options, self.id, "enabled", True)      
-        self.matchlist = get_match_option(self.violations, self.id, entry="match", default=self.get_default_matchlist())       
+        self.matchlist = get_match_option(self.files, self.id, entry="match", default=self.get_default_matchlist())       
         # Hint message how to fix errors
         self.hint = get_string_option(self.options, self.id, "hint", None)      
 
