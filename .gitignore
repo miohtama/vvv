@@ -39,7 +39,7 @@ jsdoc*
 releases
 
 .DS_Store
-docs/apidocs/*
+docs/build/*
 
 *.min.js
 *.min.css
@@ -48,3 +48,4 @@ docs/apidocs/*
 *.jar
 venv
 __pycache__
+
