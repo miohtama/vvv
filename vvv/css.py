@@ -103,7 +103,9 @@ class CSSPlugin(Plugin):
         validator = os.path.join(self.installation_path, "css-validator.jar")
 
         classpath += validator + os.pathsep
-        classpath += os.path.join(self.installation_path, "velocity-1.5.jar") + os.pathsep
+        # XXX: Fix for Windows
+        classpath += os.path.join(self.installation_path, "velocity/velocity-1.7/velocity-1.7-dep.jar") + os.pathsep
+        classpath += os.path.join(self.installation_path, "velocity/velocity-1.7/velocity-1.7.jar") + os.pathsep
         classpath += os.path.join(jigsaw, "xerces.jar") + os.pathsep
         classpath += os.path.join(jigsaw, "jigsaw.jar") + os.pathsep
         classpath += os.path.join(jigsaw, "xp.jar") + os.pathsep                
@@ -112,5 +114,5 @@ class CSSPlugin(Plugin):
         classpath += os.path.join(jigsaw, "Tidy.jar") + os.pathsep      
         classpath += os.path.join(jigsaw, "tagsoup-1.2.jar")
 
-        #return self.run_command_line(["java", "-jar", validator, fname], dict(CLASSPATH=classpath))
-        return self.run_command_line([os.path.join(self.installation_path, "test.sh")], dict(CLASSPATH=classpath))
+        # ...does not even have return code...
+        return self.run_command_line(["java", "org.w3c.css.css.CssValidator", "file://" + fname], bad_string="Sorry!", env=dict(CLASSPATH=classpath))

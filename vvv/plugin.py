@@ -185,11 +185,13 @@ class Plugin(metaclass=ABCMeta):
         if not self.validate(fullpath):
             self.hint_to_fix_errors()
 
-    def run_command_line(self, cmdline, env={}):
+    def run_command_line(self, cmdline, env={}, bad_string=None):
         """
         Run a command line command and capture output to the reporter.
 
         :param cmdline: List of arguments
+
+        :param bad_string: If detected in output assume there were validation errors
         """
 
         success = True
@@ -200,14 +202,21 @@ class Plugin(metaclass=ABCMeta):
         self.logger.debug("Running command line: %s" % cmdline)
         self.logger.debug("Env: %s" % subenv)
 
-        process = subprocess.Popen(cmdline, env=subenv)
+        process = subprocess.Popen(cmdline, env=subenv, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         out, err = process.communicate()
 
+        out = out.decode("utf-8")
+        err = err.decode("utf-8")
+
+        if bad_string:
+            if bad_string in out or bad_string in err:
+                success = False
+
         if not success:
-            if out != "":
+            if out != None:
                 self.reporter.report_unstructured(self.id, out)
-            if err != "":
+            if err != None:
                 self.reporter.report_unstructured(self.id, err)
 
         return success
