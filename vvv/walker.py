@@ -61,7 +61,7 @@ class Walker:
                 if os.path.isdir(fpath):
                     recurse(fpath)                
                 else:
-                    files.append(fpath)                 
+                    files.append(relative)                 
                 
 
         recurse(project_path)

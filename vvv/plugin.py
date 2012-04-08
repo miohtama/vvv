@@ -178,6 +178,8 @@ class Plugin(metaclass=ABCMeta):
         :return: True if file was processed 
         """
 
+        assert not project_root_relative_path.startswith("/"), "Cannot work on absolute paths"
+
         if not self.enabled:
             return False
 

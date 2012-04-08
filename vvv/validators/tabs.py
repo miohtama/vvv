@@ -19,6 +19,14 @@ To allow hard tabs in specific files use ``validator-files.yaml``::
     tabs:
       Makefile
       *.mk 
+
+Converting tabs to spaces 
+--------------------------------
+
+UNIX ``expand`` command is handy if you need to convert
+the whole project tree from tabs to spaces::
+
+
         
 Supported files
 ----------------

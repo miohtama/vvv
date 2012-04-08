@@ -46,7 +46,16 @@ from vvv.utils import get_int_option
 
 class LineLengthPlugin(Plugin):
     """
+    Line length driver.
     """
+
+    def __init__(self):
+
+        Plugin.__init__(self)
+        
+        #: Configuration file option
+        self.line_length = None
+            
 
     def get_default_matchlist(self):
         return ["*"]

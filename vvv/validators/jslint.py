@@ -42,11 +42,19 @@ from vvv.plugin import Plugin
 from vvv.utils import get_string_option
 
 from vvv import sysdeps
-from vvv import download
 
 class JSLintPlugin(Plugin):
     """
-    """
+    jslint driver
+    """            
+
+    def __init__(self):
+
+        Plugin.__init__(self)
+
+        #: Configuration file option
+        self.extra_options = None
+    
 
     def setup_local_options(self):
         """ """
@@ -68,7 +76,7 @@ class JSLintPlugin(Plugin):
     def check_requirements(self):
         """
         """
-        sysdeps.has_node(needed_for="Node.js must be installed in order to run JSLint Javascript validator")
+        sysdeps.has_node("Node.js must be installed in order to run JSLint Javascript validator")
 
         sysdeps.has_exe("jslint", 
                         "jslint must be installed via npm in order to run Javascript validation", 

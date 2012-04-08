@@ -43,13 +43,13 @@ from collections import OrderedDict
 
 # Local imports
 from vvv.plugin import Plugin
-from vvv.utils import get_string_option
+#from vvv.utils import get_string_option
 
 from vvv import sysdeps
 from vvv import download
 
 # JAR madness... This is why PyPi rocks
-download_and_extract = [
+DOWNLOAD_AND_EXTRACT = [
     ("jigsaw.tar.gz", "http://jigsaw.w3.org/Distrib/jigsaw_2.2.6.tar.gz"),
     ("velocity.tar.gz", "http://www.nic.funet.fi/pub/mirrors/apache.org//velocity/engine/1.7/velocity-1.7.tar.gz"),
     ("xerces.tar.gz", "http://www.nic.funet.fi/pub/mirrors/apache.org//xerces/j/source/Xerces-J-src.2.11.0.tar.gz"),
@@ -59,7 +59,7 @@ download_and_extract = [
     ("css-validator.jar", "http://www.w3.org/QA/Tools/css-validator/css-validator.jar"),
 ]
 
-download_and_extract = OrderedDict(download_and_extract)
+DOWNLOAD_AND_EXTRACT = OrderedDict(DOWNLOAD_AND_EXTRACT)
 
 # set CLASSPATH=C:\jigsaw\jigsaw\www\servlet\css-validator\css-validator.jar;c:\jigsaw\classes\velocity-1.5.jar;c:\jigsaw\\classes\xerces.jar
 # ;c:\jigsaw\classes\jigsaw.jar;c:\jigsaw\classes\xp.jar;
@@ -68,13 +68,11 @@ download_and_extract = OrderedDict(download_and_extract)
 
 class CSSPlugin(Plugin):
     """
+    W3C CSS validator driver.
     """
 
     def setup_local_options(self):
         """ """
-
-        # Extra options passed to the validator
-        self.css_options = get_string_option(self.options, self.id, "extra", None)
 
         if not self.hint:
             self.hint = "CSS source code did not pass W3C validator http://jigsaw.w3.org/css-validator/"
@@ -92,7 +90,7 @@ class CSSPlugin(Plugin):
         See if the last file is downloaded and extracted
         """
 
-        keys = download_and_extract.keys()
+        keys = DOWNLOAD_AND_EXTRACT.keys()
         keys = list(keys)
 
         path = os.path.join(self.installation_path, keys[-1])
@@ -108,7 +106,7 @@ class CSSPlugin(Plugin):
         Download & install the validator app.
         """
 
-        for fname, url in download_and_extract.items():
+        for fname, url in DOWNLOAD_AND_EXTRACT.items():
             path = os.path.join(self.installation_path, fname)
             download.download_and_extract_java_dep(self.logger, path, url)
 

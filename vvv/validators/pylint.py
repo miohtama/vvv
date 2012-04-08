@@ -12,11 +12,25 @@ Installation
 
 A temporarily *virtualenv* environment is automatically created
 where pylint command and its dependencies are is installed. 
+However this is not very good way to run pylint, as if you 
+are using any third party libraries pylint cannot import them
+and thus fails.
 
-.. warning ::
+It is recommended to use ``host-python-env`` option -
+this whill install pylint to a Python environment
+which you enable before running.
 
-    Currently Pylint is in horribly broken state. You MUST 
-    use Python 2.7 and corresponding virtualenv command to install it.
+Example (assuming you have ``host-python-env`` set in ``validate-options.yaml``)::
+
+    # Activate virtualenv
+    source venv/bin/activate
+
+    # Run vvv and install pylint to now activate Python env
+    vvv --reinstall
+
+The default pylint checks are very strict. You might want to see a more relaxed configuration example::
+
+* https://github.com/miohtama/vvv/blob/master/validation-options.yaml
 
 Supported files
 ----------------
@@ -33,6 +47,17 @@ Example ``validation-options.yaml``::
 
         command-line: --reports=n
 
+host-python-env
+++++++++++++++++
+
+If true do not create a virtualenv, but install pylint using
+the active ``python`` interpreter when vvv is run.
+
+Default false.
+
+.. note :: 
+
+    If you change this you need run ``vvv --reinstall``.
 
 command-line
 ++++++++++++
@@ -53,14 +78,14 @@ python3k
 
 If true set-up pylint for Python 3.x. The default is Python 2.x.
 
-No that if you change this you need run ``vvv --reinstall``.
+.. note :: 
+
+    If you change this you need run ``vvv --reinstall``.
 
 Other
 ------------
 
 To disable warning per source code file one can add pylint hints in the .py file::
-
-    
 
 To see all pylint error and warning message ids::
 
@@ -116,7 +141,28 @@ DEFAULT_CONFIG = """
 
 class PylintPlugin(Plugin):
     """
+    Pylint driver.    
     """
+
+    def __init__(self):
+
+        Plugin.__init__(self)
+
+        #: Configuration file option
+        self.extra_options = None
+
+        #: Virtualenv path used to run pylint
+        self.virtualenv = None
+
+        #: Configuration file option
+        self.python3k = None 
+
+        #: Configuration file option
+        self.pylint_configuration = None 
+
+        #: Configuration file option
+        self.host_python = None 
+
 
     def setup_local_options(self):
         """ """
@@ -134,6 +180,8 @@ class PylintPlugin(Plugin):
 
         self.python3k = utils.get_boolean_option(self.options, self.id, "python3k", False)
 
+        self.host_python = utils.get_boolean_option(self.options, self.id, "host-python-env", False)
+
     def get_default_matchlist(self):
         """
         These files go into the validator.
@@ -146,6 +194,10 @@ class PylintPlugin(Plugin):
         """
         See if we have installed working virtualenv for pylint
         """
+
+        if self.host_python:
+            return sysdeps.which("pylint")
+
         exists = os.path.exists(os.path.join(self.virtualenv, "bin", "pylint"))
 
         self.logger.debug("Pylint virtualenv status: %s" % "good" if exists else "bad")
@@ -153,6 +205,16 @@ class PylintPlugin(Plugin):
 
     def check_requirements(self):
         sysdeps.has_virtualenv(needed_for="Pylint validator")
+
+    def run_virtualenv_command(self, cmd, raise_error=False):
+        """
+        Run cmd under host Python or our own virtualenv 
+        """
+
+        if self.host_python:
+            return utils.shell(self.logger, cmd, raise_error=raise_error)
+        else:
+            return sysdeps.run_virtualenv_command(self.logger, self.virtualenv, cmd, raise_error=raise_error)
 
     def install(self):
         """
@@ -165,18 +227,18 @@ class PylintPlugin(Plugin):
         http://comments.gmane.org/gmane.comp.python.logilab/1193
         """
 
-
-
         pkg = "pylint-0.25.1"
 
         if self.python3k:
             python = "python3.2"
-            easy_install = "easy_install"
         else:
             python = "python2.7"
-            easy_install = "easy_install"
 
-        sysdeps.create_virtualenv(self.logger, self.virtualenv, py3=self.python3k)
+        if self.host_python:
+            # Use whatever python command is currently active
+            python = "python"
+        else:
+            sysdeps.create_virtualenv(self.logger, self.virtualenv, py3=self.python3k)
 
         # Extract and download manually
         pylint_download_path = os.path.join(self.installation_path, "pylint-extract.tar.gz")
@@ -184,9 +246,9 @@ class PylintPlugin(Plugin):
  
         download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
 
-        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install logilab-common", raise_errors=True)
-        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install logilab-astng", raise_errors=True)
-        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "cd %s ; NO_SETUPTOOLS=1 %s setup.py install --no-compile" % (pylint_extract_path, python), raise_errors=True)
+        self.run_virtualenv_command("easy_install logilab-common", raise_error=True)
+        self.run_virtualenv_command("easy_install logilab-astng", raise_error=True)
+        self.run_virtualenv_command("cd %s ; NO_SETUPTOOLS=1 %s setup.py install --no-compile" % (pylint_extract_path, python), raise_error=True)
 
     def validate(self, fname):
         """
@@ -204,7 +266,7 @@ class PylintPlugin(Plugin):
             if not "--rcfile" in options:
                 options += " --rcfile=%s" % f.name
 
-            exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, 'pylint %s "%s"' % (options, fname))
+            exitcode, output = self.run_virtualenv_command('pylint %s "%s"' % (options, fname))
         finally:
             f.unlink(f.name)
 
