@@ -20,16 +20,28 @@ import yaml
 # Local imports
 from .reporter import Reporter, FirstError
 from .utils import load_yaml_file, get_list_option, match_file, get_match_option
+from .walker import Walker
 
 logger = logging.getLogger("vvv")
 
+#: Regular expression to match all dotted files and folders
+#: 1. Match anything after slash which starts with .
+#: 2. Match anything which starts with . (root level dotted files)
+# http://regex.larsolavtorvik.com/
+MATCH_DOTTED_FILES_AND_FOLDERS_REGEX=".*\/\..*|^\.*.*"
+
 #: Ignore known common project, temp, etc. files by default
+#DEFAULT_MATCHLIST = [
+#  r"*",
+#  r"!RE:.*.vvv.*",
+#  r"!RE:.*venv.*",
+#  r"!RE:.*__pycache__.*"
+#]
+
 DEFAULT_MATCHLIST = [
-  r"*",
-  r"!RE:.*.vvv.*",
-  r"!RE:.*venv.*",
-  r"!RE:.*__pycache__.*"
+    "./docs/build/*"
 ]
+
 
 class VVV(object):
     """ 
@@ -101,7 +113,9 @@ class VVV(object):
                     reporter = self.reporter,
                     options = self.options_data,
                     files = self.files_data,
-                    installation_path = plugin_installation
+                    installation_path = plugin_installation,
+                    project_path = self.project,
+                    walker = self.walker
                 )
 
                 instance.setup_options()
@@ -120,20 +134,17 @@ class VVV(object):
 
         logger.info("Running vvv validation against %s" % path)
 
-        for root, dirs, files in os.walk(path, topdown=False):
-            for name in files:
+        for fpath in self.walker.walk_project_files(path, self.matchlist):
 
-                fpath = os.path.join(root, name)
+            if self.include:
+                fname = os.path.basename(fpath)
+                if not fnmatch.fnmatch(fname, self.include):
+                    #logger.debug("%s ignored by command-line override" % fpath)
+                    continue                
+                    
+            if self.process(fpath):
+                return True             
 
-                if self.include:
-                    if not fnmatch.fnmatch(name, self.include):
-                        #logger.debug("%s ignored by command-line override" % fpath)
-                        continue                
-
-                if match_file(logger, fpath, self.matchlist):
-                    if self.process(fpath):
-                        return True
-                        
         return False                 
 
     def read_config(self):
@@ -179,7 +190,7 @@ class VVV(object):
         """
 
         # Set-up global whitelist and blacklist
-        self.matchlist = get_match_option(self.files_data, "all", default=DEFAULT_MATCHLIST)
+        self.matchlist = self.walker.get_match_option(self.files_data, "all", default=DEFAULT_MATCHLIST)
 
     def post_process_options(self):
         """
@@ -205,23 +216,31 @@ class VVV(object):
         logger.info("Removing existing downloads and installations")
         shutil.rmtree(self.installation)
 
+    def prepare(self):
+        """
+        Prepare for a run.
+        """
+        self.reporter = Reporter(suicidal=self.suicidal)
+
+        self.walker = Walker(logger, self.regex_debug)
+
     def run(self):
         """ """
 
         if self.verbose:
-            logging.basicConfig(level=logging.DEBUG)
+            logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
         else:
-            logging.basicConfig(level=logging.INFO)
+            logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
         self.post_process_options()
 
         self.read_config()
 
-        self.setup_options()
-
         self.find_plugins()
 
-        self.reporter = Reporter(suicidal=self.suicidal)
+        self.prepare()
+
+        self.setup_options()
 
         self.init_plugins()
 
@@ -246,24 +265,30 @@ class VVV(object):
 
 
 def main(
-    options : ("Validation options file. Default is validation-options.yaml", 'option', 'c'),
+    options : ("Validation options file. Default is validation-options.yaml", 'option', 'o'),
     files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f"),
     verbose : ("Give verbose output", "flag", "v"),
     project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
-    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "if"),
-    reinstall : ("Redownload and configure all validation software", "flag", "r"),
+    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
+    reinstall : ("Redownload and configure all validation software", "flag", "ri"),
     suicidal : ("Die on first error", "flag", "s"),
-    include : ("Include only files matching this spec", "option", "inc")
+    include : ("Include only files matching this spec", "option", "inc"),
+    regexdebug : ("Print out match traces from validation-files.yaml regular expressions", "flag", "rd")
     ):
     """ 
+    vvv - very valid versioning
 
-    Application starting point without parsing the command line.
-
-    http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
+    A convenience tool for scanning source code files for validation errors and linting.
     """
+
+    # Application starting point without parsing the command line.
+
+    # http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
+
+
     vvv = VVV(options=options, files=files, verbose=verbose, project=project, 
               installation=installation, reinstall=reinstall, 
-              suicidal=suicidal, include = include)
+              suicidal=suicidal, include = include, regex_debug=regexdebug)
     vvv.run()
 
 
@@ -273,6 +298,7 @@ def entry_point():
 
     Can be used from other modules too.
     """
+
     import plac; plac.call(main)
 
 if __name__ == "__main__":

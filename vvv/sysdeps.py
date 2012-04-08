@@ -81,9 +81,9 @@ def create_virtualenv(logger, target, egg_spec):
     if os.path.exists(target):
         return
 
-    shell("virtualenv %s" % target, raise_error=True)
+    shell(logger, "virtualenv %s" % target, raise_error=True)
 
-    shell('source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
+    shell(logger, 'source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
 
 def run_virtualenv_command(logger, target, command):
-    shell('source %s/bin/activate ; %s' % (target, command), raise_error=True)
+    shell(logger, 'source %s/bin/activate ; %s' % (target, command), raise_error=True)

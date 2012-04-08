@@ -16,9 +16,7 @@ VVV can be configuredin two ways
 
 Configuration files are specified in `YAML syntax <http://ess.khhq.net/wiki/YAML_Tutorial>`_.
 
-The recommended policy is to indent YAML files with two spaces (not checked though, a suitable validator does not exist yet...)
 Configuration file
-
 +++++++++++++++++++++++++
 
 In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below. 
@@ -33,7 +31,6 @@ In your project root add ``validation-options.yaml``. If this file does not exis
     css:
 
         hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.
-
 
 Available configuration file options
 ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -50,6 +47,20 @@ Each validator can has its own settings, but there exist some options which are 
 
 For validator specific options please consult validators manual. 
 
+Example ``validation-options.yaml``::
+
+    tabs:
+        enable false
+
+    css:
+        enable false
+
+    linelength:
+        length: 250      
+
+    jslint:
+        hint: This project follows jQuery Core Javascript coding conventions http://docs.jquery.com/JQuery_Core_Style_Guidelines
+
 File whitelisting and blacklisting
 ++++++++++++++++++++++++++++++++++++++
 
@@ -58,37 +69,35 @@ It's main purpose is to ignore files which do not conform your policies 100%.
 This is e.g. useful if your source code repository contains third party library files which 
 do not inherit your project coding conventions.
 
-The file contains path specs which follow `.gitignore regex rules <http://linux.die.net/man/5/gitignore>`_ matching guidelines.
+The file contains YAML sections which follow `Bazaar ignore path matching rules <http://doc.bazaar.canonical.com/beta/en/user-reference/ignore-help.html>`_.
+
+.. note::
+
+    Unlike with Bazaar path specs are inclusive (list of matched), not exclusive (list of ignored files)
 
 There is one global ``all`` section with blacklist and whitelist and then validator specific sections by the validator id. 
 
 Example::
 
     all:
-        whitelist: 
-            *
-        blacklist:  
-            .svn
-            .git
-            .DS_Store
-            *.egg-info
-            .metadata
+        *
+        .svn
+        .git
+        .DS_Store
+        *.egg-info
+        .metadata
 
     css:
-        whitelist:
-            *.css
+        *.css
 
-The order of rules
-
-* Global blacklist (ignore version control, metadata, etc. folders by default)
-
-* Global whitelist (all files by default)
-
-* Validator specific blacklist
-
-* Validator specific whitelist (e.g. \*.css files for CSS validator)
+    # Include all text files, ignore hard tab checking for Makefiles
+    tabs:
+        *
+        !Makefile
+        !*.mk
 
 Validators won't try to process binary files.
 
+More info
 
-
+* http://kashfarooq.wordpress.com/2009/09/15/ignoring-files-and-folders-with-bazaar-source-control/

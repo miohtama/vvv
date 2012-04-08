@@ -46,6 +46,7 @@ docs/build/*
 *.debug.css
 *.db
 *.jar
+.vvv
 venv
 __pycache__
 

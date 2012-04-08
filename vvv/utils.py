@@ -59,7 +59,7 @@ def get_int_option(yaml, section, entry, default=0):
 def get_string_option(yaml, section, entry, default=""):
     return get_option(yaml, section, entry, default)
 
-def get_match_option(yaml, section, entry = None, default=[]):
+def get_match_option(yaml, section, entry = None, default=[], debug=False):
     
     if entry:
         opt = get_option(yaml, section, entry, default)
@@ -70,7 +70,7 @@ def get_match_option(yaml, section, entry = None, default=[]):
     if type(opt) != list:
         opt = opt.split() 
 
-    g = ExceptionGlobster(opt)
+    g = ExceptionGlobster(opt, debug)
 
     g.orignal_pattern = opt
 
@@ -126,7 +126,7 @@ def shell(logger, cmd, raise_error=False):
     :return: Tuple (return code, interleaved stdout and stderr output as string)
     """    
 
-    self.logger.debug("Running command line: %s" % cmd)
+    logger.debug("Running command line: %s" % cmd)
 
     process = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 

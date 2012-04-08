@@ -1,6 +1,7 @@
 all: | 
-  * 
-  !RE:.*\..*
-  !RE:.*\.git.*
-  !RE:.*venv.*
-  !RE:.*__pycache__.*
+  *
+  !RE:.*\/\..*|^\..*
+  !**/build/**  
+  !venv
+  !**/__pycache__
+  !*.egg-info

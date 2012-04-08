@@ -25,10 +25,11 @@ from __future__ import absolute_import
 import re
 import logging
 
-logger = logging.getLogger("bzrlib")
+logger = logging.getLogger("globster")
 
 from . import lazy_regex
 
+# Dummy out some bzr internals
 def mutter(x):
     logger.debug(x)
 
@@ -205,8 +206,9 @@ class Globster(object):
         },
     }
 
-    def __init__(self, patterns):
+    def __init__(self, patterns, debug):
         self._regex_patterns = []
+        self.debug = debug
         pattern_lists = {
             "extension" : [],
             "basename" : [],
@@ -237,19 +239,26 @@ class Globster(object):
 
         :return A matching pattern or None if there is no matching pattern.
         """
+
         try:
             for regex, patterns in self._regex_patterns:
                 match = regex.match(filename)
-                #print("Matching %s %s" % (regex._real_regex.pattern, filename))
+
+                debug_template = "Matching %s %s: %%s" % (regex._real_regex.pattern, filename)
 
                 if match:
-                    #print("Hit")
+                    if self.debug:
+                        logger.info(debug_template % "hit")
                     return patterns[match.lastindex -1]
+
+                if self.debug:
+                    logger.info(debug_template % "miss")
+
         except Exception as e:
             # We can't show the default e.msg to the user as thats for
             # the combined pattern we sent to regex. Instead we indicate to
             # the user that an ignore file needs fixing.
-            mutter('Invalid pattern found in regex: %s.', e.msg)
+            logger.error('Invalid pattern found in regex: %s.', e.msg)
             e.msg = "File ~/.bazaar/ignore or .bzrignore contains error(s)."
             bad_patterns = ''
             for _, patterns in self._regex_patterns:
@@ -258,7 +267,8 @@ class Globster(object):
                         bad_patterns += ('\n  %s' % p)
             e.msg += bad_patterns
             raise e
-        #print("Miss")
+        
+
         return None
 
     @staticmethod
@@ -306,7 +316,7 @@ class ExceptionGlobster(object):
     that apply under paths specified by '!' exception patterns.
     """
     
-    def __init__(self,patterns):
+    def __init__(self,patterns, debug):
         ignores = [[], [], []]
         for p in patterns:
             if p.startswith('!!'):
@@ -315,17 +325,14 @@ class ExceptionGlobster(object):
                 ignores[1].append(p[1:])
             else:
                 ignores[0].append(p)
-        self._ignores = [Globster(i) for i in ignores]
+        self._ignores = [Globster(i, debug) for i in ignores]
         
     def match(self, filename):
         """Searches for a pattern that matches the given filename.
 
         :return A matching pattern or None if there is no matching pattern.
         """
-        #print("Matching:"+filename)
-        #print("Ignores: %s" % self._ignores[1]._regex_patterns)
-        #print("Ignores: %s" % type(self._ignores[1]))
-        
+            
         double_neg = self._ignores[2].match(filename)
         if double_neg:
             return "!!%s" % double_neg

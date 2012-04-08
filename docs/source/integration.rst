@@ -17,6 +17,17 @@ However sometimes automatic installation is little bit
 tricky in which case yo'll get an error message 
 with a link to friendly installation instructions for a specific validator.
 
+Automatically installed files
+====================================
+
+By default, VVV keeps automatically downloaded 
+validator binaries in hidden
+``.vvv`` folder in your project root. You can override
+this setting with command line switches.
+
+Also use ``--reinstall`` option as described below
+to purge and reinstall files in this folder if needed.
+
 Running by hand
 ==================
 
@@ -29,7 +40,7 @@ project folder manually.
 
 * Execute command from your virtualenv::
 
-    ~/vvv/scripts/vvv 
+    vvv 
 
 Tada. That's it, assuming the sane defaults work for you.
 
@@ -38,7 +49,22 @@ Command line options
 
 Please use ``--help`` switch to see up-to-date command line help::
 
-    ~/vvv-venv/bin/vvv --help
+    vvv --help
+
+Important command line options    
+------------------------------------
+
+Reinstall - download and reinstall all automatically
+installed software in the case you had to abort the previous run
+and incomplete files 
+
+Verbose - output a lot of troubleshooting information::
+
+	vvv -v
+
+Reinstall - reinstall all automatically downloaded files in ``.vvv`` folder::
+
+	vvv --reinstall	
 
 Integrating with Git 
 ===================================
@@ -60,6 +86,8 @@ More info
 
 Integration with Subversion
 ===================================
+
+TODO
 
 Integrating with Travis CI
 ===================================

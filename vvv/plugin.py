@@ -26,7 +26,7 @@ class Plugin(metaclass=ABCMeta):
     Methods you should override are ``validate()`` and ``setup_local_options()``.
     """
         
-    def init(self, id, main, reporter, options, files, installation_path):
+    def init(self, id, main, reporter, options, files, installation_path, project_path, walker):
         """
 
         :param id: internal id is externally set and comes from setup.py entry point name 
@@ -44,6 +44,8 @@ class Plugin(metaclass=ABCMeta):
         self.logger = logging.getLogger("vvv")
         self.reporter = reporter
         self.installation_path = installation_path      
+        self.project_path = project_path
+        self.walker = walker
 
     def is_active(self):
         """
@@ -92,7 +94,7 @@ class Plugin(metaclass=ABCMeta):
         """
 
         self.enabled = get_boolean_option(self.options, self.id, "enabled", True)      
-        self.matchlist = get_match_option(self.files, self.id, entry="match", default=self.get_default_matchlist())       
+        self.matchlist = self.walker.get_match_option(self.files, self.id, entry="match", default=self.get_default_matchlist())       
         # Hint message how to fix errors
         self.hint = get_string_option(self.options, self.id, "hint", None)      
 
@@ -162,7 +164,7 @@ class Plugin(metaclass=ABCMeta):
         if self.hint:
             self.reporter.hint_user(self.hint)
 
-    def run(self, fullpath):
+    def run(self, project_root_relative_path):
         """
         :return: True if file was processed 
         """
@@ -170,9 +172,11 @@ class Plugin(metaclass=ABCMeta):
         if not self.enabled:
             return False
 
-        if not self.match(fullpath):
-            self.logger.debug("No plug-in match %s on %s" % (self.id, fullpath))
+        if not self.match(project_root_relative_path):
+            self.logger.debug("No plug-in match %s on %s" % (self.id, project_root_relative_path))
             return False
+
+        fullpath = os.path.join(self.project_path, project_root_relative_path)
 
         if is_binary_file(fullpath) and not self.is_binary_friendly():
             self.logger.debug("%s: skipping binary file %s" % (self.id, fullpath))
