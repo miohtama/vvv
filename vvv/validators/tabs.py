@@ -43,11 +43,12 @@ from vvv.plugin import Plugin
 
 class TabsPlugin(Plugin):
     """
+    Hard tab banisher plug-in.
     """
 
     def setup_local_options(self):
         if not self.hint:
-            self.hint = "Adjust your text editor settings to save tabs as spaces.\nhttp://dougneiner.com/post/641596410/tabs-vs-spaces"
+            self.hint = "Adjust your text editor settings to indent using spaces instead of hard tabs.\nUse a converter to convert existing tabs to spaces.\nhttp://dougneiner.com/post/641596410/tabs-vs-spaces"
 
     def get_default_matchlist(self):
         """

@@ -1,14 +1,16 @@
 """
 
+    Plain text output reporter.
 
 """
 
 class FirstError(Exception):
+    """ Special exception used to abort execution when first validation error occurs""" 
     pass
 
 class Reporter:
     """
-    Simple output collector from plug-ins-
+    Simple output collector from plug-ins.
     """
 
     def __init__(self, suicidal):
@@ -99,5 +101,6 @@ class Reporter:
         if len(self.hints) > 0:         
             out += "\nTo fix validation errors:\n-----------------------------\n"
             out += "\n\n".join(self.hints)
+            out += "\n\nLet's fix these issues, ok? ^_^"
 
         return out

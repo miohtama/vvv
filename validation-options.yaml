@@ -1,2 +1,20 @@
 linelength:
   length: 250
+
+# Python additional configuration
+
+pylint:
+
+  python3k: true
+
+  command-line: --reports=n
+
+  configuration: |
+
+    [BASIC]
+    # Allow one letter variables
+    variable-rgx=.*$
+
+    [FORMAT]
+    max-line-length=250
+

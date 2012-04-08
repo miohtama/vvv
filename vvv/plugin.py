@@ -25,6 +25,11 @@ class Plugin(metaclass=ABCMeta):
 
     Methods you should override are ``validate()`` and ``setup_local_options()``.
     """
+
+    def __init__(self):
+
+        #: Option file hint if the validation fails
+        self.hint = None
         
     def init(self, id, main, reporter, options, files, installation_path, project_path, walker):
         """
@@ -94,7 +99,7 @@ class Plugin(metaclass=ABCMeta):
         """
 
         self.enabled = get_boolean_option(self.options, self.id, "enabled", True)      
-        self.matchlist = self.walker.get_match_option(self.files, self.id, entry="match", default=self.get_default_matchlist())       
+        self.matchlist = self.walker.get_match_option(self.files, self.id, None, default=self.get_default_matchlist())       
         # Hint message how to fix errors
         self.hint = get_string_option(self.options, self.id, "hint", None)      
 

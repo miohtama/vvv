@@ -29,7 +29,7 @@ def match_file(logger, fullpath, matchlist):
             
     return matchlist.match(fullpath)
 
-def get_option(yaml, section, entry, default=None):
+def get_option(yaml, section_name, entry, default=None):
     """
     Convert YAML tree entry to a Python list.
 
@@ -38,7 +38,11 @@ def get_option(yaml, section, entry, default=None):
     http://pyyaml.org/wiki/PyYAMLDocumentation#Blocksequences 
     """
 
-    section = yaml.get(section, {})
+    section = yaml.get(section_name, {})
+
+    if type(section) == str:
+        raise RuntimeError("Expected configuration file block, but found a string option instead %s: %s" % (section_name, entry))
+
     entry = section.get(entry, default)
 
     return entry

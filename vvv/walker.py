@@ -7,6 +7,8 @@
 
 """
 
+# pylint: disable=W0102 
+
 import os
 
 from vvv import utils
@@ -40,14 +42,12 @@ class Walker:
         Unlike os.walk() do not enter into directories which are on the ignore list.
         """
 
-        # XXX: Handle symlinks and stuff
-
         files = []
         
         def recurse(path):
             """
+            Handle each folder 
             """
-
             for name in os.listdir(path):
                 fpath = os.path.join(path, name)
                 relative = make_project_root_relative(fpath, project_path)
@@ -69,7 +69,7 @@ class Walker:
         return files          
 
 
-    def get_match_option(self, yaml, section, entry = None, default=[]):
+    def get_match_option(self, yaml, section, entry=None, default=[]):
         """
         Read a file match list option from a config line.
 
@@ -77,4 +77,4 @@ class Walker:
 
         :return: Globster matching object
         """
-        return utils.get_match_option(yaml, section, entry = None, default=default, debug=self.debug)
+        return utils.get_match_option(yaml, section, entry=entry, default=default, debug=self.debug)
