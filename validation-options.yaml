@@ -5,6 +5,8 @@ linelength:
 
 pylint:
 
+  host-python-env: true
+
   python3k: true
 
   command-line: --reports=n
@@ -18,3 +20,7 @@ pylint:
     [FORMAT]
     max-line-length=250
 
+    [MISCELLANEOUS]
+    # Don't fail validation because of our notes
+    notes=
+    #notes=FIXME,XXX,TODO

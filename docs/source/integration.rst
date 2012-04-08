@@ -60,11 +60,11 @@ and incomplete files
 
 Verbose - output a lot of troubleshooting information::
 
-	vvv -v
+    vvv -v
 
 Reinstall - reinstall all automatically downloaded files in ``.vvv`` folder::
 
-	vvv --reinstall	
+    vvv --reinstall 
 
 Integrating with Git 
 ===================================

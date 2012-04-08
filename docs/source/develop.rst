@@ -11,9 +11,9 @@ vvv is programmed in Python and targets Python 3.2 and newer versions.
 
 .. note ::
 
-	Validators largerly use whatever tools the targe programming language supports and 
-	VVV only provides stub modules which execute shell processes
-	and then parse output. Not much Python knowledge is needed in order to expand VVV.  
+    Validators largerly use whatever tools the targe programming language supports and 
+    VVV only provides stub modules which execute shell processes
+    and then parse output. Not much Python knowledge is needed in order to expand VVV.  
 
 vvv accepts plug-ins as Python eggs. Yo'll declare plug-in integration points in your egg setup.py ``entry_points`` section.
 Then just install your eggs in the same virtualenv with **vvv** and it will automatically pick them up.
