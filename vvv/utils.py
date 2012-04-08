@@ -9,6 +9,7 @@
 import fnmatch
 import re
 import os
+import subprocess
 
 # Third party
 import yaml
@@ -26,12 +27,7 @@ def match_file(logger, fullpath, matchlist):
     :param matchlist: Globster object
     """
             
-    if matchlist.match(fullpath):
-        logger.debug("File %s matches by pattern %s" % (fullpath, matchlist.orignal_pattern))
-        return True
-    else:
-        logger.debug("File %s is ignored by pattern %s" % (fullpath, matchlist.orignal_pattern))
-        return False
+    return matchlist.match(fullpath)
 
 def get_option(yaml, section, entry, default=None):
     """
@@ -117,7 +113,7 @@ def is_binary_file(fpath):
 
     return False
 
-def shell(logger, cmd, raise_error=False):
+def shell(logger, cmdline, raise_error=False):
     """
     Run a shell command.
 
@@ -126,7 +122,7 @@ def shell(logger, cmd, raise_error=False):
     :return: Tuple (return code, interleaved stdout and stderr output as string)
     """    
 
-    logger.debug("Running command line: %s" % cmd)
+    logger.debug("Running command line: %s" % cmdline)
 
     process = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
@@ -139,7 +135,7 @@ def shell(logger, cmd, raise_error=False):
     if raise_error and process.returncode != 0:
         logger.error("Command output:")
         logger.error(out + err)
-        raise ShellCommandFailed("The following command did not succeed: %s" % cmd)
+        raise ShellCommandFailed("The following command did not succeed: %s" % cmdline)
 
     return (process.returncode, out + err)    
 

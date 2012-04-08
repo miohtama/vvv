@@ -77,3 +77,37 @@ def download_and_extract_java_dep(logger, towhere, url):
         tar = tarfile.open(towhere)
         tar.extractall(path=folder)
         tar.close()
+
+def download_and_extract_gz(logger, towhere, url):
+    """
+    Download and extract .tar.gz archive.
+    Will be extracted to a folder with matching name.
+
+    :param towhere: Path where the downloaded file is stored
+    """
+
+    assert towhere.endswith(".tar.gz"), "You must give a local .tar.gz file"
+
+    # Don't redownload files if they happen to exist
+    if not os.path.exists(towhere):
+        # XXX: this might be a bad idea due to unfinishe downloads
+        download(logger, towhere, url)
+
+    # Extract path
+    path = os.path.dirname(towhere)
+    fname = os.path.basename(towhere)
+    base, ext = os.path.splitext(fname)
+    folder = os.path.join(path, base) 
+
+    # XXX: Argh do this again with less coffee more sleep
+    folder = folder.replace(".tar", "")
+
+    logger.debug("Extracting tar archive: %s to %s" % (fname, folder))
+
+    os.makedirs(folder)
+
+    tar = tarfile.open(towhere)
+    tar.extractall(path=folder)
+    tar.close()
+
+

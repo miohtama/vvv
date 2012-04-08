@@ -13,6 +13,11 @@ Installation
 A temporarily *virtualenv* environment is automatically created
 where pylint command and its dependencies are is installed. 
 
+.. warning ::
+
+    Currently Pylint is in horribly broken state. You MUST 
+    use Python 2.7 and corresponding virtualenv command to install it.
+
 Supported files
 ----------------
 
@@ -67,11 +72,14 @@ class PylintPlugin(Plugin):
             "*.py",
         ]
 
-    def check_install(self):
+    def check_is_installed(self):
         """
-        See if the last file is downloaded and extracted
+        See if we have installed working virtualenv for pylint
         """
-        sysdeps.virtualenv_exists(self.virtualenv)
+        exists = os.path.exists(os.path.join(self.virtualenv, "bin", "pylint"))
+
+        self.logger.debug("Pylint virtualenv status: %s" % "good" if exists else "bad")
+        return exists
 
     def check_requirements(self):
         sysdeps.has_virtualenv(needed_for="Pylint validator")
@@ -79,11 +87,41 @@ class PylintPlugin(Plugin):
     def install(self):
         """
         Download & install the validator app.
+
+        ARGFADSFASF WHY *"#€"#€" NOTHING CANNOT WORK IN THIS WORLD?
+
+        http://www.logilab.org/82417
+
+        http://comments.gmane.org/gmane.comp.python.logilab/1193
         """
-        sysdeps.create_virtualenv(self.logger, self.virtualenv, "pylint==0.25.1")
+
+        pkg = "pylint-0.25.1"
+
+        python = "python2.7"
+        easy_install = "easy_install"
+
+        sysdeps.create_virtualenv(self.logger, self.virtualenv, py3=False)
+
+        # Extract and download manually
+        pylint_download_path = os.path.join(self.installation_path, "pylint-extract.tar.gz")
+        pylint_extract_path = os.path.join(self.installation_path, "pylint-extract", pkg)
+ 
+        download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
+
+        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install logilab-common", raise_errors=True)
+        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install logilab-astng", raise_errors=True)
+        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "cd %s ; NO_SETUPTOOLS=1 %s setup.py install --no-compile" % (pylint_extract_path, python), raise_errors=True)
 
     def validate(self, fname):
         """
         Run installed pylint validator against a file.
         """
-        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, 'pylint "%s"' % fname)
+        exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, 'pylint "%s"' % fname)
+
+        if exitcode == 0:
+            return True # Validation ok
+        else:
+            self.reporter.report_unstructured(self.id, output, fname=fname)
+            return False
+
+

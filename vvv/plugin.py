@@ -109,14 +109,15 @@ class Plugin(metaclass=ABCMeta):
         Turn read options to Python objects if needed after both global and local config has been merged.  
         """
 
-    def check_install(self):
+    def check_is_installed(self):
         """
         Check if we need to download & install stuff to run this validatdor.
 
         :param installation_path: Where we dump all automatically downloaded stuff
 
-        :return: True if install must be called
+        :return: False if install must be called
         """
+        return True
 
     def check_requirements(self):
         """ Check that system has necessary facilities (like java) to run the validator.
@@ -140,10 +141,13 @@ class Plugin(metaclass=ABCMeta):
         """
         See if we are already installed. If not install required binary blobs and other crap to run this validator.
         """
-        if self.check_install():
+        if not self.check_is_installed():
+            self.logger.info("Installing software for validator: %s" % self.id)
             self.check_requirements()
             self.init_installation()
             self.install()      
+        else:
+            self.logger.debug("Plug-in was already installed: %s" % self.id)
 
     @abstractmethod
     def validate(self, fullpath):
@@ -173,7 +177,8 @@ class Plugin(metaclass=ABCMeta):
             return False
 
         if not self.match(project_root_relative_path):
-            self.logger.debug("No plug-in match %s on %s" % (self.id, project_root_relative_path))
+            if self.walker.debug:
+                self.logger.info("No plug-in match %s on %s" % (self.id, project_root_relative_path))
             return False
 
         fullpath = os.path.join(self.project_path, project_root_relative_path)

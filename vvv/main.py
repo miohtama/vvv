@@ -30,6 +30,9 @@ logger = logging.getLogger("vvv")
 # http://regex.larsolavtorvik.com/
 MATCH_DOTTED_FILES_AND_FOLDERS_REGEX=".*\/\..*|^\.*.*"
 
+# http://docs.python.org/library/logging.html
+LOG_FORMAT="%(message)s"
+
 #: Ignore known common project, temp, etc. files by default
 #DEFAULT_MATCHLIST = [
 #  r"*",
@@ -214,7 +217,8 @@ class VVV(object):
         Purge all downloads etc. by deleting the installation folder.
         """
         logger.info("Removing existing downloads and installations")
-        shutil.rmtree(self.installation)
+        if os.path.exists(self.installation):
+            shutil.rmtree(self.installation)
 
     def prepare(self):
         """
@@ -228,9 +232,9 @@ class VVV(object):
         """ """
 
         if self.verbose:
-            logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+            logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format=LOG_FORMAT)
         else:
-            logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+            logging.basicConfig(level=logging.INFO, stream=sys.stdout, format=LOG_FORMAT)
 
         self.post_process_options()
 

@@ -41,10 +41,13 @@ class Walker:
         """
 
         # XXX: Handle symlinks and stuff
+
+        files = []
         
         def recurse(path):
             """
             """
+
             for name in os.listdir(path):
                 fpath = os.path.join(path, name)
                 relative = make_project_root_relative(fpath, project_path)
@@ -53,15 +56,17 @@ class Walker:
                 if not utils.match_file(self.logger, fpath, matchlist):
                     if self.debug:
                         self.logger.info("Ignoring %s by global match list", relative)
-                        continue
-              
+                    continue
+                
                 if os.path.isdir(fpath):
                     recurse(fpath)                
                 else:
-                    yield fpath                 
+                    files.append(fpath)                 
                 
 
-        return recurse(project_path)          
+        recurse(project_path)
+        
+        return files          
 
 
     def get_match_option(self, yaml, section, entry = None, default=[]):

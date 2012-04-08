@@ -5,3 +5,11 @@ all: |
   !venv
   !**/__pycache__
   !*.egg-info
+
+# Sphinx generated conf.py does not pass pylint validation
+# https://bitbucket.org/birkenfeld/sphinx/issue/909/generated-default-confpy-does-not-pass
+pylint: |
+  *.py
+  !docs/source/conf.py
+
+

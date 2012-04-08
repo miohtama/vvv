@@ -87,7 +87,7 @@ class CSSPlugin(Plugin):
             "*.css",
         ]
 
-    def check_install(self):
+    def check_is_installed(self):
         """
         See if the last file is downloaded and extracted
         """
@@ -96,7 +96,7 @@ class CSSPlugin(Plugin):
         keys = list(keys)
 
         path = os.path.join(self.installation_path, keys[-1])
-        return not os.path.exists(path)
+        return os.path.exists(path)
 
     def check_requirements(self):
         """
