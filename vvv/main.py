@@ -15,11 +15,10 @@ import fnmatch
 
 # Third party
 from pkg_resources import iter_entry_points
-import yaml
 
 # Local imports
 from .reporter import Reporter, FirstError
-from .utils import load_yaml_file, get_list_option, match_file, get_match_option
+from .utils import load_yaml_file
 from .walker import Walker
 
 logger = logging.getLogger("vvv")
@@ -28,10 +27,10 @@ logger = logging.getLogger("vvv")
 #: 1. Match anything after slash which starts with .
 #: 2. Match anything which starts with . (root level dotted files)
 # http://regex.larsolavtorvik.com/
-MATCH_DOTTED_FILES_AND_FOLDERS_REGEX=".*\/\..*|^\.*.*"
+MATCH_DOTTED_FILES_AND_FOLDERS_REGEX = ".*\/\..*|^\..*"
 
 # http://docs.python.org/library/logging.html
-LOG_FORMAT="%(message)s"
+LOG_FORMAT = "%(message)s"
 
 #: Ignore known common project, temp, etc. files by default
 #DEFAULT_MATCHLIST = [
@@ -62,6 +61,25 @@ class VVV(object):
     """
 
     def __init__(self, **kwargs):
+
+
+        #: Command line options
+        self.options = self.files = self.verbose = self.project = \
+        self.installation = self.reinstall = self.suicidal = \
+        self.include = self.regex_debug = None
+
+        #: Parsed option file data
+        self.options_data = self.files_data = None
+
+        #: Global file matchlist
+        self.matchlist = None
+
+        #: Reporter instance collecting output
+        self.reporter = None
+
+        #: File tree walker and match helper
+        self.walker = None
+
         # Copy in all arguments given to the constructor
         self.__dict__.update(kwargs)
 
@@ -172,16 +190,16 @@ class VVV(object):
         :return True: if the process should be aborted
         """
 
-        for id, p in self.plugins.items():
+        for plugin_id, p in self.plugins.items():
             try:
                 p.run(fpath)
-            except FirstError as fe:
+            except FirstError:
                 logger.info("Aborting on the first error")
                 return True
             except Exception as e:
                 etype, value, tb = sys.exc_info()
                 msg = ''.join(format_exception(etype, value, tb))
-                self.reporter.report_internal_error(id, msg)
+                self.reporter.report_internal_error(plugin_id, msg)
                 
                 if self.suicidal:
                     raise e
@@ -265,6 +283,7 @@ class VVV(object):
             print(text)
             sys.exit(2)
         else:
+            print("All files ok")
             sys.exit(0)
 
 
@@ -303,7 +322,8 @@ def entry_point():
     Can be used from other modules too.
     """
 
-    import plac; plac.call(main)
+    import plac
+    plac.call(main)
 
 if __name__ == "__main__":
     print("foo")
