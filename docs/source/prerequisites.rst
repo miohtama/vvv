@@ -12,9 +12,9 @@ information how to install various.
 
 .. note ::
 
-	You don't need to install everything here; only if you are using a validator
-	needing a specific run-time installed. You'll get an error message
-	when running VVV if you are lacking something.
+    You don't need to install everything here; only if you are using a validator
+    needing a specific run-time installed. You'll get an error message
+    when running VVV if you are lacking something.
 
 Java
 ===================================

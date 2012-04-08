@@ -20,7 +20,7 @@ To allow hard tabs in specific files use ``validator-files.yaml``::
       Makefile
       *.mk 
 
-Converting tabs to spaces 
+Mass converting tabs to spaces 
 --------------------------------
 
 VVV provides a Python script to expand tabs to spaces in-place.
@@ -29,9 +29,11 @@ With ``find`` and ``xargs`` you can easily convert the whole project
 tree away from hard tabs::
 
     
-    # Find all ascii files and convert them to use tabs
+    # Find all ascii files and convert them to use tabs,
+    # but watch out not to hit Makefile or any other file needing hard tabs!
     find . -name "*" -type f -print | xargs file | grep ASCII | cut -d: -f1 | xargs scripts/expand_tabs.py --inplace --tabsize=4 
 
+You can also try UNIX ``expand`` command, but it does not do in-place conversion.
         
 Supported files
 ----------------
