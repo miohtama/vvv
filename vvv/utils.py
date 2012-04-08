@@ -4,10 +4,10 @@
 
 """
 
+# Dangerous default value [] as argument
+# pylint: disable=W0102 
 
 # Python imports
-import fnmatch
-import re
 import os
 import subprocess
 
@@ -18,7 +18,7 @@ from .bzrlib.globster import ExceptionGlobster
 class ShellCommandFailed(Exception):
     """ Executing a shell command failed """
 
-def match_file(logger, fullpath, matchlist):
+def match_file(fullpath, matchlist):
     """
     Bzr style file matching.
 
@@ -29,16 +29,18 @@ def match_file(logger, fullpath, matchlist):
             
     return matchlist.match(fullpath)
 
-def get_option(yaml, section_name, entry, default=None):
+def get_option(config, section_name, entry, default=None):
     """
     Convert YAML tree entry to a Python list.
 
     If section does not exist return empty list.
     
     http://pyyaml.org/wiki/PyYAMLDocumentation#Blocksequences 
+
+    :param config: Configuration as Python dict
     """
 
-    section = yaml.get(section_name, {})
+    section = config.get(section_name, {})
 
     if type(section) == str:
         raise RuntimeError("Expected configuration file block, but found a string option instead %s: %s" % (section_name, entry))
@@ -47,24 +49,38 @@ def get_option(yaml, section_name, entry, default=None):
 
     return entry
 
-def get_list_option(yaml, section, entry, default=[]):
-    return get_option(yaml, section, entry, default)
+def get_list_option(config, section, entry, default=[]):
+    """
+    Read YAML config which is list-line
+    """
+    return get_option(config, section, entry, default)
 
-def get_boolean_option(yaml, section, entry, default=False):
-    return get_option(yaml, section, entry, default)
+def get_boolean_option(config, section, entry, default=False):
+    """
+    Read YAML true/false config 
+    """
+    return get_option(config, section, entry, default)
 
-def get_int_option(yaml, section, entry, default=0):
-    return get_option(yaml, section, entry, default)    
+def get_int_option(config, section, entry, default=0):
+    """
+    Read YAML int config 
+    """
+    return get_option(config, section, entry, default)    
 
-def get_string_option(yaml, section, entry, default=""):
-    return get_option(yaml, section, entry, default)
+def get_string_option(config, section, entry, default=""):
+    """
+    Read YAML string config 
+    """
+    return get_option(config, section, entry, default)
 
-def get_match_option(yaml, section, entry = None, default=[], debug=False):
-    
+def get_match_option(config, section, entry = None, default=[], debug=False):
+    """
+    Read YAML config which is a block string of file ignore patterns  
+    """    
     if entry:
-        opt = get_option(yaml, section, entry, default)
+        opt = get_option(config, section, entry, default)
     else:
-        opt = yaml.get(section, default)
+        opt = config.get(section, default)
 
     # Split space or new line separated list to pieces
     if type(opt) != list:
@@ -133,6 +149,8 @@ def shell(logger, cmdline, raise_error=False):
     # XXX: Support stderr interleaving
     out, err = process.communicate()
 
+    # :E1103: *%s %r has no %r member (but some types could not be inferred)*
+    # pylint: disable=E1103 
     out = out.decode("utf-8")
     err = err.decode("utf-8")
 

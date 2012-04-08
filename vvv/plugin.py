@@ -4,16 +4,21 @@
 
 """
 
+# :R0201: *Method could be a function*
+# We use dummy methods which subclasses can override
+# W0102 Dangerous default value [] as argument
+# R0921 Abstract class not referenced
+# :W0611: *Unused import %s*
+# pylint: disable=R0201, W0102, R0921, W0611
+
 # Python imports
 from abc import ABCMeta, abstractmethod
 import logging
 import os
 import subprocess
-from fnmatch import fnmatch
 
 # Local imports
-from .utils import is_binary_file, get_boolean_option, get_string_option, get_list_option, match_file, get_match_option
-
+from .utils import is_binary_file, get_boolean_option, get_string_option, match_file
 
 class Plugin(metaclass=ABCMeta):
     """
@@ -30,11 +35,15 @@ class Plugin(metaclass=ABCMeta):
 
         #: Option file hint if the validation fails
         self.hint = None
+
+        self.logger = self.matchlist = self.enabled = None
+
+        self.id = self.main = self.reporter = self.options = self.files = self.installation_path = self.project_path = self.walker = None
         
-    def init(self, id, main, reporter, options, files, installation_path, project_path, walker):
+    def init(self, plugin_id, main, reporter, options, files, installation_path, project_path, walker):
         """
 
-        :param id: internal id is externally set and comes from setup.py entry point name 
+        :param plugin_id: internal id is externally set and comes from setup.py entry point name 
 
         :param main: Main VVV instance. You should not rely on this, but use explicitly passed in parameters.
 
@@ -42,7 +51,7 @@ class Plugin(metaclass=ABCMeta):
 
         :param files: Validation files file
         """
-        self.id = id
+        self.id = plugin_id
         self.main = main
         self.options = options
         self.files = files
@@ -74,7 +83,7 @@ class Plugin(metaclass=ABCMeta):
         """
         Check if a path matches plug-in filtering options.
         """
-        return match_file(self.logger, fullpath, self.matchlist)
+        return match_file(fullpath, self.matchlist)
                  
     def setup_options(self):
         """
@@ -221,6 +230,9 @@ class Plugin(metaclass=ABCMeta):
         process = subprocess.Popen(cmdline, env=subenv, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         out, err = process.communicate()
+
+        # :E1103: *%s %r has no %r member (but some types could not be inferred)*
+        # pylint: disable=E1103 
 
         out = out.decode("utf-8")
         err = err.decode("utf-8")

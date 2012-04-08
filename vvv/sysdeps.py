@@ -1,6 +1,6 @@
 """
 
-    System-wide dependency checker.
+    Dependency checker for system-wide commands.
 
     Check for things like is Java present, is node present, etc.
 
@@ -8,13 +8,13 @@
 
 # Python imports
 import os
-import subprocess
 
 # Local imports
 from .utils import shell
 
 class HasNotCommand(Exception):
     """
+    Thrown when OS lacks a command we'd like to use
     """
 
 def which(program):
@@ -23,9 +23,12 @@ def which(program):
     """
 
     def is_exe(fpath):
+        """
+        Check if we can execute the command
+        """
         return os.path.exists(fpath) and os.access(fpath, os.X_OK)
 
-    fpath, fname = os.path.split(program)
+    fpath = os.path.dirname(program)
     if fpath:
         if is_exe(program):
             return program
@@ -42,22 +45,25 @@ def has_exe(name, needed_for="validator", instructions=""):
     Check whether a command is installed on the system or not and provide user friendly failure.
     """
     if not which(name):     
-        raise HasNotCommand("Your system does not have %s installed which is needed to run %s. %s" % (name, needed_for, install_instructions))
+        raise HasNotCommand("Your system does not have %s installed which is needed to run %s. %s" % (name, needed_for, instructions))
 
 def has_java(needed_for):
     """
+    Check java is installed
     """
     return has_exe("java", needed_for)
 
-def has_node(needer_for):
+def has_node(needed_for):
     """
+    Check node.js is installed
     """
     return has_exe("nodejs", needed_for, "Install Node.js using your OS package manager https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager")
 
-def has_spidermoney(needed_for):
-    return has_exe("js", needed_for)
 
 def has_virtualenv(needed_for):
+    """
+    Check python virtualenv is installed
+    """
     return has_exe("virtualenv", needed_for)
 
 def virtualenv_exists(target):
@@ -71,6 +77,8 @@ def virtualenv_exists(target):
 
 def get_virtualenv_py3k_command():
     """
+    Get command to create Python 3 virtualenv.
+
     ... they don't make this easy for us ...
     """   
 
@@ -87,6 +95,9 @@ def get_virtualenv_py3k_command():
             return v
 
 def get_virtualenv_py2_command():            
+    """
+    Get command to create Python 3 virtualenv.
+    """
     versions = ["virtualenv-2.7", "virtualenv2.7"]
     for v in versions:
         if which(v):
@@ -127,6 +138,9 @@ def create_virtualenv(logger, target, egg_spec=None, py3=True, python=None):
     if egg_spec:
         shell(logger, 'source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
 
-def run_virtualenv_command(logger, target, command, raise_errors=False):
-    return shell(logger, 'source %s/bin/activate ; %s' % (target, command), raise_error=raise_errors)
+def run_virtualenv_command(logger, target, command, raise_error=False):
+    """
+    Run a shell command having target virtualenv active
+    """
+    return shell(logger, 'source %s/bin/activate ; %s' % (target, command), raise_error=raise_error)
 

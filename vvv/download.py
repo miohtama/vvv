@@ -61,6 +61,9 @@ def download_and_extract_java_dep(logger, towhere, url):
     download(logger, towhere, url)
 
     # Extract path
+
+    # W:100,10:download_and_extract_gz: Unused variable 'ext'
+    # pylint: disable = W0612
     path = os.path.dirname(towhere)
     fname = os.path.basename(towhere)
     base, ext = os.path.splitext(fname)
@@ -94,6 +97,8 @@ def download_and_extract_gz(logger, towhere, url):
         download(logger, towhere, url)
 
     # Extract path
+    # W:100,10:download_and_extract_gz: Unused variable 'ext'
+    # pylint: disable = W0612    
     path = os.path.dirname(towhere)
     fname = os.path.basename(towhere)
     base, ext = os.path.splitext(fname)

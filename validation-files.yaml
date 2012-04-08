@@ -6,10 +6,14 @@ all: |
   !**/__pycache__
   !*.egg-info
 
-# Sphinx generated conf.py does not pass pylint validation
+# Sphinx generated conf.py does not pass pylint validation.
 # https://bitbucket.org/birkenfeld/sphinx/issue/909/generated-default-confpy-does-not-pass
+# bzrlib files come from outside the project.
+# expand_tabs come from outside the project
 pylint: |
   *.py
   !docs/source/conf.py
+  !vvv/bzrlib/*
+  !scripts/expand_tabs.py
 
 

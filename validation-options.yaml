@@ -17,6 +17,10 @@ pylint:
     # Allow one letter variables
     variable-rgx=.*$
 
+    # Regular expression which should only match correct instance attribute names.
+    # Allow two letter attributes
+    attr-rgx=.*$
+
     [FORMAT]
     max-line-length=250
 
@@ -24,3 +28,16 @@ pylint:
     # Don't fail validation because of our notes
     notes=
     #notes=FIXME,XXX,TODO
+
+    [DESIGN]
+    # Maximum number of arguments for function / method
+    max-args=12
+
+    # Maximum number of attributes for a class (see R0902).
+    max-attributes=25
+
+    [MESSAGES CONTROL]
+    # Disable:
+    # - Missing docstring
+    # :C0112: *Empty docstring*
+    disable = C0111, C0112

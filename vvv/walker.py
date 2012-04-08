@@ -7,6 +7,7 @@
 
 """
 
+# Dangerous default value [] as argument
 # pylint: disable=W0102 
 
 import os
@@ -53,7 +54,7 @@ class Walker:
                 relative = make_project_root_relative(fpath, project_path)
                 self.logger.debug("Scanning %s" % relative)
             
-                if not utils.match_file(self.logger, fpath, matchlist):
+                if not utils.match_file(fpath, matchlist):
                     if self.debug:
                         self.logger.info("Ignoring %s by global match list", relative)
                     continue

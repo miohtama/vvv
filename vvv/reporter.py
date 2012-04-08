@@ -4,6 +4,9 @@
 
 """
 
+# :W0613: *Unused argument %r*
+# pylint: disable=W0613 
+
 class FirstError(Exception):
     """ Special exception used to abort execution when first validation error occurs""" 
     pass
@@ -31,7 +34,7 @@ class Reporter:
         if self.suicidal:
             raise FirstError("First error reached - aborting")
 
-    def report_detailed(self, plugin_id, severity, fname, line, pos, id, msg, excerpt=None, details=None):
+    def report_detailed(self, plugin_id, severity, fname, line, pos, error_id, msg, excerpt=None, details=None):
         """
 
         :param plugin_id: Which validator failed - later used to display hint message to the user
@@ -40,7 +43,7 @@ class Reporter:
 
         :param severity: One of Python logging.* constants
 
-        :param id: Error message id if any or None
+        :param error_id: Error message id if any or None
 
         :param line: Line number as integer
 
@@ -52,10 +55,10 @@ class Reporter:
 
         :param details: Multi-line error messags like a traceback (usually hidden in details view) or None
         """
-        if id is None:
-            id = "validation error"
+        if error_id is None:
+            error_id = "validation error"
 
-        self.raw_output.append("%s %d: [%s] %s" % (fname, line, id, msg))
+        self.raw_output.append("%s %d: [%s] %s" % (fname, line, error_id, msg))
 
         if excerpt:
             self.raw_output.append(excerpt)

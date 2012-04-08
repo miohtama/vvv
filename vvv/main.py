@@ -104,14 +104,14 @@ class VVV(object):
 
         Allow plug-in to read its own options.
         """
-        for id, instance in self.plugins.items():
+        for plugin_id, instance in self.plugins.items():
             
             try:
 
-                plugin_installation = os.path.join(self.installation, id)
+                plugin_installation = os.path.join(self.installation, plugin_id)
         
                 instance.init(
-                    id = id,
+                    plugin_id = plugin_id,
                     main = self,
                     reporter = self.reporter,
                     options = self.options_data,
@@ -123,7 +123,7 @@ class VVV(object):
 
                 instance.setup_options()
             except Exception as e:
-                logger.error("Could not initialize plug-in: %s", id)
+                logger.error("Could not initialize plug-in: %s", plugin_id)
                 raise e             
 
     def walk(self, path):
