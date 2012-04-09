@@ -13,6 +13,7 @@ Contents:
    validators
    prerequisites
    guidelines
+   community
    develop
 
 

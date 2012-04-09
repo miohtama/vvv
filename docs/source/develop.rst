@@ -45,3 +45,12 @@ Other
 -----
 
 * `Sphinx function signatures <http://sphinx.pocoo.org/domains.html#signatures>`_
+
+Running tests
+===========================
+
+To run tests::
+
+	source venv/bin/activate
+	cd tests
+	python -m unittest discover

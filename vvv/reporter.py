@@ -99,6 +99,9 @@ class Reporter:
             self.hints.append(hint_message)
 
     def get_output_as_text(self):
+        """
+        Return 
+        """
         out = "\n".join(self.raw_output) 
 
         if len(self.hints) > 0:         

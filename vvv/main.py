@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 """
 
-    vvv entrypoint
+    Very vine versioning
 
 """
 
@@ -21,6 +21,7 @@ from .reporter import Reporter, FirstError
 from .utils import load_yaml_file
 from .walker import Walker
 
+# XXX: Factor this to VVV main class attribute
 logger = logging.getLogger("vvv")
 
 #: Regular expression to match all dotted files and folders
@@ -60,7 +61,7 @@ class VVV(object):
         #: Command line options
         self.options = self.files = self.verbose = self.project = \
         self.installation = self.reinstall = self.suicidal = \
-        self.include = self.regex_debug = None
+        self.include = self.regex_debug = self.quiet = None
 
         #: Parsed option file data
         self.options_data = self.files_data = None
@@ -227,6 +228,8 @@ class VVV(object):
     def nuke(self):
         """
         Purge all downloads etc. by deleting the installation folder.
+
+        https://www.youtube.com/watch?v=2s1MspmfEwg
         """
         logger.info("Removing existing downloads and installations")
         if os.path.exists(self.installation):
@@ -240,14 +243,24 @@ class VVV(object):
 
         self.walker = Walker(logger, self.regex_debug)
 
-    def run(self):
-        """ """
-
-        if self.verbose:
+    def setup_output(self):
+        """
+        Set how we deal with output.
+        """
+        if self.quiet:
+            logging.basicConfig(level=logging.ERROR, stream=sys.stdout, format=LOG_FORMAT)
+        elif self.verbose:
             logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format=LOG_FORMAT)
         else:
             logging.basicConfig(level=logging.INFO, stream=sys.stdout, format=LOG_FORMAT)
 
+    def run(self):
+        """
+        Run the show. 
+
+        XXX: Split to several parts which can be called individually,
+        so that we can have better control over this from unit tests.
+        """
         self.post_process_options()
 
         self.read_config()
@@ -265,7 +278,7 @@ class VVV(object):
 
         self.walk(self.project)
 
-        self.report()
+        return self.report()
 
     def report(self):
         """
@@ -274,11 +287,11 @@ class VVV(object):
         text = self.reporter.get_output_as_text()
 
         if text != "":
-            print(text)
-            sys.exit(2)
+            logger.info(text)
+            return 2
         else:
-            print("All files ok")
-            sys.exit(0)
+            logger.info("All files ok")
+            return 0
 
 
 def main(
@@ -290,6 +303,7 @@ def main(
     suicidal : ("Die on first error", "flag", "s"),
     include : ("Include only files matching this spec", "option", "inc"),
     regexdebug : ("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
+    quiet : ("Only output fatal internal errors to stdout", "flag", "q"), 
     project_folder : ("Path to a project folder. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
     ):
     """ 
@@ -308,7 +322,7 @@ def main(
 
 
     vvv = VVV(options=options, files=files, verbose=verbose, project=project_folder, 
-              installation=installation, reinstall=reinstall, 
+              installation=installation, reinstall=reinstall, quiet = quiet,
               suicidal=suicidal, include = include, regex_debug=regexdebug)
     vvv.run()
 

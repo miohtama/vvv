@@ -1,3 +1,6 @@
+# Don't match hidden dotted files/folders
+# Don't match generated folders
+# Don't match test data (which needs to be bad)
 all: | 
   *
   !RE:.*\/\..*|^\..*
@@ -5,6 +8,7 @@ all: |
   !venv
   !**/__pycache__
   !*.egg-info
+  !tests/validators
 
 # Sphinx generated conf.py does not pass pylint validation.
 # https://bitbucket.org/birkenfeld/sphinx/issue/909/generated-default-confpy-does-not-pass
