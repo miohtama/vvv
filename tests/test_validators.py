@@ -26,6 +26,10 @@ import sys
 
 from vvv.main import VVV
 
+VERBOSE = os.environ.get("VVV_TEST_OUTPUT", "verbose")
+
+REINSTALL = os.environ.get("VVV_TEST_REINSTALL", None) != "false"
+
 def get_own_path():
     """
     Get path of this Python module.
@@ -59,15 +63,17 @@ class ValidatorTestCase(unittest.TestCase):
         """
 
         # Set output level
-        quiet = os.environ.get("VVV_TEST_OUTPUT", None) != "verbose" 
-        verbose = not quiet
+        verbose = VERBOSE
+        quiet = not VERBOSE
 
         # Set test installation folder
         install_path = get_own_path()
         install_path = os.path.join(install_path, "test-installation-environment")
 
         # Ugh.... does not make me proud
-        reinstall = not ValidatorTestCase.first_run
+        reinstall = not ValidatorTestCase.first_run and REINSTALL
+
+
         ValidatorTestCase.first_run = False
 
         # Run 
@@ -81,12 +87,10 @@ class ValidatorTestCase(unittest.TestCase):
 
         success = (result == 0)
         if success:
-            if not self.success:
-                raise AssertionError("Test folder %s should have failed, but succeeded", self.path)
+            self.assertTrue(self.success, "Test folder %s should have failed, but succeeded" % self.path)
 
         if not success:
-            if self.success:
-                raise AssertionError("Test folder %s should have passed, but failed. Run env option VVV_TEST_OUTPUT=verbose for more output", self.path)
+            self.assertFalse(self.success, "Test folder %s should have passed, but failed. Run env option VVV_TEST_OUTPUT=verbose for more output" % self.path)
 
 def scan_test_cases():
     """

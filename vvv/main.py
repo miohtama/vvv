@@ -231,7 +231,7 @@ class VVV(object):
 
         https://www.youtube.com/watch?v=2s1MspmfEwg
         """
-        logger.info("Removing existing downloads and installations")
+        logger.warn("Removing existing downloads and installations: %s" % self.installation)
         if os.path.exists(self.installation):
             shutil.rmtree(self.installation)
 
@@ -262,6 +262,8 @@ class VVV(object):
         so that we can have better control over this from unit tests.
         """
         self.post_process_options()
+
+        self.setup_output()
 
         self.read_config()
 

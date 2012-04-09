@@ -50,3 +50,4 @@ docs/build/*
 venv
 __pycache__
 
+tests/test-installation-environment

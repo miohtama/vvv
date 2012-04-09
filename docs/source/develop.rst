@@ -54,3 +54,7 @@ To run tests::
 	source venv/bin/activate
 	cd tests
 	python -m unittest discover
+
+To debug further runs without triggering reinstall & download::
+
+    VVV_TEST_REINSTALL=false VVV_TEST_OUTPUT=verbose python -m unittest discover
