@@ -1,40 +1,46 @@
-=============================
-VVV - Very Valid Versioning 
-=============================
+==================================
+VVV - validation and linting tool
+==================================
 
-VVV provides easy to integrate validation and linting tools to prevent bad stuff committed in your software project.
-
-VVV is designed to be used with Github and Travis CI (simple setup), 
-but will work with other version control systems (more complex setup).
+VVV is a tool for easy validation and linting integration for your software project.
+With a single command validate all files in a source tree against a policy you can specify with simple configuration file.
+VVV prevents bad stuff to be committed in your software source control or makes cleaning it up easier.
 
 .. contents :: :local:
 
 Benefits
 =========
 
-* Prevent people (accidentally) committing files which do not comply project coding conventions and policies.
-  Automatically guide committers to the policy guidelines and let them fix errors themselves, instead of having
-  post-commit personal coaching.
+* Enforce coding conventions across multiple developers
 
-* Install for your project code repository with UNIX shell one-liner
+* Enable linting and validators support for your software project with a single command
+
+* Automatically guide committers to policy guidelines and let them fix errors themselves, instead of having
+  post-commit personal coaching.
 
 * Provide sane default validation and linting options for all popular programming languages and file formats
 
-* Run VVV as continuous integration service with systems like Travis CI or Jenkins and shoot down bad code push ins
+* Run VVV as continuous integration service with systems like Travis CI or Jenkins and shoot down bad code push-ins
 
-What vvv doesn't do
+What VVV doesn't do
 
-* This is not automated testing services. We just scan files for **policy** files, not for
-  programming errors. For this, use proper unit testing facilities.
+* This is not automated testing tool. We just scan files against a **policy**, not for
+  programming errors. Linting tools tend to pick up programming errors, too though,
+  like mistyped names. 
 
 Features
 =========
 
-* Set-up for your software repository with two files ``validation-options.yaml`` (pass in options for validators) and ``validation-files.yaml`` (blacklist)
+* Set-up for your software repository with two files ``validation-options.yaml`` (configuration) and ``validation-files.yaml`` (whitelist/blacklist)
 
-* Automatically download and install in validator software, no matter whether they are written in Javascript, Java, etc., on demand.  
+* VVV automatically downloads and locally installs required software - you don't need to spend time hunting downloads or distribution packages   
 
-* Guarantee tab and whitespace policies 
+* Check file against hard tabs and whitespace policies - no more different tab width ever
+
+* Prevent committing hard source code breakpoints, like Python's ``import pdb ; pdb.set_trace()``
+
+* Support (on its way) for Subversion, Git, Github, Travis CI, Jenkings and other popular version control and continuous integration
+  systems 
 
 Documentation
 ===============
