@@ -25,6 +25,10 @@
 
 """
 
+# unittest method names do not satisfy PEP-8
+# :C0103: *Invalid name "%s" (should match %s)*
+# pylint: disable = C0103   
+
 import unittest
 import os
 import sys
@@ -54,6 +58,14 @@ class ValidatorTestCase(unittest.TestCase):
 
     first_run = False
 
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        unittest.TestCase.__init__(self, *args, **kwargs)
+
+        #: Declare variables given us externally
+        self.path = self.success = self.options = None
+
     def set_path(self, path, success):
         """
         Set path to a "project source folder" which we execute.
@@ -63,9 +75,10 @@ class ValidatorTestCase(unittest.TestCase):
         :param success: Should test data validate or not
         """
         self.path = path
-        self.succes = success
+        self.success = success
 
-    def get_install_path(self):
+    @staticmethod
+    def get_install_path():
         """
         """
         get_own_path()
@@ -139,6 +152,9 @@ def scan_test_cases():
 
     path = os.path.join(get_own_path(), "validators")
 
+    # W:100,10:Unused variable'
+    # pylint: disable = W0612    
+
     for root, dirs, files in os.walk(path):
         for d in dirs:
 
@@ -169,11 +185,15 @@ def create_test_case_class(name, path, success, options):
     """
 
     klass = type(
-           'name',
+           name,
            (ValidatorTestCase,),
            dict(path=path, success=success, options=options)
            )
     return klass
+
+
+# :W0613: *Unused argument %r*
+# pylint: disable = W0613   
 
 def load_tests(loader, standard_tests, wtf_is_this_third_argument):
     """

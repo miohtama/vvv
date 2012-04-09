@@ -26,12 +26,13 @@ reports = []
 orignal_system_message = utils.Reporter.system_message
 
 # 'No directive entry for "automodule" in module "docutils.parsers.rst.languages.en".\nTrying "automodule" as canonical directive name.'
+# <string>:23: (ERROR/3) Unknown interpreted text role "ref"
 def filter_message(message):
     """ 
     Return True if message is valid output
     """
     # <string>:7: (ERROR/3) Unknown directive type "automodule".
-    if "No directive entry for" in message or "Unknown directive type" in message:
+    if "No directive entry for" in message or "Unknown directive type" in message or "Unknown interpreted text role" in message:
         return False
     return True 
 
@@ -63,8 +64,6 @@ utils.Reporter.system_message = system_message
 
 def rst2html(value):
     """ Run rst2html translation """
-    docutils_settings = {}
-    #parts = publish_parts(source=value, writer_name="html4css1")
     parts = publish_parts(source=value)
     return parts['whole']
 
@@ -84,7 +83,7 @@ def run():
     # Monkeypatch docutils for simple error/warning output support
     utils.Reporter.system_message = system_message
 
-    html = rst2html(text)
+    rst2html(text)
 
     if len(reports) > 0:
         print(reports)

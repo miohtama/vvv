@@ -162,8 +162,7 @@ def shell(logger, cmdline, raise_error=False):
 
     return (process.returncode, out + err)    
 
-
-class temp_config_file:
+class TempConfigFile:
     """
     Content guard which creates a temporary file which can be passed as ini/rc file to the executed command.
 
@@ -184,5 +183,8 @@ class temp_config_file:
         self.f.close()        
         return self.f.name
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exit_type, value, traceback):
         self.f.unlink(self.f.name)
+
+def temp_config_file(config_data):
+    return TempConfigFile(config_data)

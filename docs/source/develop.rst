@@ -67,9 +67,9 @@ Running tests
 
 To run tests::
 
-	source venv/bin/activate
-	cd tests
-	python -m unittest discover
+    source venv/bin/activate
+    cd tests
+    python -m unittest discover
 
 To debug further runs without triggering reinstall & download::
 

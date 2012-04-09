@@ -39,9 +39,16 @@ Features
 Documentation
 ===============
 
-Please see the `VVV documentation on readthedocs.org <http://foobar>`_
+Please see the `VVV documentation on readthedocs.org <http://readthedocs.org/docs/vvv/en/latest/>`_
 
+Bad block::
 
+Foobar
+
+Author
+===============
+
+Mikko Ohtamaa (`blog <http://opensourcehacker.com>`_, `Twitter <http://twitter.com/moo9000>`_)
 
     
 

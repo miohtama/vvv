@@ -129,6 +129,9 @@ class JSHintPlugin(Plugin):
             if not "--config" in options:
                 options += " --config=%s" % config_fname
 
+            # W:100,10:Unused variable'
+            # pylint: disable = W0612    
+
             exitcode, output = utils.shell(self.logger, 'jshint "%s" %s' % (fname, options))
 
             if "error" in output:

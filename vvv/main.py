@@ -150,7 +150,7 @@ class VVV(object):
 
         # XXX: Optimize this to not to walk into folders which are blacklisted
 
-        logger.info("Running vvv validation against %s" % path)
+        logger.info("Running vvv against %s" % path)
 
         for fpath in self.walker.walk_project_files(path, self.matchlist):
 

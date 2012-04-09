@@ -33,7 +33,6 @@ import os
 
 from vvv.plugin import Plugin
 
-from vvv import utils
 from vvv import sysdeps
 
 #: Command-line options given to jshint always

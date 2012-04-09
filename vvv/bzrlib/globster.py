@@ -244,7 +244,7 @@ class Globster(object):
             for regex, patterns in self._regex_patterns:
                 match = regex.match(filename)
 
-                debug_template = "Matching %s %s: %%s" % (regex._real_regex.pattern, filename)
+                debug_template = "%s against %s: %%s" % (filename, regex._real_regex.pattern)
 
                 if match:
                     if self.debug:

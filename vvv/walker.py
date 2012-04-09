@@ -44,7 +44,7 @@ class Walker:
         """
 
         files = []
-        
+                
         def recurse(path):
             """
             Handle each folder 
@@ -52,9 +52,13 @@ class Walker:
             for name in os.listdir(path):
                 fpath = os.path.join(path, name)
                 relative = make_project_root_relative(fpath, project_path)
+
+                if relative.startswith("./"):
+                    relative = relative[2:]
+
                 self.logger.debug("Scanning %s" % relative)
             
-                if not utils.match_file(fpath, matchlist):
+                if not utils.match_file(relative, matchlist):
                     if self.debug:
                         self.logger.info("Ignoring %s by global match list", relative)
                     continue
