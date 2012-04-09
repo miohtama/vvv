@@ -10,7 +10,7 @@ Introduction
 Here is a collection of validation, linting, coding conventions
 and guidelines for various programming languages and frameworks.
 
- Javascript 
+Javascript 
 ============================
 
 Validation 

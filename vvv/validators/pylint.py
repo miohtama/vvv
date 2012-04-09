@@ -85,7 +85,15 @@ If true set-up pylint for Python 3.x. The default is Python 2.x.
 Other
 ------------
 
-To disable warning per source code file one can add pylint hints in the .py file::
+To disable warning per source code file one can add pylint hints in the .py files using ``pylint:`` directives like::
+
+    # :R0201: *Method could be a function*
+    # W0102 Dangerous default value [] as argument
+    # R0921 Abstract class not referenced
+    # :W0611: *Unused import %s*
+    # pylint: disable=R0201, W0102, R0921, W0611
+
+These can be function or module level scoped.
 
 To see all pylint error and warning message ids::
 

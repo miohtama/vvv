@@ -26,6 +26,8 @@ Programming language validators
 
 .. automodule:: vvv.validators.jslint
 
+.. automodule:: vvv.validators.pylint
+
 --------------------------------------------
 Web development related validators
 --------------------------------------------

@@ -27,23 +27,17 @@ logger = logging.getLogger("vvv")
 #: 1. Match anything after slash which starts with .
 #: 2. Match anything which starts with . (root level dotted files)
 # http://regex.larsolavtorvik.com/
-MATCH_DOTTED_FILES_AND_FOLDERS_REGEX = ".*\/\..*|^\..*"
+MATCH_DOTTED_FILES_AND_FOLDERS_REGEX = r".*\/\..*|^\..*"
 
 # http://docs.python.org/library/logging.html
 LOG_FORMAT = "%(message)s"
 
 #: Ignore known common project, temp, etc. files by default
-#DEFAULT_MATCHLIST = [
-#  r"*",
-#  r"!RE:.*.vvv.*",
-#  r"!RE:.*venv.*",
-#  r"!RE:.*__pycache__.*"
-#]
-
 DEFAULT_MATCHLIST = [
-    "./docs/build/*"
+  r"*",
+  "!" + MATCH_DOTTED_FILES_AND_FOLDERS_REGEX,
+  r"!__pycache__"
 ]
-
 
 class VVV(object):
     """ 
@@ -102,7 +96,6 @@ class VVV(object):
 
         for loader in iter_entry_points(group='vvv', name=None):
             
-            #import pdb; pdb.set_trace()
             try:
                 # Construct the plug-in instance
                 name = loader.name
@@ -175,13 +168,14 @@ class VVV(object):
         
         logger.debug("Using options config file: %s" % self.options)
         self.options_data = load_yaml_file(self.options)
+
         if self.options_data == {}:
-            logger.debug("No options config file found")
+            logger.warn("No validation-options.yaml config file found, using defaults")
 
         logger.debug("Using files config file: %s" % self.files)
         self.files_data = load_yaml_file(self.files)
         if self.files_data == {}:
-            logger.debug("No files config file found")
+            logger.warn("No validation-files.yaml config file found, using defaults")
 
     def process(self, fpath):
         """
@@ -288,20 +282,24 @@ class VVV(object):
 
 
 def main(
-    options : ("Validation options file. Default is validation-options.yaml", 'option', 'o'),
-    files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f"),
+    options : ("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
+    files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
+    installation : ("Where automatically downloaded files are kept. Defaults to hidden .vvv directory in the software repository", "option", "i", None, None, ".vvv"),
     verbose : ("Give verbose output", "flag", "v"),
-    project : ("Path to a project folder. Defaults to the current working directory.", "option", "p"),
-    installation : ("Where to download & install binaries need to run the validators. Defaults to the repository root .vvv folder", "option", "i"),
     reinstall : ("Redownload and configure all validation software", "flag", "ri"),
     suicidal : ("Die on first error", "flag", "s"),
     include : ("Include only files matching this spec", "option", "inc"),
-    regexdebug : ("Print out match traces from validation-files.yaml regular expressions", "flag", "rd")
+    regexdebug : ("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
+    project_folder : ("Path to a project folder. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
     ):
     """ 
-    vvv - very valid versioning
-
     A convenience tool for scanning source code files for validation errors and linting.
+
+    More info: https://github.com/miohtama/vvv
+
+    Example how to scan the current source tree for issues:
+
+        vvv .
     """
 
     # Application starting point without parsing the command line.
@@ -309,7 +307,7 @@ def main(
     # http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
 
 
-    vvv = VVV(options=options, files=files, verbose=verbose, project=project, 
+    vvv = VVV(options=options, files=files, verbose=verbose, project=project_folder, 
               installation=installation, reinstall=reinstall, 
               suicidal=suicidal, include = include, regex_debug=regexdebug)
     vvv.run()
