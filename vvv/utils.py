@@ -10,6 +10,7 @@
 # Python imports
 import os
 import subprocess
+import tempfile
 
 # Third party
 import yaml
@@ -161,3 +162,27 @@ def shell(logger, cmdline, raise_error=False):
 
     return (process.returncode, out + err)    
 
+
+class temp_config_file:
+    """
+    Content guard which creates a temporary file which can be passed as ini/rc file to the executed command.
+
+    http://effbot.org/zone/python-with-statement.htm
+
+    :return: File object
+    """
+    def __init__(self, config_data):
+        self.config_data = config_data
+        self.f = None
+
+    def __enter__(self):
+        """
+        :return: Full path to a temporary config file
+        """
+        self.f = tempfile.NamedTemporaryFile(mode="wt", delete=False)
+        self.f.write(self.config_data)
+        self.f.close()        
+        return self.f.name
+
+    def __exit__(self, type, value, traceback):
+        self.f.unlink(self.f.name)

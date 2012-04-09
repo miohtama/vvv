@@ -4,10 +4,12 @@ Extend and develop
 
 .. contents :: :local:
 
+.. highligh:: console
+
 Introduction
 ============================
 
-vvv is programmed in Python and targets Python 3.2 and newer versions.
+VVV is programmed in Python and targets Python 3.2 and newer versions.
 
 .. note ::
 
@@ -15,8 +17,8 @@ vvv is programmed in Python and targets Python 3.2 and newer versions.
     VVV only provides stub modules which execute shell processes
     and then parse output. Not much Python knowledge is needed in order to expand VVV.  
 
-vvv accepts plug-ins as Python eggs. Yo'll declare plug-in integration points in your egg setup.py ``entry_points`` section.
-Then just install your eggs in the same virtualenv with **vvv** and it will automatically pick them up.
+VVV accepts plug-ins as Python eggs. Yo'll declare plug-in integration points in your egg setup.py ``entry_points`` section.
+Then just install your eggs in the same virtualenv with VVV and it will automatically pick them up.
 
 Setting up development environment
 ========================================================
@@ -39,7 +41,21 @@ Creating plug-in
 
 Each entry point is a Python module with certain format.
 
-See ``plugin.py`` for more information.
+* Fork on GitHub
+
+* Copy existing plug-in .py file as template (``jshint.py`` preferred)
+
+* Add new entry points in setup.py
+
+* Run ``python setup.py develop`` to activate the entry points
+
+* Add test cases in ``tests/validators`` 
+
+* See tests pass
+
+* See VVV code itself passes the validation
+
+* Send merge request
 
 Other
 -----
@@ -58,3 +74,26 @@ To run tests::
 To debug further runs without triggering reinstall & download::
 
     VVV_TEST_REINSTALL=false VVV_TEST_OUTPUT=verbose python -m unittest discover
+
+To run a single test / test group you can use a filter which uses substring match against test names::
+
+    VVV_TEST_REINSTALL=false VVV_TEST_FILTER=css python -m unittest discover
+
+... or ...::
+
+    VVV_TEST_REINSTALL=false VVV_TEST_OUTPUT=verbose VVV_TEST_FILTER=css_simple_pass python -m unittest discover
+        
+.. note ::
+
+    All slashes and dashes are converted to underscores in test case names.
+    
+TODO: Use HTTP proxy (polipo) to speed up tests by caching downloads locally.        
+
+Validating code
+==========================
+
+Your can self-validate the vvv codebase::
+
+    source venv/bin/activate
+    vvv .
+

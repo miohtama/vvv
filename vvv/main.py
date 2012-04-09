@@ -78,8 +78,11 @@ class VVV(object):
         # Copy in all arguments given to the constructor
         self.__dict__.update(kwargs)
 
-        # Map of plug-ins id -> plugin instance
+        #: Map of plug-ins id -> plugin instance
         self.plugins = dict()
+
+        #: Store test runner output, so that (test) drivers of vvv can print this 
+        self.output = None
 
     def load_config(self):
         """
@@ -286,10 +289,10 @@ class VVV(object):
         """
         Give output what we found and set sys exit code.
         """
-        text = self.reporter.get_output_as_text()
+        self.output = self.reporter.get_output_as_text()
 
-        if text != "":
-            logger.info(text)
+        if self.output != "":
+            logger.info(self.output)
             return 2
         else:
             logger.info("All files ok")
@@ -309,7 +312,7 @@ def main(
     project_folder : ("Path to a project folder. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
     ):
     """ 
-    A convenience tool for scanning source code files for validation errors and linting.
+    A convenience utility for software source code validation and linting.
 
     More info: https://github.com/miohtama/vvv
 

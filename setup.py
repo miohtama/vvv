@@ -29,7 +29,7 @@ setup(name = "vvv",
       tabs=vvv.validators.tabs:TabsPlugin
       linelength = vvv.validators.linelength:LineLengthPlugin
       css = vvv.validators.css:CSSPlugin
-      jslint = vvv.validators.jslint:JSLintPlugin
+      jshint = vvv.validators.jshint:JSHintPlugin
       pylint = vvv.validators.pylint:PylintPlugin
 
       [console_scripts]

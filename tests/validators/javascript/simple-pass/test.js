@@ -1,3 +1,5 @@
-function foobar() {
-     return false;
-}
+(function() {
+    function foobar() {
+         return false;
+    }
+})();

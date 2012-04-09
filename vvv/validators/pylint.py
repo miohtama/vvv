@@ -132,7 +132,6 @@ More info
 
 # Python imports
 import os
-import tempfile
 
 # Local imports
 from vvv.plugin import Plugin
@@ -263,20 +262,13 @@ class PylintPlugin(Plugin):
         Run installed pylint validator against a file.
         """
 
-        f = tempfile.NamedTemporaryFile(mode="wt", delete=False)
-
-        try:
+        with utils.temp_config_file(self.pylint_configuration) as config_fname:
             
-            f.write(self.pylint_configuration)
-            f.close()
-
             options = self.extra_options
             if not "--rcfile" in options:
-                options += " --rcfile=%s" % f.name
+                options += " --rcfile=%s" % config_fname
 
             exitcode, output = self.run_virtualenv_command('pylint %s "%s"' % (options, fname))
-        finally:
-            f.unlink(f.name)
 
         if exitcode == 0:
             return True # Validation ok

@@ -237,6 +237,8 @@ class Plugin(metaclass=ABCMeta):
         out = out.decode("utf-8")
         err = err.decode("utf-8")
 
+        self.logger.debug(out + "\n" + err)        
+
         if bad_string:
             if bad_string in out or bad_string in err:
                 success = False

@@ -24,7 +24,7 @@ Generic text file validators
 Programming language validators
 --------------------------------------------
 
-.. automodule:: vvv.validators.jslint
+.. automodule:: vvv.validators.jshint
 
 .. automodule:: vvv.validators.pylint
 
