@@ -33,9 +33,11 @@ import shutil
 from vvv.main import VVV
 from vvv import utils
 
-VERBOSE = os.environ.get("VVV_TEST_OUTPUT", "verbose")
+VERBOSE = os.environ.get("VVV_TEST_OUTPUT", None) == "verbose"
 
 REINSTALL = os.environ.get("VVV_TEST_REINSTALL", None) != "false"
+
+TEST_CASE_FILTER = os.environ.get("VVV_TEST_FILTER", None)
 
 def get_own_path():
     """
@@ -77,7 +79,7 @@ class ValidatorTestCase(unittest.TestCase):
 
         # test-options.yaml reinstall option gives installation names to nuke
         # E.g. reinstall: pylint 
-        reinstall = self.options.get("reinstall")
+        reinstall = self.options.get("reinstall", "")
         if type(reinstall) != list:
             reinstall = reinstall.split()
 
@@ -138,15 +140,21 @@ def scan_test_cases():
         for d in dirs:
 
             fullname = os.path.join(root, d)
+            relative_root = fullname[len(path)+1:]
+            name = relative_root.replace("-", "_").replace(os.sep, "_")
 
+            if TEST_CASE_FILTER:
+                if not TEST_CASE_FILTER in name:
+                    continue
+    
             # Read test driver options
             options = utils.load_yaml_file(os.path.join(fullname, "test-options.yaml"))
 
 
             if d.endswith("-pass"):
-                out.append((fullname, d, True, options))
+                out.append((fullname, name, True, options))
             if d.endswith("-fail"):
-                out.append((fullname, d, False, options))
+                out.append((fullname, name, False, options))
 
             
 
