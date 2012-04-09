@@ -1,6 +1,6 @@
 """
 
-    Simple script to validate rst files, ignoring Unknown directive errors
+    Simple script to validate rst files, patched to ignore Unknown directive errors
 
     Based on rst2html http://docutils.svn.sourceforge.net/viewvc/docutils/trunk/docutils/tools/rst2html.py?revision=4564&view=markup
 
@@ -27,9 +27,11 @@ orignal_system_message = utils.Reporter.system_message
 
 # 'No directive entry for "automodule" in module "docutils.parsers.rst.languages.en".\nTrying "automodule" as canonical directive name.'
 def filter_message(message):
-    """ """
+    """ 
+    Return True if message is valid output
+    """
     # <string>:7: (ERROR/3) Unknown directive type "automodule".
-    if "'No directive entry for" in message:
+    if "No directive entry for" in message or "Unknown directive type" in message:
         return False
     return True 
 
@@ -40,15 +42,17 @@ def system_message(self, level, message, *children, **kwargs):
     http://docutils.svn.sourceforge.net/viewvc/docutils/trunk/docutils/docutils/utils/__init__.py?revision=7338&view=markup
     """
 
-    if filter_message(message):
-        # We don't want to see the filtered messages
-        result = orignal_system_message(self, self.DEBUG_LEVEL, message, *children, **kwargs)
-    else:
 
+    if filter_message(message):
         result = orignal_system_message(self, level, message, *children, **kwargs)
 
         # Collect to internal message log
         reports.append(message)
+
+    else:
+        # We don't want to see the filtered messages
+        result = orignal_system_message(self, self.DEBUG_LEVEL, message, *children, **kwargs)
+
 
     # All reST failures preventing doc publishing go to reports 
     # and thus will result to failed checkdocs run
@@ -83,6 +87,7 @@ def run():
     html = rst2html(text)
 
     if len(reports) > 0:
+        print(reports)
         sys.exit(1)
        
     sys.exit(0)

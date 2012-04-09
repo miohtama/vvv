@@ -87,7 +87,7 @@ class RestructuredTextPlugin(Plugin):
         """
 
         exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "vvv-validate-rst %s" % fname)
-        
+    
         if exitcode != 0:
             self.reporter.report_unstructured(self.id, output, fname=fname)
             return False
