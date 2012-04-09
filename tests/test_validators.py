@@ -18,13 +18,20 @@
         Running the tests will always reload all crap from the internets
         and perform local installs.
 
+    The script will scan ``validator`` subfolders. If folder name 
+    ends with -pass or -fail it is considered a test case.
+    VVV is run against this folder. The folder may give its
+    own ``validation-options.yaml`` file.
+
 """
 
 import unittest
 import os
 import sys
+import shutil
 
 from vvv.main import VVV
+from vvv import utils
 
 VERBOSE = os.environ.get("VVV_TEST_OUTPUT", "verbose")
 
@@ -56,6 +63,28 @@ class ValidatorTestCase(unittest.TestCase):
         self.path = path
         self.succes = success
 
+    def get_install_path(self):
+        """
+        """
+        get_own_path()
+        install_path = os.path.join(get_own_path(), "test-installation-environment")
+        return install_path
+
+    def nuke_installations(self):
+        """
+        Delete and reconfigure .vvv validator installations between tests if the test says so. 
+        """ 
+
+        # test-options.yaml reinstall option gives installation names to nuke
+        # E.g. reinstall: pylint 
+        reinstall = self.options.get("reinstall")
+        if type(reinstall) != list:
+            reinstall = reinstall.split()
+
+        for installation in reinstall:
+            path = os.path.join(self.get_install_path(), installation)
+            if os.path.exists(path):
+                shutil.rmtree(path)
         
     def runTest(self):
         """
@@ -67,14 +96,14 @@ class ValidatorTestCase(unittest.TestCase):
         quiet = not VERBOSE
 
         # Set test installation folder
-        install_path = get_own_path()
-        install_path = os.path.join(install_path, "test-installation-environment")
+        install_path = self.get_install_path()
 
         # Ugh.... does not make me proud
         reinstall = not ValidatorTestCase.first_run and REINSTALL
 
-
         ValidatorTestCase.first_run = False
+
+        self.nuke_installations()
 
         # Run 
         vvv = VVV(project=self.path, 
@@ -98,7 +127,7 @@ def scan_test_cases():
 
     Add folders ending with -pass or -fail to the test queue.
 
-    :return: List of tuples (fullname, name, success)
+    :return: List of tuples (fullname, name, success, options)
     """
 
     out = []
@@ -110,14 +139,20 @@ def scan_test_cases():
 
             fullname = os.path.join(root, d)
 
+            # Read test driver options
+            options = utils.load_yaml_file(os.path.join(fullname, "test-options.yaml"))
+
+
             if d.endswith("-pass"):
-                out.append((fullname, d, True))
+                out.append((fullname, d, True, options))
             if d.endswith("-fail"):
-                out.append((fullname, d, False))
+                out.append((fullname, d, False, options))
+
+            
 
     return out
 
-def create_test_case_class(name, path, success):
+def create_test_case_class(name, path, success, options):
     """
     Spoofs out Python TestCase class which matches folder name.
     """
@@ -125,7 +160,7 @@ def create_test_case_class(name, path, success):
     klass = type(
            'name',
            (ValidatorTestCase,),
-           dict(path=path, success=success)
+           dict(path=path, success=success, options=options)
            )
     return klass
 
@@ -137,11 +172,15 @@ def load_tests(loader, standard_tests, wtf_is_this_third_argument):
 
     cases = scan_test_cases()
     for c in cases:
-        klass = create_test_case_class(c[1], c[0], c[2])
+        klass = create_test_case_class(c[1], c[0], c[2], c[3])
         tests = loader.loadTestsFromTestCase(klass)
         suite.addTest(tests)
 
     return suite
 
 if __name__ == '__main__':
-    unittest.main()    
+    if VERBOSE:
+        verbosity = 3
+    else: 
+        verbosity = 0
+    unittest.main(verbosity=verbosity)    
