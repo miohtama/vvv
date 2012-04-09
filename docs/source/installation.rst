@@ -3,6 +3,8 @@ Installation
 
 .. contents :: :local:
 
+.. highlight:: console
+
 Prerequisites
 ----------------
 
@@ -12,7 +14,7 @@ Requires Python 3 environment to run.
 Installing locally
 --------------------------------------
 
-`virtualenv based <http://pypi.python.org/pypi/virtualenv>` installation is recommended. 
+`virtualenv based <http://pypi.python.org/pypi/virtualenv>`_ installation is recommended. 
 virtualenv is a tool to manage self-contained Python software installations without
 need to install Python packages in your system folders using super-user priviledges.
 
@@ -33,15 +35,43 @@ Then create environment e.g. in your home folder::
     # Use Py3.2 - not default Python version which tends to be py2
     cd ~
     virtualenv-3.2 vvv-venv
-    source vvv-venv/bin/activate
+    source ~/vvv-venv/bin/activate
 
     easy_install vvv
 
-Per-validator prerequisites
+Now when virtualenv is active (activated with the ``source`` command above), your ``PATH``
+environment variable pulls in ``vvv`` command from that folder::
+
+    vvv    
+
+Now just ``cd`` to the any source tree and type in the command::
+    
+    vvv .
+
+VVV will validate your source code.
+
+Now you can proceed to :doc:`configuring VVV for your project </configuration>`,
+to get rid of those pesky validation errors.
+
+Validator auto installed software
 --------------------------------------
 
-Each target programming language may have its own system-wide
+Each target programming language may require its own system-wide
 dependencies before you can run the validtor.
+
 You'll get an error message when running VVV if you are lacking something.
 If you get such an error for more information installing 
 the dependencies please see :doc:`prerequisites </prerequisites>`. 
+
+vvv will automatically try to install software needed to run the
+validator. This software is installed locally in hidden ``.vvv``
+folder in your home folder.
+
+In the case this installation becomes damaged e.g.
+because you interrupt download and configuration with CTRL+C
+you can always recreate all downloaded files with the folllowing command::
+
+    vvv --reinstall .
+
+
+

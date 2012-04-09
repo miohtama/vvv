@@ -36,7 +36,7 @@ setup(name = "vvv",
 
       [console_scripts]
       vvv = vvv.main:entry_point
-      vvv-git-pre-commit-hook = vvv.hooks.git:precommit
+      vvv-install-git-pre-commit-hook = vvv.hooks.git:setup_hook
       vvv-validate-rst = vvv.scripts.validaterst:run
       """,        
 ) 

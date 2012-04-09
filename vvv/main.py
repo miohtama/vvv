@@ -222,7 +222,11 @@ class VVV(object):
             self.files = os.path.join(self.project, "validation-files.yaml")
 
         if self.installation is None:
-            self.installation = os.path.join(self.project, ".vvv")
+            home = os.environ.get("HOME", None)
+            if not home:
+                raise RuntimeError("No home folder")
+
+            self.installation = os.path.join(home, ".vvv")
 
     def nuke(self):
         """
@@ -259,6 +263,8 @@ class VVV(object):
 
         XXX: Split to several parts which can be called individually,
         so that we can have better control over this from unit tests.
+
+        :return: System exit return code
         """
         self.post_process_options()
 
@@ -298,7 +304,7 @@ class VVV(object):
 def main(
     options : ("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
     files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
-    installation : ("Where automatically downloaded files are kept. Defaults to hidden .vvv directory in the software repository", "option", "i", None, None, ".vvv"),
+    installation : ("Where automatically downloaded files are kept. Defaults to hidden .vvv directory in home folder", "option", "i", None, None, ".vvv"),
     verbose : ("Give verbose output", "flag", "v"),
     reinstall : ("Redownload and configure all validation software", "flag", "ri"),
     suicidal : ("Die on first error", "flag", "s"),
@@ -325,7 +331,7 @@ def main(
     vvv = VVV(options=options, files=files, verbose=verbose, project=project_folder, 
               installation=installation, reinstall=reinstall, quiet = quiet,
               suicidal=suicidal, include = None, regex_debug=regexdebug, print_files=printfiles)
-    vvv.run()
+    sys.exit(vvv.run())
 
 
 def entry_point():

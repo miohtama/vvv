@@ -5,19 +5,19 @@
 .. contents :: :local:
 
 Introduction
---------------------------------------
+===================================
 
 VVV can be configuredin two ways
 
-* Configuration files are in your project folder are shared between
-  all the developers and tell what validation policies your project has
+* VVV configuration files are in your software project folder are shared between
+  the developers of the project (``validation-options.yaml`` and ``validation-files.yaml``)
 
 * VVV command line parameters are specific to each run / integration environment where VVV is executed
 
 Configuration files are specified in `YAML syntax <http://ess.khhq.net/wiki/YAML_Tutorial>`_.
 
 Configuration file
-+++++++++++++++++++++++++
+===================================
 
 In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below. 
 
@@ -33,7 +33,7 @@ In your project root add ``validation-options.yaml``. If this file does not exis
         hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.
 
 Available configuration file options
-++++++++++++++++++++++++++++++++++++++++++++++++++
+======================================================================
 
 The configuration file has one section per each validator.
 
@@ -62,9 +62,9 @@ Example ``validation-options.yaml``::
         hint: This project follows jQuery Core Javascript coding conventions http://docs.jquery.com/JQuery_Core_Style_Guidelines
 
 File whitelisting and blacklisting
-++++++++++++++++++++++++++++++++++++++
+===================================
 
-``validation-files.yaml`` allows you to flag files for going for validation or to be ignored.
+``validation-files.yaml`` allows you to whitelist and blacklist files for validation.
 It's main purpose is to ignore files which do not conform your policies 100%.
 This is e.g. useful if your source code repository contains third party library files which 
 do not inherit your project coding conventions.
@@ -77,18 +77,36 @@ The file contains YAML sections which follow `Bazaar ignore path matching rules 
 
 There is one global ``all`` section with blacklist and whitelist and then validator specific sections by the validator id. 
 
-Example::
+Example ``validation-files.yaml``::
 
-    all:
-        *
-        .svn
-        .git
-        .DS_Store
-        *.egg-info
-        .metadata
+    # Don't match hidden dotted files/folders
+    # Don't match generated folders
+    # Don't match test data (which is bad intentionally)
+    all: | 
+      *
+      !RE:.*\/\..*|^\..*
+      !**/build/**  
+      !venv
+      !**/__pycache__
+      !*.egg-info
+      !tests/validators
+      !tests/test-installation-environment
 
-    css:
-        *.css
+    # Sphinx generated conf.py does not pass pylint validation.
+    # https://bitbucket.org/birkenfeld/sphinx/issue/909/generated-default-confpy-does-not-pass
+    # bzrlib files come from outside the project.
+    # expand_tabs come from outside the project
+    pylint: |
+      *.py
+      !docs/source/conf.py
+      !vvv/bzrlib/*
+      !scripts/expand_tabs.py
+
+    # pdb validator has set_trace() inside strings
+    pdb: |
+      *.py
+      !vvv/validators/pdb.py
+
 
     # Include all text files, ignore hard tab checking for Makefiles
     tabs:

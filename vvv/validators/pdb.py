@@ -17,7 +17,7 @@ The validator match for ``pdb.set_trace()`` in uncommented lines.
 Supported files
 ----------------
 
-* *.py
+``*.py``
 
 Options
 -----------

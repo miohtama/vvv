@@ -3,7 +3,7 @@
 Tab policy
 ====================
 
-Validator name:: ``tabs``
+Validator name: ``tabs``
 
 Do not allow hard tabs in committed files.
 Instead, use soft tabs and spaces.

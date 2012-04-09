@@ -6,6 +6,8 @@ Restructred Text (rst)
 Validator name: ``rst``
 
 Check that .rst files do not contain syntax errors using `docutils <http://docutils.sourceforge.net//>`_.
+Restructured format is used by `Sphinx documentatio tool <http://sphinx.pocoo.org/>`_ and 
+also supported by Github README files.
 
 .. note ::
 
@@ -27,6 +29,10 @@ Options
 
 None.
 
+More information
+----------------
+
+* https://github.com/miohtama/vvv/blob/master/vvv/scripts/validaterst.py
 
 """
 import os
@@ -73,16 +79,18 @@ class RestructuredTextPlugin(Plugin):
         """
         See if we have installed working virtualenv for docutils
         """
-        return os.path.exists(self.virtualenv)
-
+        has_created_virtualenv =  os.path.exists(self.virtualenv)
+        return has_created_virtualenv
+        
     def install(self):
         """
         """
+        self.logger.info("Installing %s" % self.virtualenv)
         sysdeps.create_virtualenv(self.logger, self.virtualenv, egg_spec="docutils==0.8.1")
 
     def validate(self, fname):
         """
-        Run installed jshint against a file.
+        Run .rst against our custom validation script.
         """
 
         exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "vvv-validate-rst %s" % fname)

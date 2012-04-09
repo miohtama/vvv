@@ -28,7 +28,8 @@
 # unittest method names do not satisfy PEP-8
 # :C0103: *Invalid name "%s" (should match %s)*
 # :W0201: *Attribute %r defined outside __init__*
-# pylint: disable = C0103, W0201
+# :W0603: *Using the global statement*
+# pylint: disable = C0103, W0201, W0603
 
 import unittest
 import os
@@ -40,9 +41,12 @@ from vvv import utils
 
 VERBOSE = os.environ.get("VVV_TEST_OUTPUT", None) == "verbose"
 
-REINSTALL = os.environ.get("VVV_TEST_REINSTALL", None) != "false"
+SKIP_REINSTALL = os.environ.get("VVV_TEST_SKIP_REINSTALL", None) == "true"
 
 TEST_CASE_FILTER = os.environ.get("VVV_TEST_FILTER", None)
+
+#: Are we the first test case to be executed
+first_run = True
 
 def get_own_path():
     """
@@ -56,8 +60,6 @@ class ValidatorTestCase(unittest.TestCase):
     """
     Wraps executing vvv process to Python unittest framework.
     """
-
-    first_run = False
 
     def __init__(self, *args, **kwargs):
         """
@@ -86,7 +88,7 @@ class ValidatorTestCase(unittest.TestCase):
         install_path = os.path.join(get_own_path(), "test-installation-environment")
         return install_path
 
-    def nuke_installations(self):
+    def nuke_installations_by_test_case(self):
         """
         Delete and reconfigure .vvv validator installations between tests if the test says so. 
         """ 
@@ -107,6 +109,8 @@ class ValidatorTestCase(unittest.TestCase):
         Execute vvv in a folder and check the output.
         """
 
+        global first_run 
+
         # Set output level
         verbose = VERBOSE
         quiet = not VERBOSE
@@ -115,11 +119,14 @@ class ValidatorTestCase(unittest.TestCase):
         install_path = self.get_install_path()
 
         # Ugh.... does not make me proud
-        reinstall = not ValidatorTestCase.first_run and REINSTALL
+        reinstall = first_run 
 
-        ValidatorTestCase.first_run = False
+        if SKIP_REINSTALL:
+            reinstall = False
 
-        self.nuke_installations()
+        first_run = False
+    
+        self.nuke_installations_by_test_case()
 
         # Run 
         vvv = VVV(project=self.path, 

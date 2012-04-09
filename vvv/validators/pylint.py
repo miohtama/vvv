@@ -234,6 +234,9 @@ class PylintPlugin(Plugin):
         http://comments.gmane.org/gmane.comp.python.logilab/1193
         """
 
+        # XXX: Prefix virtualenv name by version so we can have multiple pylints installed
+        # in .vvv once
+
         pkg = "pylint-0.25.1"
 
         if self.python3k:

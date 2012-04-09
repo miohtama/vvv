@@ -13,17 +13,16 @@ needed validators automatically if they are not installed.
 Installation is on-demand - if your project does not 
 contain PHP files no PHP validator will be installed.
 
-However sometimes automatic installation is little bit
-tricky in which case yo'll get an error message 
+In the case validators cannot be automatically installed due to system 
+dependencies (e.g. Java) you'll get an error message 
 with a link to friendly installation instructions for a specific validator.
 
 Automatically installed files
 ====================================
 
-By default, VVV keeps automatically downloaded 
-validator binaries in hidden
-``.vvv`` folder in your project root. You can override
-this setting with command line switches.
+By default, :doc:`VVV keeps automatically downloaded </installation>`
+software in hidden ``.vvv`` folder. You can override
+the folder location with a command line switch.
 
 Also use ``--reinstall`` option as described below
 to purge and reinstall files in this folder if needed.
@@ -75,10 +74,21 @@ Local repository
 Here are instructions how to set-up pre-commit hook with Git.
 This prevents you to commit files violating policy.
 
-If you have a local installation using virtualenv::
+If you have :doc:`a local installation using virtualenv </installation>`::
 
-    cd ~/yourprojectrepo
-    ln -s hooks/pre-commit/vvv ~/vvv-virtualenv/scripts/git-pre-commit-hook
+    # Activate the virtualenv
+    source ~/vvv-venv/bin/activate
+
+    # Run pre-commit hook installation
+    vvv-install-git-pre-commit-hook
+
+After this git will run vvv for all local commits and aborts
+the commit if the incoming files contain validation errors.
+
+.. note ::
+
+    Currently vvv does not optimize and check only commited files.
+    This will be future feature.    
 
 More info 
 
@@ -86,6 +96,21 @@ More info
 
 Integration with Subversion
 ===================================
+
+Local hook
+------------------
+
+``svn`` client-side command does not offer a way to execute hooks.
+You can probably work around this with ``alias svn``
+but I have not yet figured out how.
+
+* `SVN client side options <http://svnbook.red-bean.com/en/1.7/svn.advanced.confarea.html>`_
+
+Server-side hook
+------------------
+
+Subversion server allows you to install pre-commit hook which runs code
+checks on the server when the client pushes in a potential commit.
 
 TODO
 

@@ -4,7 +4,7 @@ Extend and develop
 
 .. contents :: :local:
 
-.. highligh:: console
+.. highlight:: console
 
 Introduction
 ============================
@@ -73,15 +73,15 @@ To run tests::
 
 To debug further runs without triggering reinstall & download::
 
-    VVV_TEST_REINSTALL=false VVV_TEST_OUTPUT=verbose python -m unittest discover
+    VVV_TEST_SKIP_REINSTALL=true VVV_TEST_OUTPUT=verbose python -m unittest discover
 
 To run a single test / test group you can use a filter which uses substring match against test names::
 
-    VVV_TEST_REINSTALL=false VVV_TEST_FILTER=css python -m unittest discover
+    VVV_TEST_SKIP_REINSTALL=true VVV_TEST_FILTER=css python -m unittest discover
 
 ... or ...::
 
-    VVV_TEST_REINSTALL=false VVV_TEST_OUTPUT=verbose VVV_TEST_FILTER=css_simple_pass python -m unittest discover
+    VVV_TEST_SKIP_REINSTALL=true VVV_TEST_OUTPUT=verbose VVV_TEST_FILTER=css_simple_pass python -m unittest discover
         
 .. note ::
 

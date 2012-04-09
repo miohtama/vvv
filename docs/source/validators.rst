@@ -28,8 +28,16 @@ Programming language validators
 
 .. automodule:: vvv.validators.pylint
 
+.. automodule:: vvv.validators.pdb
+
 --------------------------------------------
-Web development related validators
+Web development validators
 --------------------------------------------
 
 .. automodule:: vvv.validators.css
+
+--------------------------------------------
+Mark-up validators
+--------------------------------------------
+
+.. automodule:: vvv.validators.rst
