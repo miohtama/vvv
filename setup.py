@@ -31,6 +31,7 @@ setup(name = "vvv",
       css = vvv.validators.css:CSSPlugin
       jshint = vvv.validators.jshint:JSHintPlugin
       pylint = vvv.validators.pylint:PylintPlugin
+      pdb = vvv.validators.pdb:PdbPlugin
       rst = vvv.validators.rst:RestructuredTextPlugin
 
       [console_scripts]

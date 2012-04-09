@@ -11,7 +11,6 @@ import logging
 from traceback import format_exception
 import sys
 import shutil
-import fnmatch
 
 # Third party
 from pkg_resources import iter_entry_points
@@ -61,7 +60,7 @@ class VVV(object):
         #: Command line options
         self.options = self.files = self.verbose = self.project = \
         self.installation = self.reinstall = self.suicidal = \
-        self.include = self.regex_debug = self.quiet = None
+        self.include = self.regex_debug = self.quiet = self.print_files = None
 
         #: Parsed option file data
         self.options_data = self.files_data = None
@@ -154,11 +153,8 @@ class VVV(object):
 
         for fpath in self.walker.walk_project_files(path, self.matchlist):
 
-            if self.include:
-                fname = os.path.basename(fpath)
-                if not fnmatch.fnmatch(fname, self.include):
-                    #logger.debug("%s ignored by command-line override" % fpath)
-                    continue                
+            if self.print_files:
+                logger.info(fpath)
                     
             if self.process(fpath):
                 return True             
@@ -306,7 +302,7 @@ def main(
     verbose : ("Give verbose output", "flag", "v"),
     reinstall : ("Redownload and configure all validation software", "flag", "ri"),
     suicidal : ("Die on first error", "flag", "s"),
-    include : ("Include only files matching this spec", "option", "inc"),
+    printfiles : ("Output scanned files to stdout", "flag", "print"),
     regexdebug : ("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
     quiet : ("Only output fatal internal errors to stdout", "flag", "q"), 
     project_folder : ("Path to a project folder. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
@@ -328,7 +324,7 @@ def main(
 
     vvv = VVV(options=options, files=files, verbose=verbose, project=project_folder, 
               installation=installation, reinstall=reinstall, quiet = quiet,
-              suicidal=suicidal, include = include, regex_debug=regexdebug)
+              suicidal=suicidal, include = None, regex_debug=regexdebug, print_files=printfiles)
     vvv.run()
 
 

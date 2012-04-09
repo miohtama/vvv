@@ -21,4 +21,7 @@ pylint: |
   !vvv/bzrlib/*
   !scripts/expand_tabs.py
 
-
+# pdb validator has set_trace() inside strings
+pdb: |
+  *.py
+  !vvv/validators/pdb.py

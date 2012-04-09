@@ -27,7 +27,8 @@
 
 # unittest method names do not satisfy PEP-8
 # :C0103: *Invalid name "%s" (should match %s)*
-# pylint: disable = C0103   
+# :W0201: *Attribute %r defined outside __init__*
+# pylint: disable = C0103, W0201
 
 import unittest
 import os
@@ -63,10 +64,7 @@ class ValidatorTestCase(unittest.TestCase):
         """
         unittest.TestCase.__init__(self, *args, **kwargs)
 
-        #: Declare variables given us externally
-        self.path = self.success = self.options = None
-
-    def set_path(self, path, success):
+    def set_path(self, path, success, options):
         """
         Set path to a "project source folder" which we execute.
 
@@ -74,8 +72,11 @@ class ValidatorTestCase(unittest.TestCase):
 
         :param success: Should test data validate or not
         """
+        # XXX: Set set static class members,
+        # no need to call this method
         self.path = path
         self.success = success
+        self.options = options
 
     @staticmethod
     def get_install_path():
