@@ -5,10 +5,14 @@ Python (pylint)
 
 Validator name: ``pylint``
 
-Validate Python files against Pylint.
+Lint Python files using Pylint.
 
 Installation
 ----------------
+
+.. warn::
+
+    pylint installation is broken for Python 3.x - please see notes below 
 
 A temporarily *virtualenv* environment is automatically created
 where pylint command and its dependencies are is installed. 
@@ -110,15 +114,32 @@ And to find a message id::
 pylint bugs
 ------------
 
-Currently you need to manually fix logilab-astng package for Python 3 with truk astng::
+Currently you need to manually fix logilab-astng package for Python 3 with trunk version.
 
-    cd .vvv
-    source source pylint/pylint-virtualenv/bin/activate
+The error::
+
+      File "/Users/moo/code/vvv/dist/test/lib/python3.2/site-packages/logilab_astng-0.23.1-py3.2.egg/logilab/astng/scoped_nodes.py", line 249, in file_stream
+        return file(self.file)
+    NameError: global name 'file' is not defined
+
+If you are using a .vvv virtualenv::
+
+    cd ~/.vvv
+    source pylint/pylint-virtualenv/bin/activate
+    hg clone http://hg.logilab.org/logilab/astng
+    cd astng
+    python setup.py install
+
+If you are using ``host-python-env`` option::
+
+    source YOURVIRTUALENV/bin/activate
     hg clone http://hg.logilab.org/logilab/astng
     cd astng
     python setup.py install
 
 * http://comments.gmane.org/gmane.comp.python.logilab/1193
+
+After this re-run vvv and everything should go ok.
 
 More info
 ------------

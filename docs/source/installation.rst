@@ -11,7 +11,7 @@ Prerequisites
 Runs on OSX and Linux. Windows is not (yet) supported. 
 Requires Python 3 environment to run. 
 
-Installing locally
+Installing locally using virtualenv
 --------------------------------------
 
 `virtualenv based <http://pypi.python.org/pypi/virtualenv>`_ installation is recommended. 
@@ -53,7 +53,19 @@ VVV will validate your source code.
 Now you can proceed to :doc:`configuring VVV for your project </configuration>`,
 to get rid of those pesky validation errors.
 
-Validator auto installed software
+Installing trunk version
+++++++++++++++++++++++++++++
+
+If you want to use GitHub trunk version do::
+
+    source ~/vvv-venv/bin/activate
+    git clone git://github.com/miohtama/vvv.git
+    cd vvv
+    python setup.py develop
+
+This will install vvv development version under ``vvv-venv`` virtualenv.
+
+Automatically pulled in software
 --------------------------------------
 
 Each target programming language may require its own system-wide

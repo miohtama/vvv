@@ -6,9 +6,12 @@
 
 from setuptools import setup
 
+LONG_DESCRIPTION = open("README.rst").read()
+
 setup(name = "vvv",
     version = "0.1",
-    description = "Very valid versioning",
+    long_description = LONG_DESCRIPTION,
+    description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",
     author_email = "mikko@opensourcehacker.com",
     url = "https://github.com/miohtama/vvv",

@@ -48,6 +48,8 @@ Documentation
 
 Please see the `VVV documentation on readthedocs.org <http://readthedocs.org/docs/vvv/en/latest/>`_
 
+Explore different `linting and validators available <http://readthedocs.org/docs/vvv/en/latest/validators.html>`_.
+
 Author
 ===============
 

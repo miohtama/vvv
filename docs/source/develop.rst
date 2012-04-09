@@ -95,5 +95,28 @@ Validating code
 Your can self-validate the vvv codebase::
 
     source venv/bin/activate
+
+    # Make sure you have docutils installed, as it is referred by some files
+    easy_install docutils
+
     vvv .
 
+Releasing
+==========================
+
+Use `jarn.mkrelease <http://pypi.python.org/pypi/jarn.mkrelease>`_::
+
+    source PYTHON2-VENV/bin/activate
+    easy_install mkrelease
+    mkrelease -C -T -d pypi .  
+
+.. note ::
+
+    For mkrelease you need to Python 2.x virtualenv.
+
+mkrelease bug::
+
+      File "/Users/moo/code/vvv/venv/lib/python3.2/site-packages/jarn.mkrelease-3.5-py3.2.egg/jarn/mkrelease/mkrelease.py", line 237
+        except getopt.GetoptError, e:
+                                 ^
+    SyntaxError: invalid syntax
