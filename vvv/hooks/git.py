@@ -7,6 +7,7 @@
 """
 import os
 import sys
+import stat
 
 from vvv import sysdeps
 
@@ -54,6 +55,11 @@ def setup_hook():
     f = open(precommit, "wt")
     f.write(hook)
     f.close()
+
+    # Make hook executable
+    mode = os.stat(precommit).st_mode
+    mode += stat.S_IXOTH + stat.S_IXGRP + stat.S_IXUSR
+    os.chmod(precommit, mode)
 
     print("Installed git precommit hook %s" % precommit)
     sys.exit(0)
