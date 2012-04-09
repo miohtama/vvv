@@ -1,0 +1,587 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Validators &mdash; VVV 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="VVV 0.1 documentation" href="index.html" />
+    <link rel="next" title="System prerequisites" href="prerequisites.html" />
+    <link rel="prev" title="Running and integration" href="integration.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="prerequisites.html" title="System prerequisites"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="integration.html" title="Running and integration"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Validators</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#module-vvv.validators.tabs">Generic text file validators</a><ul>
+<li><a class="reference internal" href="#tab-policy">Tab policy</a><ul>
+<li><a class="reference internal" href="#mass-converting-tabs-to-spaces">Mass converting tabs to spaces</a></li>
+<li><a class="reference internal" href="#supported-files">Supported files</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#more-info">More info</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#line-length">Line length</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#id1">Supported files</a></li>
+<li><a class="reference internal" href="#id2">Options</a><ul>
+<li><a class="reference internal" href="#length">length</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">More info</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.jshint">Programming language validators</a><ul>
+<li><a class="reference internal" href="#javascript-jshint">Javascript (jshint)</a><ul>
+<li><a class="reference internal" href="#id4">Prerequisites</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#id5">Supported files</a></li>
+<li><a class="reference internal" href="#id6">Options</a><ul>
+<li><a class="reference internal" href="#configuration">configuration</a></li>
+<li><a class="reference internal" href="#command-line">command-line</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">More info</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-pylint">Python (pylint)</a><ul>
+<li><a class="reference internal" href="#id8">Installation</a></li>
+<li><a class="reference internal" href="#id9">Supported files</a></li>
+<li><a class="reference internal" href="#id10">Options</a><ul>
+<li><a class="reference internal" href="#host-python-env">host-python-env</a></li>
+<li><a class="reference internal" href="#id11">command-line</a></li>
+<li><a class="reference internal" href="#id12">configuration</a></li>
+<li><a class="reference internal" href="#python3k">python3k</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other">Other</a></li>
+<li><a class="reference internal" href="#pylint-bugs">pylint bugs</a></li>
+<li><a class="reference internal" href="#id13">More info</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-pdb-breakpoints">Python (pdb breakpoints)</a><ul>
+<li><a class="reference internal" href="#id14">Supported files</a></li>
+<li><a class="reference internal" href="#id15">Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.css">Web development validators</a><ul>
+<li><a class="reference internal" href="#css">CSS</a><ul>
+<li><a class="reference internal" href="#id16">Prerequisites</a></li>
+<li><a class="reference internal" href="#id17">Installation</a></li>
+<li><a class="reference internal" href="#id18">Supported files</a></li>
+<li><a class="reference internal" href="#id19">Options</a></li>
+<li><a class="reference internal" href="#id20">More info</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.rst">Mark-up validators</a><ul>
+<li><a class="reference internal" href="#restructred-text-rst">Restructred Text (rst)</a><ul>
+<li><a class="reference internal" href="#id21">Installation</a></li>
+<li><a class="reference internal" href="#id22">Supported files</a></li>
+<li><a class="reference internal" href="#id23">Options</a></li>
+<li><a class="reference internal" href="#more-information">More information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="integration.html"
+                        title="previous chapter">Running and integration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="prerequisites.html"
+                        title="next chapter">System prerequisites</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/validators.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="validators">
+<h1>Validators<a class="headerlink" href="#validators" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id24">Introduction</a></li>
+<li><a class="reference internal" href="#module-vvv.validators.tabs" id="id25">Generic text file validators</a><ul>
+<li><a class="reference internal" href="#tab-policy" id="id26">Tab policy</a></li>
+<li><a class="reference internal" href="#line-length" id="id27">Line length</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.jshint" id="id28">Programming language validators</a><ul>
+<li><a class="reference internal" href="#javascript-jshint" id="id29">Javascript (jshint)</a></li>
+<li><a class="reference internal" href="#python-pylint" id="id30">Python (pylint)</a></li>
+<li><a class="reference internal" href="#python-pdb-breakpoints" id="id31">Python (pdb breakpoints)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.css" id="id32">Web development validators</a><ul>
+<li><a class="reference internal" href="#css" id="id33">CSS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-vvv.validators.rst" id="id34">Mark-up validators</a><ul>
+<li><a class="reference internal" href="#restructred-text-rst" id="id35">Restructred Text (rst)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id24">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Here are options and background for each different vvv
+validator described.</p>
+</div>
+<div class="section" id="module-vvv.validators.tabs">
+<span id="generic-text-file-validators"></span><h2><a class="toc-backref" href="#id25">Generic text file validators</a><a class="headerlink" href="#module-vvv.validators.tabs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tab-policy">
+<h3><a class="toc-backref" href="#id26">Tab policy</a><a class="headerlink" href="#tab-policy" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">tabs</span></tt></p>
+<p>Do not allow hard tabs in committed files.
+Instead, use soft tabs and spaces.</p>
+<p>To allow hard tabs in any file add the following in your <tt class="docutils literal"><span class="pre">validator-options.yaml</span></tt>:</p>
+<div class="highlight-python"><pre>tabs:
+    enable: false</pre>
+</div>
+<p>To allow hard tabs in specific files use <tt class="docutils literal"><span class="pre">validator-files.yaml</span></tt>:</p>
+<div class="highlight-python"><pre>tabs:
+  Makefile
+  *.mk </pre>
+</div>
+<div class="section" id="mass-converting-tabs-to-spaces">
+<h4>Mass converting tabs to spaces<a class="headerlink" href="#mass-converting-tabs-to-spaces" title="Permalink to this headline">¶</a></h4>
+<p>VVV provides a Python script to expand tabs to spaces in-place.</p>
+<p>With <tt class="docutils literal"><span class="pre">find</span></tt> and <tt class="docutils literal"><span class="pre">xargs</span></tt> you can easily convert the whole project 
+tree away from hard tabs:</p>
+<div class="highlight-python"><pre># Find all ascii files and convert them to use tabs,
+# but watch out not to hit Makefile or any other file needing hard tabs!
+find . -name &quot;*&quot; -type f -print | xargs file | grep ASCII | cut -d: -f1 | xargs scripts/expand_tabs.py --inplace --tabsize=4 </pre>
+</div>
+<p>You can also try UNIX <tt class="docutils literal"><span class="pre">expand</span></tt> command, but it does not do in-place conversion.</p>
+</div>
+<div class="section" id="supported-files">
+<h4>Supported files<a class="headerlink" href="#supported-files" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>All text files, Makefiles are excluded by default</li>
+</ul>
+</div>
+<div class="section" id="options">
+<h4>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h4>
+<p>No options.</p>
+</div>
+<div class="section" id="more-info">
+<h4>More info<a class="headerlink" href="#more-info" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="http://dougneiner.com/post/641596410/tabs-vs-spaces">http://dougneiner.com/post/641596410/tabs-vs-spaces</a></li>
+</ul>
+</div>
+</div>
+<span class="target" id="module-vvv.validators.linelength"></span><div class="section" id="line-length">
+<h3><a class="toc-backref" href="#id27">Line length</a><a class="headerlink" href="#line-length" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">linelength</span></tt></p>
+<p>Check that that text file lines are not too long.</p>
+<div class="section" id="prerequisites">
+<h4>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h4>
+<p>Built-in - no external software needed.</p>
+</div>
+<div class="section" id="id1">
+<h4>Supported files<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>All text files.</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h4>Options<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="length">
+<h5>length<a class="headerlink" href="#length" title="Permalink to this headline">¶</a></h5>
+<p>Set maximum allowed line length. Defaults to <tt class="docutils literal"><span class="pre">80</span></tt> columns.</p>
+<p>Example <tt class="docutils literal"><span class="pre">validator-options.yaml</span></tt>:</p>
+<div class="highlight-python"><pre># Allow long text lines
+linelength:
+    length: 250</pre>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h4>More info<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="http://www.kernel.org/doc/Documentation/CodingStyle">http://www.kernel.org/doc/Documentation/CodingStyle</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="module-vvv.validators.jshint">
+<span id="programming-language-validators"></span><h2><a class="toc-backref" href="#id28">Programming language validators</a><a class="headerlink" href="#module-vvv.validators.jshint" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="javascript-jshint">
+<h3><a class="toc-backref" href="#id29">Javascript (jshint)</a><a class="headerlink" href="#javascript-jshint" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">jshint</span></tt></p>
+<p>Lint Javascript files using <a class="reference external" href="http://www.jshint.com/">jshint</a>.</p>
+<div class="section" id="id4">
+<h4>Prerequisites<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>Your system supports Node.js and must have jshint package installed.</p>
+<p>Please see <a class="reference internal" href="prerequisites.html"><em>prerequisites</em></a>.</p>
+</div>
+<div class="section" id="installation">
+<h4>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h4>
+<p>You must use Node <tt class="docutils literal"><span class="pre">npm</span></tt> to install <tt class="docutils literal"><span class="pre">node-jshint</span></tt> package.</p>
+<div class="highlight-python"><pre>sudo npm install -g jshint</pre>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/jshint/node-jshint/">https://github.com/jshint/node-jshint/</a></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h4>Supported files<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>*.js</li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h4>Options<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>Options for <tt class="docutils literal"><span class="pre">jshint</span></tt> section in <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt>.</p>
+<p>Example <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt>:</p>
+<div class="highlight-python"><pre>jshint:
+    configuration: |
+        {
+            eqeqeq : true
+        }</pre>
+</div>
+<div class="section" id="configuration">
+<h5>configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h5>
+<p>Pass in <tt class="docutils literal"><span class="pre">.jshintrc</span></tt> configuration options.</p>
+<ul class="simple">
+<li><a class="reference external" href="http://www.jshint.com/options/">Information about jshint options</a></li>
+<li><a class="reference external" href="https://github.com/jshint/node-jshint/blob/master/.jshintrc">Example configuration</a></li>
+</ul>
+</div>
+<div class="section" id="command-line">
+<h5>command-line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h5>
+<p>Pass in extra arguments for the jshint command line.</p>
+</div>
+</div>
+<div class="section" id="id7">
+<h4>More info<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="http://www.jshint.com/">http://www.jshint.com/</a></li>
+</ul>
+</div>
+</div>
+<span class="target" id="module-vvv.validators.pylint"></span><div class="section" id="python-pylint">
+<h3><a class="toc-backref" href="#id30">Python (pylint)</a><a class="headerlink" href="#python-pylint" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">pylint</span></tt></p>
+<p>Lint Python files using Pylint.</p>
+<div class="section" id="id8">
+<h4>Installation<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">pylint installation is broken for Python 3.x - please see notes below</p>
+</div>
+<p>A temporarily <em>virtualenv</em> environment is automatically created
+where pylint command and its dependencies are is installed. 
+However this is not very good way to run pylint, as if you 
+are using any third party libraries pylint cannot import them
+and thus fails.</p>
+<p>It is recommended to use <tt class="docutils literal"><span class="pre">host-python-env</span></tt> option -
+this whill install pylint to a Python environment
+which you enable before running.</p>
+<p>Example (assuming you have <tt class="docutils literal"><span class="pre">host-python-env</span></tt> set in <tt class="docutils literal"><span class="pre">validate-options.yaml</span></tt>):</p>
+<div class="highlight-python"><pre># Activate virtualenv
+source venv/bin/activate
+
+# Run vvv and install pylint to now activate Python env
+vvv --reinstall</pre>
+</div>
+<p>The default pylint checks are very strict. You might want to see a more relaxed configuration example:</p>
+<div class="highlight-python"><pre>* https://github.com/miohtama/vvv/blob/master/validation-options.yaml</pre>
+</div>
+</div>
+<div class="section" id="id9">
+<h4>Supported files<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>*.py</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h4>Options<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p>Example <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt>:</p>
+<div class="highlight-python"><pre>pylint:
+    python3k: true
+
+    command-line: --reports=n</pre>
+</div>
+<div class="section" id="host-python-env">
+<h5>host-python-env<a class="headerlink" href="#host-python-env" title="Permalink to this headline">¶</a></h5>
+<p>If true do not create a virtualenv, but install pylint using
+the active <tt class="docutils literal"><span class="pre">python</span></tt> interpreter when vvv is run.</p>
+<p>Default false.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you change this you need run <tt class="docutils literal"><span class="pre">vvv</span> <span class="pre">--reinstall</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="id11">
+<h5>command-line<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<p>Give pylint command line options.</p>
+</div>
+<div class="section" id="id12">
+<h5>configuration<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<p>Pass in pylint configuration file data.
+This is a block of text which gets passed in as pylint .rc file.
+For rc file example run command:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">rcfile</span> 
+</pre></div>
+</div>
+</div>
+<div class="section" id="python3k">
+<h5>python3k<a class="headerlink" href="#python3k" title="Permalink to this headline">¶</a></h5>
+<p>If true set-up pylint for Python 3.x. The default is Python 2.x.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you change this you need run <tt class="docutils literal"><span class="pre">vvv</span> <span class="pre">--reinstall</span></tt>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="other">
+<h4>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h4>
+<p>To disable warning per source code file one can add pylint hints in the .py files using <tt class="docutils literal"><span class="pre">pylint:</span></tt> directives like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># :R0201: *Method could be a function*</span>
+<span class="c"># W0102 Dangerous default value [] as argument</span>
+<span class="c"># R0921 Abstract class not referenced</span>
+<span class="c"># :W0611: *Unused import %s*</span>
+<span class="c"># pylint: disable=R0201, W0102, R0921, W0611</span>
+</pre></div>
+</div>
+<p>These can be function or module level scoped.</p>
+<p>To see all pylint error and warning message ids:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">msgs</span>    
+</pre></div>
+</div>
+<p>And to find a message id:</p>
+<div class="highlight-python"><pre>pylint --list-msgs|grep -i &quot;Dangerous default&quot;
+:W0102: *Dangerous default value %s as argument*</pre>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://www.logilab.org/ticket/91764">http://www.logilab.org/ticket/91764</a></li>
+</ul>
+</div>
+<div class="section" id="pylint-bugs">
+<h4>pylint bugs<a class="headerlink" href="#pylint-bugs" title="Permalink to this headline">¶</a></h4>
+<p>Currently you need to manually fix logilab-astng package for Python 3 with trunk version.</p>
+<p>The error:</p>
+<div class="highlight-python"><pre>  File &quot;/Users/moo/code/vvv/dist/test/lib/python3.2/site-packages/logilab_astng-0.23.1-py3.2.egg/logilab/astng/scoped_nodes.py&quot;, line 249, in file_stream
+    return file(self.file)
+NameError: global name &#x27;file&#x27; is not defined</pre>
+</div>
+<p>If you are using a .vvv virtualenv:</p>
+<div class="highlight-python"><pre>cd ~/.vvv
+source pylint/pylint-virtualenv/bin/activate
+hg clone http://hg.logilab.org/logilab/astng
+cd astng
+python setup.py install</pre>
+</div>
+<p>If you are using <tt class="docutils literal"><span class="pre">host-python-env</span></tt> option:</p>
+<div class="highlight-python"><pre>source YOURVIRTUALENV/bin/activate
+hg clone http://hg.logilab.org/logilab/astng
+cd astng
+python setup.py install</pre>
+</div>
+<ul class="simple">
+<li><a class="reference external" href="http://comments.gmane.org/gmane.comp.python.logilab/1193">http://comments.gmane.org/gmane.comp.python.logilab/1193</a></li>
+</ul>
+<p>After this re-run vvv and everything should go ok.</p>
+</div>
+<div class="section" id="id13">
+<h4>More info<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="http://pypi.python.org/pypi/pylint">http://pypi.python.org/pypi/pylint</a></li>
+<li><a class="reference external" href="http://www.logilab.org/card/pylint_manual">http://www.logilab.org/card/pylint_manual</a></li>
+<li><a class="reference external" href="http://www.logilab.org/4736">http://www.logilab.org/4736</a></li>
+</ul>
+</div>
+</div>
+<span class="target" id="module-vvv.validators.pdb"></span><div class="section" id="python-pdb-breakpoints">
+<h3><a class="toc-backref" href="#id31">Python (pdb breakpoints)</a><a class="headerlink" href="#python-pdb-breakpoints" title="Permalink to this headline">¶</a></h3>
+<p>Validator name:: <tt class="docutils literal"><span class="pre">pdb</span></tt></p>
+<p>Do not allow Python pdb breakpoints in the committed files.</p>
+<p>E.g. this will fail:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">pdb</span> <span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The validator match for <tt class="docutils literal"><span class="pre">pdb.set_trace()</span></tt> in uncommented lines.</p>
+<div class="section" id="id14">
+<h4>Supported files<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h4>
+<p><tt class="docutils literal"><span class="pre">*.py</span></tt></p>
+</div>
+<div class="section" id="id15">
+<h4>Options<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h4>
+<p>No options.</p>
+</div>
+</div>
+</div>
+<div class="section" id="module-vvv.validators.css">
+<span id="web-development-validators"></span><h2><a class="toc-backref" href="#id32">Web development validators</a><a class="headerlink" href="#module-vvv.validators.css" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="css">
+<h3><a class="toc-backref" href="#id33">CSS</a><a class="headerlink" href="#css" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">css</span></tt></p>
+<p>Validate CSS files against W3C CSS validator.</p>
+<div class="section" id="id16">
+<h4>Prerequisites<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h4>
+<p>Your system supports <tt class="docutils literal"><span class="pre">java</span></tt> command.</p>
+<p>Please see <a class="reference internal" href="prerequisites.html"><em>prerequisites</em></a>.</p>
+</div>
+<div class="section" id="id17">
+<h4>Installation<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h4>
+<p>CSS validator is Java executable and bunch of JAR files
+which are downloaded and installed automatically.</p>
+</div>
+<div class="section" id="id18">
+<h4>Supported files<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>*.css</li>
+</ul>
+</div>
+<div class="section" id="id19">
+<h4>Options<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h4>
+<p>No options.</p>
+</div>
+<div class="section" id="id20">
+<h4>More info<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="http://jigsaw.w3.org/css-validator/">http://jigsaw.w3.org/css-validator/</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="module-vvv.validators.rst">
+<span id="mark-up-validators"></span><h2><a class="toc-backref" href="#id34">Mark-up validators</a><a class="headerlink" href="#module-vvv.validators.rst" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="restructred-text-rst">
+<h3><a class="toc-backref" href="#id35">Restructred Text (rst)</a><a class="headerlink" href="#restructred-text-rst" title="Permalink to this headline">¶</a></h3>
+<p>Validator name: <tt class="docutils literal"><span class="pre">rst</span></tt></p>
+<p>Check that .rst files do not contain syntax errors using <a class="reference external" href="http://docutils.sourceforge.net//">docutils</a>.
+Restructured format is used by <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx documentatio tool</a> and 
+also supported by Github README files.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unknown restructured directives errors are ignored, mainly because systems like Sphinx
+add their own directives.</p>
+</div>
+<div class="section" id="id21">
+<h4>Installation<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h4>
+<p>Works out of the box.</p>
+</div>
+<div class="section" id="id22">
+<h4>Supported files<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>*.rst</li>
+</ul>
+</div>
+<div class="section" id="id23">
+<h4>Options<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h4>
+<p>None.</p>
+</div>
+<div class="section" id="more-information">
+<h4>More information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/miohtama/vvv/blob/master/vvv/scripts/validaterst.py">https://github.com/miohtama/vvv/blob/master/vvv/scripts/validaterst.py</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="prerequisites.html" title="System prerequisites"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="integration.html" title="Running and integration"
+             >previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Mikko Ohtamaa.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

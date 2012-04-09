@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration &mdash; VVV 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="VVV 0.1 documentation" href="index.html" />
+    <link rel="next" title="Running and integration" href="integration.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="integration.html" title="Running and integration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+<li><a class="reference internal" href="#available-configuration-file-options">Available configuration file options</a></li>
+<li><a class="reference internal" href="#file-whitelisting-and-blacklisting">File whitelisting and blacklisting</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="integration.html"
+                        title="next chapter">Running and integration</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/configuration.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#configuration-file" id="id2">Configuration file</a></li>
+<li><a class="reference internal" href="#available-configuration-file-options" id="id3">Available configuration file options</a></li>
+<li><a class="reference internal" href="#file-whitelisting-and-blacklisting" id="id4">File whitelisting and blacklisting</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>VVV can be configuredin two ways</p>
+<ul class="simple">
+<li>VVV configuration files are in your software project folder are shared between
+the developers of the project (<tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt> and <tt class="docutils literal"><span class="pre">validation-files.yaml</span></tt>)</li>
+<li>VVV command line parameters are specific to each run / integration environment where VVV is executed</li>
+</ul>
+<p>Configuration files are specified in <a class="reference external" href="http://ess.khhq.net/wiki/YAML_Tutorial">YAML syntax</a>.</p>
+</div>
+<div class="section" id="configuration-file">
+<h2><a class="toc-backref" href="#id2">Configuration file</a><a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>In your project root add <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt>. If this file does not exist default settings are used as described below.</p>
+<p><tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt> example:</p>
+<div class="highlight-python"><pre>tabs:
+
+    # Disable hard tab rejector for this project
+    enable: false
+
+css:
+
+    hint: Your CSS files did not pass W3C validator. Please see README.txt for project CSS coding conventions.</pre>
+</div>
+</div>
+<div class="section" id="available-configuration-file-options">
+<h2><a class="toc-backref" href="#id3">Available configuration file options</a><a class="headerlink" href="#available-configuration-file-options" title="Permalink to this headline">¶</a></h2>
+<p>The configuration file has one section per each validator.</p>
+<p>Each validator can has its own settings, but there exist some options which are available for each validator.</p>
+<p><strong>Global options</strong></p>
+<p><em>enable</em>: true or false. Default true. Whether globally enable a validator in your project.</p>
+<p><em>hint</em>: Helpful message printed user if this validator fails. Can be multiline.</p>
+<p>For validator specific options please consult validators manual.</p>
+<p>Example <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt>:</p>
+<div class="highlight-python"><pre>tabs:
+    enable false
+
+css:
+    enable false
+
+linelength:
+    length: 250
+
+jslint:
+    hint: This project follows jQuery Core Javascript coding conventions http://docs.jquery.com/JQuery_Core_Style_Guidelines</pre>
+</div>
+</div>
+<div class="section" id="file-whitelisting-and-blacklisting">
+<h2><a class="toc-backref" href="#id4">File whitelisting and blacklisting</a><a class="headerlink" href="#file-whitelisting-and-blacklisting" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">validation-files.yaml</span></tt> allows you to whitelist and blacklist files for validation.
+It&#8217;s main purpose is to ignore files which do not conform your policies 100%.
+This is e.g. useful if your source code repository contains third party library files which
+do not inherit your project coding conventions.</p>
+<p>The file contains YAML sections which follow <a class="reference external" href="http://doc.bazaar.canonical.com/beta/en/user-reference/ignore-help.html">Bazaar ignore path matching rules</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Unlike with Bazaar path specs are inclusive (list of matched), not exclusive (list of ignored files)</p>
+</div>
+<p>There is one global <tt class="docutils literal"><span class="pre">all</span></tt> section with blacklist and whitelist and then validator specific sections by the validator id.</p>
+<p>Example <tt class="docutils literal"><span class="pre">validation-files.yaml</span></tt>:</p>
+<div class="highlight-python"><pre># Don&#x27;t match hidden dotted files/folders
+# Don&#x27;t match generated folders
+# Don&#x27;t match test data (which is bad intentionally)
+all: |
+  *
+  !RE:.*\/\..*|^\..*
+  !**/build/**
+  !venv
+  !**/__pycache__
+  !*.egg-info
+  !tests/validators
+  !tests/test-installation-environment
+
+# Sphinx generated conf.py does not pass pylint validation.
+# https://bitbucket.org/birkenfeld/sphinx/issue/909/generated-default-confpy-does-not-pass
+# bzrlib files come from outside the project.
+# expand_tabs come from outside the project
+pylint: |
+  *.py
+  !docs/source/conf.py
+  !vvv/bzrlib/*
+  !scripts/expand_tabs.py
+
+# pdb validator has set_trace() inside strings
+pdb: |
+  *.py
+  !vvv/validators/pdb.py
+
+
+# Include all text files, ignore hard tab checking for Makefiles
+tabs:
+    *
+    !Makefile
+    !*.mk</pre>
+</div>
+<p>Validators won&#8217;t try to process binary files.</p>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://kashfarooq.wordpress.com/2009/09/15/ignoring-files-and-folders-with-bazaar-source-control/">http://kashfarooq.wordpress.com/2009/09/15/ignoring-files-and-folders-with-bazaar-source-control/</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="integration.html" title="Running and integration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Mikko Ohtamaa.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
