@@ -1,5 +1,5 @@
 ========================================================
-Validators
+Validators and linters
 ========================================================
 
 .. contents :: :local:
@@ -9,8 +9,8 @@ Validators
 Introduction
 ----------------------
 
-Here are options and background for each different vvv 
-validator described.
+Here are listed different validator and linting modules
+supported by VVV.
 
 --------------------------------------------
 Generic text file validators
@@ -21,7 +21,7 @@ Generic text file validators
 .. automodule:: vvv.validators.linelength
  
 --------------------------------------------
-Programming language validators
+Programming language linting
 --------------------------------------------
 
 .. automodule:: vvv.validators.jshint
