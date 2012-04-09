@@ -31,9 +31,11 @@ setup(name = "vvv",
       css = vvv.validators.css:CSSPlugin
       jshint = vvv.validators.jshint:JSHintPlugin
       pylint = vvv.validators.pylint:PylintPlugin
+      rst = vvv.validators.rst:RestructuredTextPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point
-      git-pre-commit-hook = vvv.hooks.git:precommit
+      vvv-git-pre-commit-hook = vvv.hooks.git:precommit
+      vvv-validate-rst = vvv.scripts.validaterst:run
       """,        
 ) 
