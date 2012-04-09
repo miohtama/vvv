@@ -41,9 +41,9 @@ def setup_hook():
     
     cmdline = "%s %s" % (command, path)    
 
-    precommit = os.path.exists(os.path.join(path, ".git", "hooks", "precommit"))
+    precommit = os.path.join(path, ".git", "hooks", "precommit")
 
-    if os.path.exists("precommit"):
+    if os.path.exists(precommit):
         print("Precommit hook already exists: %s" % precommit)
         print("Manually add in the command:")
         print(cmdline)
