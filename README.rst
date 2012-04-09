@@ -1,9 +1,10 @@
-==================================
-VVV - validation and linting tool
-==================================
+========================================
+VVV - validation and linting integrator
+========================================
 
 VVV is a tool for easy validation and linting integration for your software project.
-With a single command validate all files in a source tree against a policy you can specify with simple configuration file.
+With a single command validate all files, no matter in which programming language,
+in a source tree against a policy you specify in a simple configuration file.
 VVV prevents bad stuff to be committed in your software source control or makes cleaning it up easier.
 
 .. contents :: :local:

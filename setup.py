@@ -7,11 +7,11 @@
 from setuptools import setup
 
 setup(name = "vvv",
-    version = "0.0",
+    version = "0.1",
     description = "Very valid versioning",
     author = "Mikko Ohtamaa",
     author_email = "mikko@opensourcehacker.com",
-    url = "",
+    url = "https://github.com/miohtama/vvv",
     install_requires = ["setuptools", 
         "PyYAML==3.10",
         "plac==0.9.0",
