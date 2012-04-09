@@ -27,12 +27,16 @@ orignal_system_message = utils.Reporter.system_message
 
 # 'No directive entry for "automodule" in module "docutils.parsers.rst.languages.en".\nTrying "automodule" as canonical directive name.'
 # <string>:23: (ERROR/3) Unknown interpreted text role "ref"
+# 'No role entry for "doc" in module "docutils.parsers.rst.languages.en".\nTrying "doc" as canonical role name.'
 def filter_message(message):
     """ 
     Return True if message is valid output
     """
     # <string>:7: (ERROR/3) Unknown directive type "automodule".
-    if "No directive entry for" in message or "Unknown directive type" in message or "Unknown interpreted text role" in message:
+    if "No directive entry for" in message or "Unknown directive type" in message \
+        or "Unknown interpreted text role" in message \
+        or "No role entry for" in message:
+        
         return False
     return True 
 
@@ -45,10 +49,13 @@ def system_message(self, level, message, *children, **kwargs):
 
 
     if filter_message(message):
+
         result = orignal_system_message(self, level, message, *children, **kwargs)
 
-        # Collect to internal message log
-        reports.append(message)
+        if level >= self.WARNING_LEVEL:
+
+            # Collect to internal message log
+            reports.append(message)
 
     else:
         # We don't want to see the filtered messages

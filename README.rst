@@ -41,10 +41,6 @@ Documentation
 
 Please see the `VVV documentation on readthedocs.org <http://readthedocs.org/docs/vvv/en/latest/>`_
 
-Bad block::
-
-Foobar
-
 Author
 ===============
 
