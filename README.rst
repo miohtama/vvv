@@ -46,9 +46,9 @@ Features
 Documentation
 ===============
 
-Please see the `VVV documentation on readthedocs.org <http://readthedocs.org/docs/vvv/en/latest/>`_
+Please see the `VVV documentation on readthedocs.org <http://miohtama.github.com/vvv/>`_
 
-Explore different `linting and validators available <http://readthedocs.org/docs/vvv/en/latest/validators.html>`_.
+Explore different `linting and validators available <http://miohtama.github.com/vvv/validators.html>`_.
 
 Author
 ===============

@@ -101,7 +101,7 @@ Your can self-validate the vvv codebase::
 
     vvv .
 
-Releasing
+Releasing egg
 ==========================
 
 Use `jarn.mkrelease <http://pypi.python.org/pypi/jarn.mkrelease>`_::
@@ -111,7 +111,7 @@ Use `jarn.mkrelease <http://pypi.python.org/pypi/jarn.mkrelease>`_::
     mkrelease -C -T -d pypi .  
 
 .. note ::
-
+    
     For mkrelease you need to Python 2.x virtualenv.
 
 mkrelease bug::
@@ -120,3 +120,14 @@ mkrelease bug::
         except getopt.GetoptError, e:
                                  ^
     SyntaxError: invalid syntax
+
+Publishing docs
+============================
+
+rtfd.org does not seem to support Python 3 auto import modules.
+
+To publish docs on GitHub::
+
+    source venv/bin/activate
+    easy_install Sphinx
+    sh scripts/publish-docs.sh    

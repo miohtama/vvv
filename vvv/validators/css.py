@@ -1,6 +1,6 @@
 """
 
-CSS
+CSS (W3C validator)
 ====================
 
 Validator name: ``css``

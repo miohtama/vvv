@@ -10,7 +10,7 @@ Lint Python files using Pylint.
 Installation
 ----------------
 
-.. warn::
+.. warning::
 
     pylint installation is broken for Python 3.x - please see notes below 
 
