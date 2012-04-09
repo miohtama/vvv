@@ -1,4 +1,4 @@
 function foobar() {
-	// No globals!
-	i = 234;
+    // No globals!
+    i = 234;
 }

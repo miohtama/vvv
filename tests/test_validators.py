@@ -116,12 +116,15 @@ class ValidatorTestCase(unittest.TestCase):
         
         result = vvv.run()
 
+        if vvv.output:
+            self.assertFalse("Line contains hard tabs" in vvv.output, "Please fix tab errors in the test cases first %s" % self.path)
+
         success = (result == 0)
         if success:
-            self.assertTrue(self.success, "Test folder %s should have failed, but succeeded" % self.path)
+            self.assertTrue(self.success, "Test folder %s should have failed, but succeeded:\nOutput:\n%s" % (self.path, vvv.output))
 
         if not success:
-            self.assertFalse(self.success, "Test folder %s should have passed, but failed. Run env option VVV_TEST_OUTPUT=verbose for more output" % self.path)
+            self.assertFalse(self.success, "Test folder %s should have passed, but failed.\nOutput:\n%s" % (self.path, vvv.output))
 
 def scan_test_cases():
     """

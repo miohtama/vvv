@@ -1,3 +1,3 @@
 function foobar() {
-	return false;
+     return false;
 }
