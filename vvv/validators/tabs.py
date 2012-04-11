@@ -31,7 +31,7 @@ tree away from hard tabs::
     
     # Find all ascii files and convert them to use tabs,
     # but watch out not to hit Makefile or any other file needing hard tabs!
-    find . -name "*" -type f -print | xargs file | grep ASCII | cut -d: -f1 | vvv-expand-tabs --inplace --tabsize=4 
+    find . -name "*" -type f -print | xargs file | grep ASCII | cut -d: -f1 | xargs vvv-expand-tabs --inplace --tabsize=4 
 
 You can also try UNIX ``expand`` command, but it does not do in-place conversion.
         
