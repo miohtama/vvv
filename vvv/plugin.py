@@ -216,7 +216,7 @@ class Plugin(metaclass=ABCMeta):
 
         :param cmdline: List of arguments
 
-        :param bad_string: If detected in output assume there were validation errors
+        :param bad_string: If detected in output assume there were validation errors. One string of list of strings.
         """
 
         success = True
@@ -226,6 +226,9 @@ class Plugin(metaclass=ABCMeta):
 
         self.logger.debug("Running command line: %s" % cmdline)
         self.logger.debug("Env: %s" % subenv)
+
+        if type(bad_string) == str:
+            bad_string = [bad_string]
 
         process = subprocess.Popen(cmdline, env=subenv, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -240,8 +243,9 @@ class Plugin(metaclass=ABCMeta):
         self.logger.debug(out + "\n" + err)        
 
         if bad_string:
-            if bad_string in out or bad_string in err:
-                success = False
+            for match in bad_string:
+                if match in out or match in err:
+                    success = False
 
         if not success:
             if out != None:

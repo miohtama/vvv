@@ -134,4 +134,4 @@ class CSSPlugin(Plugin):
         classpath += os.path.join(jigsaw, "tagsoup-1.2.jar")
 
         # ...does not even have return code...
-        return self.run_command_line(["java", "org.w3c.css.css.CssValidator", "file://" + fname], bad_string="Sorry!", env=dict(CLASSPATH=classpath))
+        return self.run_command_line(["java", "org.w3c.css.css.CssValidator", "file://" + fname], bad_string=["Sorry!", 'Exception in thread "main"'], env=dict(CLASSPATH=classpath))

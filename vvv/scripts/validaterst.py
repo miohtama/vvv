@@ -9,7 +9,6 @@
 """
 
 import sys
-import os
 
 # http://const-cast.blogspot.com/2009/04/mercurial-on-mac-os-x-valueerror.html
 

@@ -93,8 +93,8 @@ class TabsPlugin(Plugin):
         except UnicodeDecodeError:
             # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
             # For now, how to handle?
-            pass
-
+            self.logger.info("Bad encoding: %s" % fname)
+            
         f.close()
 
         return not errors
