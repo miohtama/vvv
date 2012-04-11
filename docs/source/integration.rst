@@ -117,4 +117,62 @@ TODO
 Integrating with Travis CI
 ===================================
 
-TODO
+`Travis CI <http://about.travis-ci.org/>`_ is continuous integration and build service
+which is free for open source projects to use.
+
+VVV and Travic CI can be easily integrated to your project
+
+* Travis CI will automatically run after you commit changes to your project
+
+* Travis CI will run VVV validation checks against your source code and reports possible violations
+
+.. note ::
+
+    You don't need to install any software or set-up any infrastructure. Travis CI
+    is provided free software-as-a-service for open source projects and all you 
+    need to do this to register in Travis CI and drop one file in your
+    public source code repository.
+
+All you need to do is to
+
+* Drop ``.travis.yaml`` having the option to run VVV in your repository root (example below) 
+
+* Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
+
+* Login to `travis-ci.org <<http://travis-ci.org/>`_ using your Github credentials
+
+* Turn on Travis for your repository - Travis will automatically list all your Github projects
+
+Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <http://pypi.python.org>`_::
+
+    language: python
+
+    python:
+      - "3.2"
+
+    # command to install dependencies
+    # - because we validate ourselves this is special
+    install:
+      - pip install vvv --use-mirrors
+
+    # command to run tests
+    script: vvv .
+
+Example ``.travis.yaml`` using the latest `VVV trunk from Github <https://github.com/miohtama/vvv>`_::
+
+    language: python
+
+    python:
+      - "3.2"
+
+    # command to install dependencies
+    # - because we validate ourselves this is special
+    install:
+      - pip install git://github.com/miohtama/vvv.git
+
+    # command to run tests
+    script: vvv .
+
+More info
+
+* http://about.travis-ci.org/docs/user/build-configuration/

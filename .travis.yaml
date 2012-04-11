@@ -4,9 +4,9 @@ python:
   - "3.2"
 
 # command to install dependencies
+# - because we validate ourselves this is special
 install:
-  - pip install . --use-mirrors
+  - pip install git://github.com/miohtama/vvv.git
 
 # command to run tests
 script: vvv .
-
