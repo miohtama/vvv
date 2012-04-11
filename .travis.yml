@@ -6,7 +6,9 @@ python:
 
 # command to install dependencies
 # - because we validate ourselves this is special
+# - We use logilab.astng trunk until this bug fix is released http://comments.gmane.org/gmane.comp.python.logilab/1193
 install:
+  - "pip install hg+http://hg.logilab.org/logilab/astng/#egg=logilab.astng" 
   - pip install . --use-mirrors
   - pip install docutils --use-mirrors
 
