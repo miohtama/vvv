@@ -143,11 +143,16 @@ All you need to do is to
   Travis token into the settings for the Travis service if it is not already pre-filled. 
   (should not be needed unless your repo belongs to Github organization)
 
-* Drop ``.travis.yaml`` having the option to run VVV in your repository root (example below) 
+* Drop ``.travis.yml`` having the option to run VVV in your repository root (example below) 
 
 * Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
 
 * You can also `include automatically generated status image to your Github README <http://about.travis-ci.org/docs/user/status-images/>`_
+
+* After you push in ``.travis.yml`` for the first time it will trigger the build which you can 
+  see on `travis-ci.org <http://travis-ci.org/>`_ *My Repositories* tab. It should appear there in seconds. 
+
+* If you later need to force a Travis CI run you can do it from Github repository *Admin page* > *Service hooks* > *Travis* > *Test hook* button
 
 Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <http://pypi.python.org>`_::
 
@@ -164,7 +169,7 @@ Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <htt
     # command to run tests
     script: vvv .
 
-Example ``.travis.yaml`` using the latest `VVV trunk from Github <https://github.com/miohtama/vvv>`_::
+Example ``.travis.yml`` using the latest `VVV trunk from Github <https://github.com/miohtama/vvv>`_::
 
     language: python
 
@@ -178,6 +183,10 @@ Example ``.travis.yaml`` using the latest `VVV trunk from Github <https://github
 
     # command to run tests
     script: vvv .
+
+.. note ::
+
+    Travis CI uses .yml extension, VVV uses .yaml extension. VVV is better.
 
 More info
 
