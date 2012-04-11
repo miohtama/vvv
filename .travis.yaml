@@ -8,5 +8,5 @@ python:
 install:
   - pip install git://github.com/miohtama/vvv.git
 
-# command to run tests
-script: vvv .
+# command to run validation + tests against the code base
+script: vvv . ; cd tests ; python -m unittest discover

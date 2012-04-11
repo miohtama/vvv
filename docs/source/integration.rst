@@ -135,10 +135,6 @@ VVV and Travic CI can be easily integrated to your project
 
 All you need to do is to
 
-* Drop ``.travis.yaml`` having the option to run VVV in your repository root (example below) 
-
-* Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
-
 * Login to `travis-ci.org <http://travis-ci.org/>`_ using your Github credentials
 
 * Turn on Travis for your repository - Travis will automatically list all your Github projects
@@ -146,6 +142,10 @@ All you need to do is to
 * Then visit the GitHub service hooks page for that project and paste your GitHub username and 
   Travis token into the settings for the Travis service if it is not already pre-filled. 
   (should not be needed unless your repo belongs to Github organization)
+
+* Drop ``.travis.yaml`` having the option to run VVV in your repository root (example below) 
+
+* Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
 
 * You can also `include automatically generated status image to your Github README <http://about.travis-ci.org/docs/user/status-images/>`_
 
