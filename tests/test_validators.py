@@ -224,7 +224,7 @@ if __name__ == '__main__':
     else: 
         verbosity = 0
     
-    if sys.version[0] >= 3 and sys.version[1] >= 1:
+    if sys.version_info[0] >= 3 and sys.version_info[1] >= 1:
         unittest.main(verbosity=verbosity)
     else:
         # Older Pythons
