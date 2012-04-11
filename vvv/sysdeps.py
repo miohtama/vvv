@@ -11,6 +11,7 @@ import os
 
 # Local imports
 from .utils import shell
+from .download import download
 
 class HasNotCommand(Exception):
     """
@@ -75,6 +76,45 @@ def virtualenv_exists(target):
     target = "%s/bin/activate" % target
     return os.path.exists(target)
 
+
+def get_py3k_command():
+    """
+    Get command to run Python 3.
+
+    ... they don't make this easy for us ...
+    """   
+
+    # Depends on OSX/Linux dist which command to use
+    versions = [
+        # Macports
+        "python-3.2", 
+
+        # Ubuntu
+        "python3",
+    ]
+    for v in versions:
+        if which(v):
+            return v
+
+def get_py2_command():
+    """
+    Get command to run Python 3.
+
+    ... they don't make this easy for us ...
+    """   
+
+    # Depends on OSX/Linux dist which command to use
+    versions = [
+        # Macports
+        "python-2.7", "python-2.6", 
+
+        # Ubuntu
+        "python2.7", "python2.6"
+    ]
+    for v in versions:
+        if which(v):
+            return v            
+
 def get_virtualenv_py3k_command():
     """
     Get command to create Python 3 virtualenv.
@@ -86,9 +126,6 @@ def get_virtualenv_py3k_command():
     versions = [
         # Macports
         "virtualenv-3.4", "virtualenv-3.3", "virtualenv-3.2", 
-
-        # Ubuntu
-        "virtualenv-32"
     ]
     for v in versions:
         if which(v):
@@ -103,12 +140,22 @@ def get_virtualenv_py2_command():
         if which(v):
             return v
 
-def create_virtualenv(logger, target, egg_spec=None, py3=True, python=None):
+def install_virtualenv_command(logger, path):
+    """ 
+    Use virtualenv bootstrap script becase we cannot rely on ``virtualenv`` command working
+    with Python 3 on various operating systems like Ubuntu.
+    """
+    download(logger, path, "https://raw.github.com/pypa/virtualenv/master/virtualenv.py")
+
+
+def create_virtualenv(logger, venv_target, target, egg_spec=None, py3=True):
     """
     Creates a Python virtualenv and installs a single package there with dependencies.
     
     Note that we cannot use default "virtualenv" command as this most likely breaks
     on OSX with its mostly broken old Python installations. Get Python from Macports.
+
+    :param venv_target: Where to place virtualenv.py if needs to be downloaded
 
     :param target: Target folder
 
@@ -121,20 +168,32 @@ def create_virtualenv(logger, target, egg_spec=None, py3=True, python=None):
         logger.debug("Virtualenv exists: %s" % target)
         return
 
+    if not venv_target.endswith("virtualenv.py"):
+        raise RuntimeError("You must give virtualenv.py location for download")
+
+    # Try get OS virtualenv command
     if py3:
         venv_cmd = get_virtualenv_py3k_command()
-        if not venv_cmd:
-            raise RuntimeError("Ooops could not found virtualenv for Python 3.x")
     else:
         venv_cmd = get_virtualenv_py2_command()
-        if not venv_cmd:
-            raise RuntimeError("Ooops could not found virtualenv for Python 2.x")
-            
-    if python:
-        shell(logger, "%s -p %s %s" % (venv_cmd, python, target), raise_error=True)
-    else:
-        shell(logger, "%s %s" % (venv_cmd, target), raise_error=True)
 
+    if not venv_cmd:
+        # Operating system does not provide working virtualenv command,
+        # download virtualenv.py
+
+        install_virtualenv_command(logger, venv_target)
+
+        if py3:
+            venv_cmd = get_py3k_command()
+        else:
+            venv_cmd = get_py2_command()       
+            
+        venv_cmd += " %s" % os.path.join(venv_target, "virtualenv.py") 
+            
+    # Execute virtualenv.py
+    shell(logger, "%s %s" % (venv_cmd, target), raise_error=True)
+
+    # Install eny eggs if needed
     if egg_spec:
         shell(logger, 'source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
 

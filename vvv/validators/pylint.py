@@ -195,6 +195,9 @@ class PylintPlugin(Plugin):
         #: Configuration file option
         self.host_python = None 
 
+        #: Location of virtualenv.py if operating system cannot supply working one
+        self.virtualenv_cmd = None
+
 
     def setup_local_options(self):
         """ """
@@ -210,6 +213,8 @@ class PylintPlugin(Plugin):
         #: Path to the virtual env location
         self.virtualenv = os.path.join(self.installation_path, "pylint-virtualenv")
 
+        self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
+    
         self.python3k = utils.get_boolean_option(self.options, self.id, "python3k", False)
 
         self.host_python = utils.get_boolean_option(self.options, self.id, "host-python-env", False)
@@ -273,7 +278,7 @@ class PylintPlugin(Plugin):
             # Use whatever python command is currently active
             python = "python"
         else:
-            sysdeps.create_virtualenv(self.logger, self.virtualenv, py3=self.python3k)
+            sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, py3=self.python3k)
 
         # Extract and download manually
         pylint_download_path = os.path.join(self.installation_path, "pylint-extract.tar.gz")

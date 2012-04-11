@@ -57,12 +57,17 @@ class RestructuredTextPlugin(Plugin):
         #: Path to the virtual env location
         self.virtualenv = None
 
+        #: Location of virtualenv.py if operating system cannot supply working one
+        self.virtualenv_cmd = None
+
     def setup_local_options(self):
         """ """
         if not self.hint:
             self.hint = "Restructed text files contained errors"
 
         self.virtualenv = os.path.join(self.installation_path, "docutils-virtualenv")
+
+        self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
 
     def get_default_matchlist(self):
         """
@@ -86,7 +91,7 @@ class RestructuredTextPlugin(Plugin):
         """
         """
         self.logger.info("Installing %s" % self.virtualenv)
-        sysdeps.create_virtualenv(self.logger, self.virtualenv, egg_spec="docutils==0.8.1")
+        sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, egg_spec="docutils==0.8.1")
 
     def validate(self, fname):
         """
