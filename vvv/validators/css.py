@@ -10,7 +10,7 @@ Validate CSS files against W3C CSS validator.
 Prerequisites
 ----------------
       
-Your system supports ``java`` command.      
+Your system must have Java installed and support and ``java`` command.      
 
 Please see :doc:`prerequisites </prerequisites>`.
 
@@ -28,12 +28,39 @@ Supported files
 Options
 -----------
 
-No options.
+command-line
++++++++++++++
+
+Command line arguments passed to W3C validator.
+
+Default::
+
+    --profile=css3
+
+Troubleshooting
+----------------------
+
+If you get error::
+
+    Exception in thread "main" java.lang.NoClassDefFoundError: org/w3c/tools/resources/ProtocolException
+    Caused by: java.lang.ClassNotFoundException: org.w3c.tools.resources.ProtocolException
+        at java.net.URLClassLoader$1.run(URLClassLoader.java:202)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+        at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+        at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+
+It is probably caused by a broken automatic W3C validator installation and you can fix it with::
+
+    rm -rf ~/.vvv/css 
 
 More info
 ------------
 
 * http://jigsaw.w3.org/css-validator/
+
+* http://dev.w3.org/cvsweb/2002/css-validator/org/w3c/css/css/CssValidator.java?rev=1.15
 
 """
 
@@ -47,6 +74,10 @@ from vvv.plugin import Plugin
 
 from vvv import sysdeps
 from vvv import download
+from vvv import utils
+
+#: Command-line options given to the validator always
+DEFAULT_COMMAND_LINE = "--profile=css3"
 
 # JAR madness... This is why PyPi rocks
 DOWNLOAD_AND_EXTRACT = [
@@ -66,13 +97,26 @@ DOWNLOAD_AND_EXTRACT = OrderedDict(DOWNLOAD_AND_EXTRACT)
 # c:\jigsaw\classes\sax.jar;c:\jigsaw\classes\servlet.jar;c:\jigsaw\classes\Tidy.jar;c:\jigsaw\classes\tagsoup-1.2.jar;
 # C:\Jigsaw\classes\commons-lang-2.4.jar;C:\Jigsaw\classes\commons-collections-3.2.1.jar 
 
+#: If these are found in the output assume CSS validation failed
+VALIDATOR_ERRORS = ["Sorry!", 'Exception in thread "main"']
+
 class CSSPlugin(Plugin):
     """
     W3C CSS validator driver.
     """
 
+    def __init__(self):
+
+        Plugin.__init__(self)
+
+        #: Commandl line options passed to the validator from the config file
+        self.extra_options = None        
+
     def setup_local_options(self):
         """ """
+
+        # Extra options passed to the validator
+        self.extra_options = utils.get_string_option(self.options, self.id, "command-line", DEFAULT_COMMAND_LINE)
 
         if not self.hint:
             self.hint = "CSS source code did not pass W3C validator http://jigsaw.w3.org/css-validator/"
@@ -116,6 +160,8 @@ class CSSPlugin(Plugin):
         """
         classpath = ""
 
+        fullpath = os.path.abspath(fname)
+
         # Java @__@ .... remembered why I hated it
 
         jigsaw = os.path.join(self.installation_path, "jigsaw", "Jigsaw", "classes")
@@ -133,5 +179,13 @@ class CSSPlugin(Plugin):
         classpath += os.path.join(jigsaw, "Tidy.jar") + os.pathsep      
         classpath += os.path.join(jigsaw, "tagsoup-1.2.jar")
 
+        # XXX: We should not split here, but pass in command line optons
+        # as shell string 
+        options = self.extra_options.split()
+
+        cmdline = ["java", "org.w3c.css.css.CssValidator"]
+        cmdline += options
+        cmdline += ["file://" + fullpath]
+
         # ...does not even have return code...
-        return self.run_command_line(["java", "org.w3c.css.css.CssValidator", "file://" + fname], bad_string=["Sorry!", 'Exception in thread "main"'], env=dict(CLASSPATH=classpath))
+        return self.run_command_line(cmdline, bad_string=VALIDATOR_ERRORS, env=dict(CLASSPATH=classpath))

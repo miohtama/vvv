@@ -84,7 +84,7 @@ class JSHintPlugin(Plugin):
         #: Configuration file Text
         self.configuration = None
 
-        # Extra options passed to the validator
+        #: Commandl line options passed to the validator from the config file
         self.extra_options = None
 
     def setup_local_options(self):
