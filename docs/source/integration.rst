@@ -120,9 +120,10 @@ Integrating with Travis CI
 `Travis CI <http://about.travis-ci.org/>`_ is continuous integration and build service
 which is free for open source projects to use.
 
-VVV and Travic CI can be easily integrated to your project
+VVV and Travic CI can be very easily integrated to your project:
 
-* Travis CI will automatically run after you commit changes to your project
+* Travis CI will automatically run after you commit changes to your project on Github 
+  (as the writing of thisGithub is the only supported VCS)
 
 * Travis CI will run VVV validation checks against your source code and reports possible violations.
   Note that this does not prevent bad commits - you will just get notification afterwards
@@ -154,8 +155,6 @@ All you need to do is to
 
 * After you push in ``.travis.yml`` for the first time it will trigger the build which you can 
   see on `travis-ci.org <http://travis-ci.org/>`_ *My Repositories* tab. It should appear there in seconds. 
-
-* If you later need to force a Travis CI run you can do it from Github repository *Admin page* > *Service hooks* > *Travis* > *Test hook* button
 
 Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <http://pypi.python.org>`_::
 

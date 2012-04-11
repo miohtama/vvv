@@ -14,7 +14,7 @@ import tempfile
 
 # Third party
 import yaml
-from vvv.bzrlib.globster import ExceptionGlobster
+from .bzrlib.globster import ExceptionGlobster
 
 class ShellCommandFailed(Exception):
     """ Executing a shell command failed """

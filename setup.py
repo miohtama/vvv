@@ -4,7 +4,7 @@
 
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 LONG_DESCRIPTION = open("README.rst").read()
 
@@ -20,7 +20,7 @@ setup(name = "vvv",
         "plac==0.9.0",
         "requests==0.11.1"
     ],
-    packages = ['vvv'],
+    packages = find_packages(exclude=["tests"]),
     classifiers=[
         "Programming Language :: Python",
     ],     
