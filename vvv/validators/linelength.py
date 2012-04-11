@@ -75,12 +75,17 @@ class LineLengthPlugin(Plugin):
         errors = False
 
         i = 0
-        f = open(fname, "rt")
-        for line in f:
-            i += 1
-            if len(line) > self.line_length:
-                errors = True
-                self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line is too long, %d characters" % len(line), excerpt=line)
+        f = open(fname, "rt", encoding="ascii")
+        try:
+            for line in f:
+                i += 1
+                if len(line) > self.line_length:
+                    errors = True
+                    self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line is too long, %d characters" % len(line), excerpt=line)
+        except UnicodeDecodeError:
+            # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
+            # For now, how to handle?
+            pass
 
         f.close()
 

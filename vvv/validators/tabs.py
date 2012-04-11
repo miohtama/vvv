@@ -83,12 +83,18 @@ class TabsPlugin(Plugin):
         errors = False
 
         i = 0
-        f = open(fname, "rt")
-        for line in f:
-            i += 1
-            if "\t" in line:
-                errors = True
-                self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains hard tabs", excerpt=line)
+        f = open(fname, "rt", encoding="utf-8")
+        try:
+            for line in f:
+                i += 1
+                if "\t" in line:
+                    errors = True
+                    self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains hard tabs", excerpt=line)
+        except UnicodeDecodeError:
+            # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
+            # For now, how to handle?
+            pass
+
         f.close()
 
         return not errors

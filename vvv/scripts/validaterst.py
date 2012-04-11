@@ -4,24 +4,32 @@
 
     Based on rst2html http://docutils.svn.sourceforge.net/viewvc/docutils/trunk/docutils/tools/rst2html.py?revision=4564&view=markup
 
+
+
 """
 
 import sys
+import os
 
-#
-# Monkey patch crap out of docutils
-#
+# http://const-cast.blogspot.com/2009/04/mercurial-on-mac-os-x-valueerror.html
 
 try:
     from docutils import utils
 except ValueError as v:
     if str(v) == "unknown locale: UTF-8": 
         print("Your have misconfigured shell, probably caused by http://const-cast.blogspot.com/2009/04/mercurial-on-mac-os-x-valueerror.html")
+        print("Do:")
+        print("export LC_ALL=en_US.UTF-8")
+        print("export LANG=en_US.UTF-8")
     raise
 
 from docutils.core import publish_parts
 
 reports = []
+
+#
+# Monkey patch crap out of docutils
+#
 
 orignal_system_message = utils.Reporter.system_message
 
