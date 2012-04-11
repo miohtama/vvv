@@ -68,6 +68,10 @@ command-line
 
 Give pylint command line options.
 
+Default::
+
+    --reports=n --include-ids=y
+
 configuration
 +++++++++++++
 
@@ -161,7 +165,7 @@ from vvv import utils
 from vvv import sysdeps
 from vvv import download
 
-DEFAULT_COMMAND_LINE = "--reports=n"
+DEFAULT_COMMAND_LINE = "--reports=n --include-ids=y"
 
 DEFAULT_CONFIG = """
 

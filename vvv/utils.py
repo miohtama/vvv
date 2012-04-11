@@ -83,9 +83,13 @@ def get_match_option(config, section, entry = None, default=[], debug=False):
     else:
         opt = config.get(section, default)
 
-    # Split space or new line separated list to pieces
-    if type(opt) != list:
+    if type(opt) == str:
+        # Split space or new line separated list to pieces
         opt = opt.split() 
+    elif type(opt) == list:
+        pass
+    else:
+        raise RuntimeError("Bad option data for %s %s" % (section, entry))
 
     g = ExceptionGlobster(opt, debug)
 

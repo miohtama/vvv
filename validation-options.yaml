@@ -9,8 +9,6 @@ pylint:
 
   python3k: true
 
-  command-line: --reports=n
-
   configuration: |
 
     [BASIC]
