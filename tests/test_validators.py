@@ -218,8 +218,14 @@ def load_tests(loader, standard_tests, wtf_is_this_third_argument):
     return suite
 
 if __name__ == '__main__':
+    
     if VERBOSE:
         verbosity = 3
     else: 
         verbosity = 0
-    unittest.main(verbosity=verbosity)    
+    
+    if sys.version[0] >= 3 and sys.version[1] >= 1:
+        unittest.main(verbosity=verbosity)
+    else:
+        # Older Pythons
+        unittest.main()    
