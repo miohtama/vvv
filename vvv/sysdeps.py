@@ -185,9 +185,13 @@ def create_virtualenv(logger, venv_target, target, egg_spec=None, py3=True):
 
         if py3:
             venv_cmd = get_py3k_command()
+            if not venv_cmd:
+                raise RuntimeError("Did not find installed Python 3 on the system")
         else:
-            venv_cmd = get_py2_command()       
-            
+            venv_cmd = get_py2_command()           
+            if not venv_cmd:
+                raise RuntimeError("Did not find installed Python 2 on the system")
+
         venv_cmd += " " + venv_target 
             
     # Execute virtualenv.py
