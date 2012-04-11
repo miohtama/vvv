@@ -188,7 +188,7 @@ def create_virtualenv(logger, venv_target, target, egg_spec=None, py3=True):
         else:
             venv_cmd = get_py2_command()       
             
-        venv_cmd += " %s" % os.path.join(venv_target, "virtualenv.py") 
+        venv_cmd += " " + venv_target 
             
     # Execute virtualenv.py
     shell(logger, "%s %s" % (venv_cmd, target), raise_error=True)
