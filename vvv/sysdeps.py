@@ -90,7 +90,7 @@ def get_py3k_command():
         "python-3.2", 
 
         # Ubuntu
-        "python3",
+        "python3.2", "python3.1", "python3",
     ]
     for v in versions:
         if which(v):
