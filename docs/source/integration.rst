@@ -124,7 +124,10 @@ VVV and Travic CI can be easily integrated to your project
 
 * Travis CI will automatically run after you commit changes to your project
 
-* Travis CI will run VVV validation checks against your source code and reports possible violations
+* Travis CI will run VVV validation checks against your source code and reports possible violations.
+  Note that this does not prevent bad commits - you will just get notification afterwards
+  when bad stuff got in from the door already. But it's still much better than running
+  validations, linting and tests by hand.
 
 .. note ::
 
