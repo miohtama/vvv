@@ -139,9 +139,15 @@ All you need to do is to
 
 * Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
 
-* Login to `travis-ci.org <<http://travis-ci.org/>`_ using your Github credentials
+* Login to `travis-ci.org <http://travis-ci.org/>`_ using your Github credentials
 
 * Turn on Travis for your repository - Travis will automatically list all your Github projects
+
+* Then visit the GitHub service hooks page for that project and paste your GitHub username and 
+  Travis token into the settings for the Travis service if it is not already pre-filled. 
+  (should not be needed unless your repo belongs to Github organization)
+
+* You can also `include automatically generated status image to your Github README <http://about.travis-ci.org/docs/user/status-images/>`_
 
 Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <http://pypi.python.org>`_::
 
@@ -175,4 +181,8 @@ Example ``.travis.yaml`` using the latest `VVV trunk from Github <https://github
 
 More info
 
+* http://about.travis-ci.org/docs/user/getting-started/
+
 * http://about.travis-ci.org/docs/user/build-configuration/
+
+* https://github.com/travis-ci/travis-lint

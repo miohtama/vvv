@@ -50,6 +50,13 @@ Please see the `VVV documentation <http://miohtama.github.com/vvv/>`_.
 
 Explore different `linting and validators available <http://miohtama.github.com/vvv/validators.html>`_.
 
+Continuous integration status
+================================
+
+Current trunk continuous integration status with Travis CI
+
+.. image :: https://secure.travis-ci.org/miohtama/vvv.png
+
 Author
 ===============
 
