@@ -206,16 +206,18 @@ def create_test_case_class(name, path, success, options):
 def load_tests(loader, standard_tests, wtf_is_this_third_argument):
     """
     http://docs.python.org/dev/library/unittest.html
+
+    python -m unittest discover hook
     """
-    suite = unittest.TestSuite()
+    validation_suite = unittest.TestSuite()
 
     cases = scan_test_cases()
     for c in cases:
         klass = create_test_case_class(c[1], c[0], c[2], c[3])
         tests = loader.loadTestsFromTestCase(klass)
-        suite.addTest(tests)
+        validation_suite.addTest(tests)
 
-    return suite
+    return validation_suite
 
 if __name__ == '__main__':
     
@@ -224,8 +226,5 @@ if __name__ == '__main__':
     else: 
         verbosity = 0
     
-    if sys.version_info[0] >= 3 and sys.version_info[1] >= 2:
-        unittest.main(verbosity=verbosity)
-    else:
-        # Older Pythons
-        unittest.main()    
+    suite = load_tests(unittest.TestLoader(), None, None)
+    unittest.TextTestRunner(verbosity=verbosity).run(suite) 

@@ -22,7 +22,11 @@ Java
 Linux
 --------
 
-Use OpenJDK. TODO.
+Use OpenJDK. 
+
+Ubuntu::
+
+    sudo apt-get install openjdk-6-jre
 
 OSX
 --------
