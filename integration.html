@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="VVV 0.1 documentation" href="index.html" />
-    <link rel="next" title="Validators" href="validators.html" />
+    <link rel="next" title="Validators and linters" href="validators.html" />
     <link rel="prev" title="Configuration" href="configuration.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="validators.html" title="Validators"
+          <a href="validators.html" title="Validators and linters"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="configuration.html" title="Configuration"
@@ -79,7 +79,7 @@
                         title="previous chapter">Configuration</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="validators.html"
-                        title="next chapter">Validators</a></p>
+                        title="next chapter">Validators and linters</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/integration.txt"
@@ -110,27 +110,27 @@
 <h1>Running and integration<a class="headerlink" href="#running-and-integration" title="Permalink to this headline">¶</a></h1>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
-<li><a class="reference internal" href="#automatically-installed-files" id="id2">Automatically installed files</a></li>
-<li><a class="reference internal" href="#running-by-hand" id="id3">Running by hand</a></li>
-<li><a class="reference internal" href="#command-line-options" id="id4">Command line options</a><ul>
-<li><a class="reference internal" href="#important-command-line-options" id="id5">Important command line options</a></li>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#automatically-installed-files" id="id3">Automatically installed files</a></li>
+<li><a class="reference internal" href="#running-by-hand" id="id4">Running by hand</a></li>
+<li><a class="reference internal" href="#command-line-options" id="id5">Command line options</a><ul>
+<li><a class="reference internal" href="#important-command-line-options" id="id6">Important command line options</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#integrating-with-git" id="id6">Integrating with Git</a><ul>
-<li><a class="reference internal" href="#local-repository" id="id7">Local repository</a></li>
+<li><a class="reference internal" href="#integrating-with-git" id="id7">Integrating with Git</a><ul>
+<li><a class="reference internal" href="#local-repository" id="id8">Local repository</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#integration-with-subversion" id="id8">Integration with Subversion</a><ul>
-<li><a class="reference internal" href="#local-hook" id="id9">Local hook</a></li>
-<li><a class="reference internal" href="#server-side-hook" id="id10">Server-side hook</a></li>
+<li><a class="reference internal" href="#integration-with-subversion" id="id9">Integration with Subversion</a><ul>
+<li><a class="reference internal" href="#local-hook" id="id10">Local hook</a></li>
+<li><a class="reference internal" href="#server-side-hook" id="id11">Server-side hook</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#integrating-with-travis-ci" id="id11">Integrating with Travis CI</a></li>
+<li><a class="reference internal" href="#integrating-with-travis-ci" id="id12">Integrating with Travis CI</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
-<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>VVV will run and try to download, detects validators by filetype
 in your source code repository and will try to download
 needed validators automatically if they are not installed.
@@ -141,7 +141,7 @@ dependencies (e.g. Java) you&#8217;ll get an error message
 with a link to friendly installation instructions for a specific validator.</p>
 </div>
 <div class="section" id="automatically-installed-files">
-<h2><a class="toc-backref" href="#id2">Automatically installed files</a><a class="headerlink" href="#automatically-installed-files" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id3">Automatically installed files</a><a class="headerlink" href="#automatically-installed-files" title="Permalink to this headline">¶</a></h2>
 <p>By default, <a class="reference internal" href="installation.html"><em>VVV keeps automatically downloaded</em></a>
 software in hidden <tt class="docutils literal"><span class="pre">.vvv</span></tt> folder. You can override
 the folder location with a command line switch.</p>
@@ -149,7 +149,7 @@ the folder location with a command line switch.</p>
 to purge and reinstall files in this folder if needed.</p>
 </div>
 <div class="section" id="running-by-hand">
-<h2><a class="toc-backref" href="#id3">Running by hand</a><a class="headerlink" href="#running-by-hand" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id4">Running by hand</a><a class="headerlink" href="#running-by-hand" title="Permalink to this headline">¶</a></h2>
 <p>Here are instructions how to execute VVV in your
 project folder manually.</p>
 <ul>
@@ -166,13 +166,13 @@ project folder manually.</p>
 <p>Tada. That&#8217;s it, assuming the sane defaults work for you.</p>
 </div>
 <div class="section" id="command-line-options">
-<h2><a class="toc-backref" href="#id4">Command line options</a><a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id5">Command line options</a><a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
 <p>Please use <tt class="docutils literal"><span class="pre">--help</span></tt> switch to see up-to-date command line help:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">vvv</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <div class="section" id="important-command-line-options">
-<h3><a class="toc-backref" href="#id5">Important command line options</a><a class="headerlink" href="#important-command-line-options" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">Important command line options</a><a class="headerlink" href="#important-command-line-options" title="Permalink to this headline">¶</a></h3>
 <p>Reinstall - download and reinstall all automatically
 installed software in the case you had to abort the previous run
 and incomplete files</p>
@@ -187,9 +187,9 @@ and incomplete files</p>
 </div>
 </div>
 <div class="section" id="integrating-with-git">
-<h2><a class="toc-backref" href="#id6">Integrating with Git</a><a class="headerlink" href="#integrating-with-git" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Integrating with Git</a><a class="headerlink" href="#integrating-with-git" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="local-repository">
-<h3><a class="toc-backref" href="#id7">Local repository</a><a class="headerlink" href="#local-repository" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Local repository</a><a class="headerlink" href="#local-repository" title="Permalink to this headline">¶</a></h3>
 <p>Here are instructions how to set-up pre-commit hook with Git.
 This prevents you to commit files violating policy.</p>
 <p>If you have <a class="reference internal" href="installation.html"><em>a local installation using virtualenv</em></a>:</p>
@@ -213,9 +213,9 @@ This will be future feature.</p>
 </div>
 </div>
 <div class="section" id="integration-with-subversion">
-<h2><a class="toc-backref" href="#id8">Integration with Subversion</a><a class="headerlink" href="#integration-with-subversion" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Integration with Subversion</a><a class="headerlink" href="#integration-with-subversion" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="local-hook">
-<h3><a class="toc-backref" href="#id9">Local hook</a><a class="headerlink" href="#local-hook" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id10">Local hook</a><a class="headerlink" href="#local-hook" title="Permalink to this headline">¶</a></h3>
 <p><tt class="docutils literal"><span class="pre">svn</span></tt> client-side command does not offer a way to execute hooks.
 You can probably work around this with <tt class="docutils literal"><span class="pre">alias</span> <span class="pre">svn</span></tt>
 but I have not yet figured out how.</p>
@@ -224,15 +224,83 @@ but I have not yet figured out how.</p>
 </ul>
 </div>
 <div class="section" id="server-side-hook">
-<h3><a class="toc-backref" href="#id10">Server-side hook</a><a class="headerlink" href="#server-side-hook" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id11">Server-side hook</a><a class="headerlink" href="#server-side-hook" title="Permalink to this headline">¶</a></h3>
 <p>Subversion server allows you to install pre-commit hook which runs code
 checks on the server when the client pushes in a potential commit.</p>
 <p>TODO</p>
 </div>
 </div>
 <div class="section" id="integrating-with-travis-ci">
-<h2><a class="toc-backref" href="#id11">Integrating with Travis CI</a><a class="headerlink" href="#integrating-with-travis-ci" title="Permalink to this headline">¶</a></h2>
-<p>TODO</p>
+<h2><a class="toc-backref" href="#id12">Integrating with Travis CI</a><a class="headerlink" href="#integrating-with-travis-ci" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://about.travis-ci.org/">Travis CI</a> is continuous integration and build service
+which is free for open source projects to use.</p>
+<p>VVV and Travic CI can be very easily integrated to your project:</p>
+<ul class="simple">
+<li>Travis CI will automatically run after you commit changes to your project on Github
+(as the writing of thisGithub is the only supported VCS)</li>
+<li>Travis CI will run VVV validation checks against your source code and reports possible violations.
+Note that this does not prevent bad commits - you will just get notification afterwards
+when bad stuff got in from the door already. But it&#8217;s still much better than running
+validations, linting and tests by hand.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You don&#8217;t need to install any software or set-up any infrastructure. Travis CI
+is provided free software-as-a-service for open source projects and all you
+need to do this to register in Travis CI and drop one file in your
+public source code repository.</p>
+</div>
+<p>All you need to do is to</p>
+<ul class="simple">
+<li>Login to <a class="reference external" href="http://travis-ci.org/">travis-ci.org</a> using your Github credentials</li>
+<li>Turn on Travis for your repository - Travis will automatically list all your Github projects</li>
+<li>Then visit the GitHub service hooks page for that project and paste your GitHub username and
+Travis token into the settings for the Travis service if it is not already pre-filled.
+(should not be needed unless your repo belongs to Github organization)</li>
+<li>Drop <tt class="docutils literal"><span class="pre">.travis.yml</span></tt> having the option to run VVV in your repository root (example below)</li>
+<li>Drop <tt class="docutils literal"><span class="pre">validation-options.yaml</span></tt> and <tt class="docutils literal"><span class="pre">validation-files.yaml</span></tt> policies in your repository root (optional, but you most likely want to tune validation error levels)</li>
+<li>You can also <a class="reference external" href="http://about.travis-ci.org/docs/user/status-images/">include automatically generated status image to your Github README</a></li>
+<li>After you push in <tt class="docutils literal"><span class="pre">.travis.yml</span></tt> for the first time it will trigger the build which you can
+see on <a class="reference external" href="http://travis-ci.org/">travis-ci.org</a> <em>My Repositories</em> tab. It should appear there in seconds.</li>
+</ul>
+<p>Example <tt class="docutils literal"><span class="pre">.travis.yaml</span></tt> using the latest VVV release from <a class="reference external" href="http://pypi.python.org">pypi.python.org</a>:</p>
+<div class="highlight-python"><pre>language: python
+
+python:
+  - &quot;3.2&quot;
+
+# command to install dependencies
+# - because we validate ourselves this is special
+install:
+  - pip install vvv --use-mirrors
+
+# command to run tests
+script: vvv .</pre>
+</div>
+<p>Example <tt class="docutils literal"><span class="pre">.travis.yml</span></tt> using the latest <a class="reference external" href="https://github.com/miohtama/vvv">VVV trunk from Github</a>:</p>
+<div class="highlight-python"><pre>language: python
+
+python:
+  - &quot;3.2&quot;
+
+# command to install dependencies
+# - because we validate ourselves this is special
+install:
+  - pip install git://github.com/miohtama/vvv.git
+
+# command to run tests
+script: vvv .</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Travis CI uses .yml extension, VVV uses .yaml extension. VVV is better.</p>
+</div>
+<p>More info</p>
+<ul class="simple">
+<li><a class="reference external" href="http://about.travis-ci.org/docs/user/getting-started/">http://about.travis-ci.org/docs/user/getting-started/</a></li>
+<li><a class="reference external" href="http://about.travis-ci.org/docs/user/build-configuration/">http://about.travis-ci.org/docs/user/build-configuration/</a></li>
+<li><a class="reference external" href="https://github.com/travis-ci/travis-lint">https://github.com/travis-ci/travis-lint</a></li>
+</ul>
 </div>
 </div>
 
@@ -252,7 +320,7 @@ checks on the server when the client pushes in a potential commit.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="validators.html" title="Validators"
+          <a href="validators.html" title="Validators and linters"
              >next</a> |</li>
         <li class="right" >
           <a href="configuration.html" title="Configuration"
