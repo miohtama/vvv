@@ -192,3 +192,30 @@ class TempConfigFile:
 
 def temp_config_file(config_data):
     return TempConfigFile(config_data)
+
+
+class TemporaryWorkingDirectory:
+    """
+    Temporary change working directory and fall back to the current directory when the commands have been executed.
+    """
+
+    def __init__(self, folder):
+        self.folder = folder
+        self.old_folder = None
+
+    def __enter__(self):
+        """
+        """
+        self.old_folder = os.getcwd()
+        os.chdir(self.folder)
+
+    def __exit__(self, exit_type, value, traceback):
+        """
+        """
+        os.chdir(self.old_folder)
+
+def temporary_working_directory(folder):
+    """
+    Context manager which temporarily cds to another folder
+    """
+    return TemporaryWorkingDirectory(folder)

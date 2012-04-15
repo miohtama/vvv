@@ -49,6 +49,10 @@ class Plugin(metaclass=ABCMeta):
 
         :param options: Validation options file
 
+        :param installation_path: Main application creates own folder for each plug-in where they can install stuff
+
+        :parma walker: Project tree walker and file filtering helper
+
         :param files: Validation files file
         """
         self.id = plugin_id

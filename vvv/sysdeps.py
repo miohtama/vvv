@@ -1,8 +1,9 @@
 """
 
-    Dependency checker for system-wide commands.
+    Dependency checker and installer for system-wide commands.
 
     Check for things like is Java present, is node present, etc.
+    and installs packages for these systems.
 
 """
 
@@ -10,7 +11,7 @@
 import os
 
 # Local imports
-from .utils import shell
+from .utils import shell, temporary_working_directory
 from .download import download
 
 class HasNotCommand(Exception):
@@ -56,9 +57,10 @@ def has_java(needed_for):
 
 def has_node(needed_for):
     """
-    Check node.js is installed
+    Check for sane Node.js installation
     """
-    return has_exe("nodejs", needed_for, "Install Node.js using your OS package manager https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager")
+    how = "Install Node.js using your OS package manager https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager"
+    return has_exe("node", needed_for, how) and has_exe("npm", needed_for, how)
 
 
 def has_virtualenv(needed_for):
@@ -206,4 +208,13 @@ def run_virtualenv_command(logger, target, command, raise_error=False):
     Run a shell command having target virtualenv active
     """
     return shell(logger, 'source %s/bin/activate ; %s' % (target, command), raise_error=raise_error)
+
+def install_npm(logger, target, package, raise_error=False):
+    """
+    Installs node NPM package.
+
+    Runs NPM command and creates local package installation under target folder
+    """
+    with temporary_working_directory(target):
+        return shell(logger, 'npm install  %s' % package, raise_error=raise_error)
 

@@ -64,6 +64,8 @@ More info
 
 """
 
+import os
+
 from vvv.plugin import Plugin
 
 from vvv import utils
@@ -87,6 +89,9 @@ class JSHintPlugin(Plugin):
         #: Commandl line options passed to the validator from the config file
         self.extra_options = None
 
+        #: Where jshint has been installed via npm
+        self.jshint_path = None 
+
     def setup_local_options(self):
         """ """
 
@@ -96,7 +101,16 @@ class JSHintPlugin(Plugin):
         self.configuration = utils.get_string_option(self.options, self.id, "configuration", "")
 
         if not self.hint:
-            self.hint = "Javascript source code did not pass JSLint validator - http://www.jshint.com/"
+            self.hint = "Javascript source code did not pass JSHint linting - http://www.jshint.com/"
+
+        # Install directly under this plug-in path
+        self.jshint_path = self.installation_path
+
+    def get_jshint_bin(self):
+        """
+        :return: Location of jshint launch command
+        """
+        return os.path.join(self.jshint_path, "node_modules", "jshint", "bin", "hint")
 
     def get_default_matchlist(self):
         """
@@ -109,12 +123,18 @@ class JSHintPlugin(Plugin):
     def check_requirements(self):
         """
         """
-        sysdeps.has_node("Node.js must be installed in order to run JSLint Javascript validator")
+        sysdeps.has_node("Node.js must be installed in order to run JHLint Javascript validator")
 
-        sysdeps.has_exe("jshint", 
-                        "jshint must be installed via npm in order to run Javascript validation", 
-                        "Install jshint: https://github.com/jshint/node-jshint/"
-                        )
+
+    def check_is_installed(self):
+        """
+        See if we have installed working virtualenv for pylint
+        """
+        return os.path.exists(self.get_jshint_bin())
+
+    def install(self):
+        """ """
+        sysdeps.install_npm(self.logger, self.jshint_path, "jshint", raise_error=True)
 
     def validate(self, fname):
         """
@@ -132,7 +152,7 @@ class JSHintPlugin(Plugin):
             # W:100,10:Unused variable'
             # pylint: disable = W0612    
 
-            exitcode, output = utils.shell(self.logger, 'jshint "%s" %s' % (fname, options))
+            exitcode, output = utils.shell(self.logger, 'node %s "%s" %s' % (self.get_jshint_bin(), fname, options))
 
             if "error" in output:
                 self.reporter.report_unstructured(self.id, output, fname=fname)
