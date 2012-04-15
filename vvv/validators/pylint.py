@@ -274,7 +274,8 @@ class PylintPlugin(Plugin):
         if self.python3k:
             python = "python3.2"
         else:
-            python = "python2.7"
+            # General virtualenv'ed Python
+            python = "python"
 
         if self.host_python:
             # Use whatever python command is currently active
