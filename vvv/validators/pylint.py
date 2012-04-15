@@ -286,8 +286,10 @@ class PylintPlugin(Plugin):
         # Extract and download manually
         pylint_download_path = os.path.join(self.installation_path, "pylint-extract.tar.gz")
         pylint_extract_path = os.path.join(self.installation_path, "pylint-extract", pkg)
- 
-        download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
+
+        if not os.path.exists(pylint_extract_path):
+            # If path exist, assume it's prior working download
+            download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
 
         self.run_virtualenv_command("easy_install logilab-common", raise_error=True)
         self.run_virtualenv_command("easy_install logilab-astng", raise_error=True)
