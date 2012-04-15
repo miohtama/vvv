@@ -210,14 +210,16 @@ class PylintPlugin(Plugin):
         if not self.hint:
             self.hint = "Python source code did not pass Pylint validator. Please fix issues or disable warnings in .py file itself or validation-options.yaml file."
 
-        #: Path to the virtual env location
-        self.virtualenv = os.path.join(self.installation_path, "pylint-virtualenv")
-
         self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
     
         self.python3k = utils.get_boolean_option(self.options, self.id, "python3k", False)
 
         self.host_python = utils.get_boolean_option(self.options, self.id, "host-python-env", False)
+
+        #: Path to the virtual env location,
+        # vary by Python version so we don't get conflicting envs
+        self.virtualenv = os.path.join(self.installation_path, "pylint-virtualenv-%s" % "python3k" if self.python3k else "python2")
+
 
     def get_default_matchlist(self):
         """
