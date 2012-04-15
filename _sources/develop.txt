@@ -27,12 +27,21 @@ Python 3.2 needed + setuptools + virtualenv needed, as instructed in Installatio
 
 Setting up VVV in development mode::
 
+    # Fork on Github first, then replace the line below using address to your own repo
+    git clone git://github.com/miohtama/vvv.git
+    cd vvv
+    virtualenv -p python3.2 venv
     source venv/bin/activate
     python setup.py develop
+    # Set-up precommit hook to lint vvv's own files
+    vvv-install-git-pre-commit-hook
 
-Running VVV in development mode::
+Running VVV in development mode against your code repository::
 
+    # Activate virtualenv
+    cd vvv
     source venv/bin/activate
+    # Run trunk vvv against your repo
     cd ~/repo
     vvv
     

@@ -124,12 +124,20 @@ Then just install your eggs in the same virtualenv with VVV and it will automati
 <h2><a class="toc-backref" href="#id2">Setting up development environment</a><a class="headerlink" href="#setting-up-development-environment" title="Permalink to this headline">¶</a></h2>
 <p>Python 3.2 needed + setuptools + virtualenv needed, as instructed in Installation section.</p>
 <p>Setting up VVV in development mode:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">source venv/bin/activate</span>
-<span class="go">python setup.py develop</span>
-</pre></div>
+<div class="highlight-console"><pre># Fork on Github first, then replace the line below using address to your own repo
+git clone git://github.com/miohtama/vvv.git
+cd vvv
+virtualenv -p python3.2 venv
+source venv/bin/activate
+python setup.py develop
+# Set-up precommit hook to lint vvv&#x27;s own files
+vvv-install-git-pre-commit-hook</pre>
 </div>
-<p>Running VVV in development mode:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">source venv/bin/activate</span>
+<p>Running VVV in development mode against your code repository:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> Activate virtualenv
+<span class="go">cd vvv</span>
+<span class="go">source venv/bin/activate</span>
+<span class="gp">#</span> Run trunk vvv against your repo
 <span class="go">cd ~/repo</span>
 <span class="go">vvv</span>
 </pre></div>
