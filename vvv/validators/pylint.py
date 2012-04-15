@@ -54,10 +54,10 @@ Example ``validation-options.yaml``::
 host-python-env
 ++++++++++++++++
 
-If true do not create a virtualenv, but install pylint using
-the active ``python`` interpreter when vvv is run.
+If ``true`` do not create a virtualenv for running pylint, but install pylint using
+the active ``python`` environment where vvv is run.
 
-Default false.
+Default is ``false``.
 
 .. note :: 
 
