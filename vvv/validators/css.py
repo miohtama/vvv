@@ -187,5 +187,9 @@ class CSSPlugin(Plugin):
         cmdline += options
         cmdline += ["file://" + fullpath]
 
+        # W3C prints out all valid CSS and we are not really interested in that... 
+        # It prints valid CSS as last and we simply crop this tail out
+        snip = "Valid CSS information"
+
         # ...does not even have return code...
-        return self.run_command_line(cmdline, bad_string=VALIDATOR_ERRORS, env=dict(CLASSPATH=classpath))
+        return self.run_command_line(cmdline, bad_string=VALIDATOR_ERRORS, snip_string=snip, env=dict(CLASSPATH=classpath))

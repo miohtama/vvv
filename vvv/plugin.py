@@ -18,6 +18,8 @@ import os
 import subprocess
 
 # Local imports
+from vvv import utils
+# TODO: Factor there to use utils. prefix
 from .utils import is_binary_file, get_boolean_option, get_string_option, match_file
 
 class Plugin(metaclass=ABCMeta):
@@ -214,7 +216,7 @@ class Plugin(metaclass=ABCMeta):
         if not self.validate(fullpath):
             self.hint_to_fix_errors()
 
-    def run_command_line(self, cmdline, env={}, bad_string=None):
+    def run_command_line(self, cmdline, env={}, bad_string=None, snip_string=None):
         """
         Run a command line command and capture output to the reporter.
 
@@ -244,17 +246,21 @@ class Plugin(metaclass=ABCMeta):
         out = out.decode("utf-8")
         err = err.decode("utf-8")
 
-        self.logger.debug(out + "\n" + err)        
+        # TODO: Interleave here?
+        combined = out + "\n" + err
+
+        self.logger.debug(combined)        
 
         if bad_string:
             for match in bad_string:
-                if match in out or match in err:
+                if match in combined:
                     success = False
 
+        if snip_string:
+            # Remove trailing unneeded messages
+            combined = utils.snip_output(combined, snip_string)
+
         if not success:
-            if out != None:
-                self.reporter.report_unstructured(self.id, out)
-            if err != None:
-                self.reporter.report_unstructured(self.id, err)
+            self.reporter.report_unstructured(self.id, combined)
 
         return success

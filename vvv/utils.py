@@ -219,3 +219,25 @@ def temporary_working_directory(folder):
     Context manager which temporarily cds to another folder
     """
     return TemporaryWorkingDirectory(folder)
+
+
+def snip_output(output, marker):
+    """
+    Remove tailing lines of the output after encountering certain marker string in the output.
+
+    :param output: Command output as a string
+
+    :param marker: Marker string after which all lines can be dropped
+    """
+    passed = []
+    filtering = False
+    for line in output.split("\n"):
+
+        if marker in line:
+            filtering = True
+
+        if not filtering:
+            passed.append(line)
+
+
+    return "\n".join(passed)
