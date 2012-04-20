@@ -43,10 +43,13 @@ Features
 * Support (on its way) for Subversion, Git, Github, Travis CI, Jenkings and other popular version control and continuous integration
   systems 
 
-Documentation
-===============
+Documentation and code
+=========================
 
 Please see the `VVV documentation <http://miohtama.github.com/vvv/>`_.
+
+`Source code is available on Github <https://github.com/miohtama/vvv>`_. Please use Github issue tracker
+to contact the authors.
 
 Explore different `linting and validators available <http://miohtama.github.com/vvv/validators.html>`_.
 
@@ -61,6 +64,8 @@ Author
 ===============
 
 Mikko Ohtamaa (`blog <http://opensourcehacker.com>`_, `Twitter <http://twitter.com/moo9000>`_)
+
+Please use Github issue tracker to contact the authors in the project related matters.
 
     
 
