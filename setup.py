@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 LONG_DESCRIPTION = open("README.rst").read()
 
 setup(name = "vvv",
-    version = "0.1",
+    version = "0.1.1",
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",
