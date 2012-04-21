@@ -118,7 +118,7 @@ class VVV(object):
 
         # We have options file
         if self.options:
-            self.project_path = os.path.dirname(self.options)
+            self.project_path = os.path.dirname(os.path.abspath(self.options))
         else:
             # Assume current working directory
             self.project_path = os.getcwd()
