@@ -14,12 +14,6 @@ import os
 
 from vvv import utils
 
-def make_project_root_relative(abspath, project_abs_path):
-    """
-    We must deal with paths relative to the project root and os.walk() cannot spit out such
-    """
-    return abspath[len(project_abs_path)+1:]
-
 class Walker:
     """
     Convenience class for path walk and regex filtering.
@@ -36,7 +30,7 @@ class Walker:
         self.debug = debug
 
 
-    def walk_project_files(self, project_path, matchlist):
+    def walk_project_files(self, target_path, project_path, matchlist):
         """
         Walk project root and spit out project root relative output.
 
@@ -44,20 +38,24 @@ class Walker:
         """
 
         files = []
-                
+               
+        project_path = os.path.abspath(project_path)
+
         def recurse(path):
             """
             Handle each folder 
             """
             for name in os.listdir(path):
-                fpath = os.path.join(path, name)
-                relative = make_project_root_relative(fpath, project_path)
+                
+                fpath = os.path.abspath(os.path.join(path, name))
+
+                relative = os.path.relpath(fpath, project_path)
 
                 if relative.startswith("./"):
                     relative = relative[2:]
 
-                self.logger.debug("Scanning %s" % relative)
-            
+                self.logger.debug("Scanning %s" % (relative))
+
                 if not utils.match_file(relative, matchlist):
                     if self.debug:
                         self.logger.info("Ignoring %s by global match list", relative)
@@ -66,10 +64,10 @@ class Walker:
                 if os.path.isdir(fpath):
                     recurse(fpath)                
                 else:
-                    files.append(relative)                 
+                    files.append(relative)
                 
 
-        recurse(project_path)
+        recurse(target_path)
         
         return files          
 

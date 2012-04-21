@@ -126,15 +126,15 @@ class ValidatorTestCase(unittest.TestCase):
             reinstall = False
 
         first_run = False
-    
-        #self.nuke_installations_by_test_case()
 
         # Run 
-        vvv = VVV(project=self.path, 
+        vvv = VVV(target=self.path, 
                   quiet=quiet, 
                   verbose=verbose, 
                   installation=install_path, 
                   reinstall=reinstall)
+
+        vvv.set_project_path(self.path)
         
         result = vvv.run()
 

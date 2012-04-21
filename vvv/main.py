@@ -111,17 +111,25 @@ class VVV(object):
                 logger.error("Could not load plug-in: %s", loader)
                 raise e
 
+    def set_project_path(self, path):
+        """
+        Helper method to shortcut project path determination, used by test cases.
+        """
+        self.project_path = path
+
     def determine_project_path(self):
         """
         Where is the root of this source code project.
         """
 
-        # We have options file
-        if self.options:
-            self.project_path = os.path.dirname(os.path.abspath(self.options))
-        else:
-            # Assume current working directory
-            self.project_path = os.getcwd()
+        if not self.project_path:
+
+            # We have options file
+            if self.options:
+                self.project_path = os.path.dirname(os.path.abspath(self.options))
+            else:
+                # Assume current working directory
+                self.project_path = os.getcwd()
 
     def determine_target(self):
         """
@@ -179,7 +187,7 @@ class VVV(object):
         logger.info("Running vvv against %s" % path)
 
         # Walk tree
-        for fpath in self.walker.walk_project_files(path, self.matchlist):
+        for fpath in self.walker.walk_project_files(path, self.project_path, self.matchlist):
 
             if self.print_files:
                 logger.info(fpath)
@@ -223,7 +231,9 @@ class VVV(object):
 
         assert self.project_path
 
-        relative = os.path.relpath(fpath, self.project_path)
+        abs_path = os.path.join(self.project_path, fpath)
+
+        relative = os.path.relpath(abs_path, self.project_path)
 
         for plugin_id, p in self.plugins.items():
             try:
@@ -305,6 +315,7 @@ class VVV(object):
 
         http://www.youtube.com/watch?v=He82NBjJqf8
         """
+
         if self.project_tree_scan:            
             # Full tree
             logger.debug("Scanning tree: %s" % self.target)
