@@ -74,7 +74,6 @@ from vvv.plugin import Plugin
 
 from vvv import sysdeps
 from vvv import download
-from vvv import utils
 
 #: Command-line options given to the validator always
 DEFAULT_COMMAND_LINE = "--profile=css3"
@@ -116,7 +115,7 @@ class CSSPlugin(Plugin):
         """ """
 
         # Extra options passed to the validator
-        self.extra_options = utils.get_string_option(self.options, self.id, "command-line", DEFAULT_COMMAND_LINE)
+        self.extra_options = self.options.get_string_option(self.id, "command-line", DEFAULT_COMMAND_LINE)
 
         if not self.hint:
             self.hint = "CSS source code did not pass W3C validator http://jigsaw.w3.org/css-validator/"

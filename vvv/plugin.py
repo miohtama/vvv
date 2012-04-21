@@ -20,7 +20,7 @@ import subprocess
 # Local imports
 from vvv import utils
 # TODO: Factor there to use utils. prefix
-from .utils import is_binary_file, get_boolean_option, get_string_option, match_file
+from .utils import is_binary_file, match_file
 
 class Plugin(metaclass=ABCMeta):
     """
@@ -42,21 +42,24 @@ class Plugin(metaclass=ABCMeta):
 
         self.id = self.main = self.reporter = self.options = self.files = self.installation_path = self.project_path = self.walker = None
         
-    def init(self, plugin_id, main, reporter, options, files, installation_path, project_path, walker):
+    def init(self, plugin_id, main, reporter, options, files, installation_path, walker, project_path):
         """
 
         :param plugin_id: internal id is externally set and comes from setup.py entry point name 
 
         :param main: Main VVV instance. You should not rely on this, but use explicitly passed in parameters.
 
-        :param options: Validation options file
+        :param options: Config instance of global options file
 
         :param installation_path: Main application creates own folder for each plug-in where they can install stuff
 
         :parma walker: Project tree walker and file filtering helper
 
-        :param files: Validation files file
+        :param files: Config instance of files whitelist / blacklist
+
+        :param project_path: Path to the project root directory (where the config files are)
         """
+        assert project_path
         self.id = plugin_id
         self.main = main
         self.options = options
@@ -64,8 +67,8 @@ class Plugin(metaclass=ABCMeta):
         self.logger = logging.getLogger("vvv")
         self.reporter = reporter
         self.installation_path = installation_path      
-        self.project_path = project_path
         self.walker = walker
+        self.project_path = project_path
 
     def is_active(self):
         """
@@ -113,10 +116,11 @@ class Plugin(metaclass=ABCMeta):
         * plug-in failed hint text 
         """
 
-        self.enabled = get_boolean_option(self.options, self.id, "enabled", True)      
-        self.matchlist = self.walker.get_match_option(self.files, self.id, None, default=self.get_default_matchlist())       
+        self.enabled = self.options.get_boolean_option(self.id, "enabled", True)      
+
+        self.matchlist = self.walker.get_match_list(self.files, self.id, None, default=self.get_default_matchlist())       
         # Hint message how to fix errors
-        self.hint = get_string_option(self.options, self.id, "hint", None)      
+        self.hint = self.options.get_string_option(self.id, "hint", None)      
 
 
     def setup_local_options(self):
@@ -192,6 +196,8 @@ class Plugin(metaclass=ABCMeta):
         """
         :return: True if file was processed 
         """
+
+        assert self.project_path, "Project path must be determined before a plug-in can run"
 
         assert not project_root_relative_path.startswith("/"), "Cannot work on absolute paths"
 

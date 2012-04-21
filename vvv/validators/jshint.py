@@ -96,9 +96,9 @@ class JSHintPlugin(Plugin):
         """ """
 
         # Extra options passed to the validator
-        self.extra_options = utils.get_string_option(self.options, self.id, "command-line", DEFAULT_COMMAND_LINE)
+        self.extra_options = self.options.get_string_option(self.id, "command-line", DEFAULT_COMMAND_LINE)
 
-        self.configuration = utils.get_string_option(self.options, self.id, "configuration", "")
+        self.configuration = self.options.get_string_option(self.id, "configuration", "")
 
         if not self.hint:
             self.hint = "Javascript source code did not pass JSHint linting - http://www.jshint.com/"

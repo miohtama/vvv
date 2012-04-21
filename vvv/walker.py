@@ -74,12 +74,14 @@ class Walker:
         return files          
 
 
-    def get_match_option(self, yaml, section, entry=None, default=[]):
+    def get_match_list(self, config, section, entry=None, default=[]):
         """
         Read a file match list option from a config line.
 
         Set-up debugging on the regex matcher object if enabled.
 
+        :param config: Config object 
+
         :return: Globster matching object
         """
-        return utils.get_match_option(yaml, section, entry=entry, default=default, debug=self.debug)
+        return config.get_match_option(section, entry=entry, default=default, debug=self.debug)

@@ -42,8 +42,6 @@ import logging
 
 from vvv.plugin import Plugin
 
-from vvv.utils import get_int_option
-
 class LineLengthPlugin(Plugin):
     """
     Line length driver.
@@ -62,7 +60,7 @@ class LineLengthPlugin(Plugin):
 
     def setup_local_options(self):
 
-        self.line_length = get_int_option(self.options, self.id, "length", 80)
+        self.line_length = self.options.get_int_option(self.id, "length", 80)
 
         if not self.hint:
             self.hint = "Text file line length must not exceed %d characteres per line" % self.line_length

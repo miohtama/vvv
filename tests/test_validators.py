@@ -37,7 +37,6 @@ import sys
 import shutil
 
 from vvv.main import VVV
-from vvv import utils
 
 VERBOSE = os.environ.get("VVV_TEST_OUTPUT", None) == "verbose"
 
@@ -91,6 +90,8 @@ class ValidatorTestCase(unittest.TestCase):
     def nuke_installations_by_test_case(self):
         """
         Delete and reconfigure .vvv validator installations between tests if the test says so. 
+
+        XXX: Not supported currently
         """ 
 
         # test-options.yaml reinstall option gives installation names to nuke
@@ -126,7 +127,7 @@ class ValidatorTestCase(unittest.TestCase):
 
         first_run = False
     
-        self.nuke_installations_by_test_case()
+        #self.nuke_installations_by_test_case()
 
         # Run 
         vvv = VVV(project=self.path, 
@@ -175,8 +176,9 @@ def scan_test_cases():
                     continue
     
             # Read test driver options
-            options = utils.load_yaml_file(os.path.join(fullname, "test-options.yaml"))
-
+            #options = utils.load_yaml_file(os.path.join(fullname, "test-options.yaml"))
+            # XXX: Not needed ATM
+            options = {}
 
             if d.endswith("-pass"):
                 out.append((fullname, name, True, options))
