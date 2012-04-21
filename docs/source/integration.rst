@@ -33,15 +33,30 @@ Running by hand
 Here are instructions how to execute VVV in your 
 project folder manually.
 
-* Go to your source folder::
+Go to your source folder::
 
     cd ~/mycodeproject
 
-* Execute command from your virtualenv::
+Execute VVV command from :doc:`your virtualenv installation </installation>`::
+    
+    ~/vvv-venv/bin/vvv .
 
-    vvv 
+That's it, assuming the sane defaults work for you! VVV will be run against
+all source files and it will reports errors against :doc:`the currently
+configured policy </configuration>`.
 
-Tada. That's it, assuming the sane defaults work for you.
+You can also run against single files:
+
+    vvv setup.py
+    vvv subfolder/main.py
+
+You can also execute vvv in any project subfolder and
+vvv will pick the config files from any of the parent folders::
+
+  cd subfolder
+  vvv main.py # Scan one file in subfolder
+  vvv . # Scan all files in the subfolder
+
 
 Command line options
 ===================================

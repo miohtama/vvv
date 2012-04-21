@@ -44,7 +44,6 @@ def is_binary_file(fpath):
                 return True
             if len(chunk) < CHUNKSIZE:
                 break # done
-    # A-wooo! Mira, python no necesita el "except:". Achis... Que listo es.
     finally:
         fin.close()
 

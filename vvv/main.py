@@ -216,12 +216,18 @@ class VVV(object):
         """
         Run all validators against one file.
 
+        :param fpath: Any path to a file
+
         :return True: if the process should be aborted
         """
 
+        assert self.project_path
+
+        relative = os.path.relpath(fpath, self.project_path)
+
         for plugin_id, p in self.plugins.items():
             try:
-                p.run(fpath)
+                p.run(relative)
             except FirstError:
                 logger.info("Aborting on the first error")
                 return True
