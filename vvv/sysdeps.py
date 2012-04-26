@@ -67,6 +67,13 @@ def has_virtualenv(needed_for):
     """
     Check python virtualenv is installed
     """
+
+    venvs = [ "virtualenv-3.2", "virtualenv-2.7", "virtualenv"]
+
+    for v in venvs:
+        if which(v):
+            return True
+
     return has_exe("virtualenv", needed_for)
 
 def virtualenv_exists(target):
