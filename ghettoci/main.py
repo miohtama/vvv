@@ -11,7 +11,7 @@ Python script in few hundred lines fullfilling your dirty little continuos integ
 What it does
 --------------
 
-1. Runs update on a source folder on a Subversion repository (note: VCS backend easy to change)
+1. Runs update on a source folder from a Subversion repository (note: VCS backend easy to change)
 
 2. See if there are new commits since the last run
 
@@ -19,7 +19,7 @@ What it does
 
 4. See if the tests status has changed from success to failure or vice versa
 
-5. Print results to stdout, send email notifications to the team
+5. Send email notifications to the team that now shit has hit the fan 
 
 Why to use
 ---------------
@@ -41,9 +41,10 @@ Create Python 3 virtualenv and run ghetto script using Python interpreter config
     pip install plac
 
     # Install ghetto-ci.py command by downloading it from Github using wget
-    wget --no-check-certificate -O ghetto-ci.py xxx
+    wget --no-check-certificate -O ghetto-ci.py https://raw.github.com/miohtama/vvv/master/ghettoci/main.py
 
-    # Running the script, using the Python environment prepared above
+    # Running the script, using the Python environment prepared 
+    # to see that everything works
     ghetto/bin/python ghettoci.py
 
 Now you need have
@@ -52,8 +53,9 @@ Now you need have
   you can run ``svn up`` command.
 
 * A command to execute unit tests and such. Must return process exit code 0 on success.
+  If you don't bother write tests, at least `lint and validate your source code <http://pypi.python.org/pypi/vvv>`_. 
 
-* A location where you store the status file. Status file keeps track whether the last round
+* A file storing the test status. Status file keeps track whether the last round
   or tests succeeded or failed. You'll get email reports only when the test status changed -
   there is little need to get "tests succeeded" email for every commit. 
 
@@ -70,7 +72,7 @@ Create file ``/etc/cron.hourly/ghetto-ci``::
 
 ... or just use OSX or Windows task automators.
 
-Credits and source
+Source and credits
 --------------------
 
 `Ghetto CI lives on Github, in VVV project <https://github.com/miohtama/vvv>`_.
@@ -90,6 +92,7 @@ Licensed under `WTFPL <http://sam.zoy.org/wtfpl/COPYING>`_.
 from abc import ABCMeta, abstractmethod
 from email.mime.text import MIMEText 
 import pickle
+import os
 import sys
 import subprocess
 from smtplib import SMTP_SSL, SMTP 
@@ -131,11 +134,12 @@ class Status:
 
         Return fresh status if file does not exist.
         """    
-        try:
-            f = open(path, "rb")
-        except OSError:
+
+        if not os.path.exists(path):
             # Status file do not exist, get default status
             return Status()
+
+        f = open(path, "rb")
 
         try:
             content = f.read()
@@ -315,8 +319,8 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
          smtpport : ("SMTP server port for mail out", "option", None, int), 
          smtpuser : ("SMTP server username", "option"),
          smtppassword : ("SMTP server password", "option"),
-         smtpfrom : ("From email address"),
-         receivers : ("Email receives as comma separated string", "option"),
+         smtpfrom : ("Notification email From address", "option"),
+         receivers : ("Notification email receives as comma separated string", "option"),
          force : ("Run tests regardless if there have been any repository updates", "flag"),
 
          repository : ("Monitored source control repository (SVN)", "positional"), 
@@ -338,7 +342,7 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
 
 
     notifier = Notifier(server=smtpserver, port=smtpport, 
-                      user=smtpuser, password=smtppassword, from_address=smtpfrom,
+                      username=smtpuser, password=smtppassword, from_address=smtpfrom,
                       receivers=receivers)
 
     repo = SVNRepo(repository)    

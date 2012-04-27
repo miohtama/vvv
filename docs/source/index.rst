@@ -16,6 +16,7 @@ Contents:
    guidelines
    community
    develop
+   ghetto
 
 
 Indices and tables
