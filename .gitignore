@@ -34,6 +34,7 @@ __minitage__*
 .settings
 .project
 .pydevproject
+*.status
 
 jsdoc*
 releases

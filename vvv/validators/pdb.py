@@ -30,6 +30,9 @@ import logging
 
 from vvv.plugin import Plugin
 
+#: Common Python ways to invoke hardcoded breakpoint
+MARKERS = ["pdb.set_trace()", "ipdb.set_trace()"]
+
 class PdbPlugin(Plugin):
     """
     Pdb breakpoints not allowed in the code.
@@ -58,10 +61,11 @@ class PdbPlugin(Plugin):
         for line in f:
             i += 1
         
-            if "pdb.set_trace()" in line:
-                if not line.strip().startswith("#"):
-                    errors = True
-                    self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains pdb breakpoint", excerpt=line)
+            for m in MARKERS:
+                if m in line:
+                    if not line.strip().startswith("#"):
+                        errors = True
+                        self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains pdb breakpoint", excerpt=line)
         
         f.close()
 

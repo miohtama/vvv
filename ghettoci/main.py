@@ -65,12 +65,28 @@ Example of a command::
 
     # Will print output to console because email notification details are not given
     ghetto/bin/python ghettoci.py 
+
+If the tests status have changed since the last run, or the running fails
+due to internal error, the command outputs the result. Otherwise
+command outputs nothing. Exit code 0 indicates that test succeeded.
     
 Then just make *ghettoci* to poll the repository in UNIX crom (Ubuntu example).
 Create file ``/etc/cron.hourly/ghetto-ci``::
 
 
 ... or just use OSX or Windows task automators.
+
+Future tasks
+-------------------
+
+To make this script even more neat, the folowing could be considered
+
+* Using some Python library as the abstraction layer for different
+  version control systems
+
+* Using more intelligent Python library for the notifications:
+  have email, IRC and Skype notifications (How Skype bots are built nowadays?)
+
 
 Source and credits
 --------------------
@@ -96,6 +112,24 @@ import os
 import sys
 import subprocess
 from smtplib import SMTP_SSL, SMTP 
+
+#: Template used in email notifications
+NOTIFICATION_BODY_TEMPLATE="""
+Last commit %(commit)s by %(author)s:
+
+%(commit_message)s
+
+Test output:
+
+%(test_output)s
+"""
+
+def split_first(line, separator):
+    """
+    Split a string to (first part, remainder) 
+    """
+    parts = line.split(separator)
+    return parts[0], separator.join(parts[1:])
 
 def shell(cmdline):
     """
@@ -124,7 +158,11 @@ class Status:
     """
 
     def __init__(self):
-        self.test_success = False
+
+        #: Set to True of False by automation,
+        # but we have a special value for the first run
+        # to get output always
+        self.test_success = "xxx"
         self.last_commit_id = None
 
     @classmethod
@@ -142,8 +180,7 @@ class Status:
         f = open(path, "rb")
 
         try:
-            content = f.read()
-            return pickle.loads(content)
+            return pickle.load(f)
         finally:
             f.close()
         
@@ -152,9 +189,8 @@ class Status:
         """
         Write status file
         """        
-        f = open(path, "wt")
-        content = pickle.dumps(status)
-        f.write(content)
+        f = open(path, "wb")
+        content = pickle.dump(status, f)
         f.close()
 
 
@@ -197,10 +233,36 @@ class SVNRepo(Repo):
         Get the last commit status.
         """
         info, output = self.get_svn_info()
+
         if not info:
             return (None, None, None, output)
 
-        return info["Revision"]
+        log_success, author, log = self.get_svn_log()
+        if not log_success:
+            return (None, None, None, log)
+
+        return (info["Revision"], author, log, output)
+
+    def get_svn_log(self):
+        """
+        Extract the last commit author and message.
+
+
+        :return: tuple (success, last commiter, output / last commit message) 
+        """
+        exit_code, output = shell("svn log -l 1 %s" % self.path)
+
+        if exit_code != 0:
+            return (False, None, output)
+
+        # ------------------------------------------------------------------------
+        # r6101 | xxx | 2012-04-28 15:57:14 +0300 (Sat, 28 Apr 2012) | 1 line
+
+        lines = output.split("\n")
+        author_line = lines[1]
+        author = author_line.split("|")[1].strip()
+
+        return  (True, author, output)
 
     def get_svn_info(self):
         """
@@ -212,8 +274,7 @@ class SVNRepo(Repo):
 
         data = {}
         for line in output.split("\n"):
-            key, values = line.split(":")
-            value = ",".join(values)
+            key, value = split_first(line, ":")
             data[key] = value
 
         return data, output
@@ -322,6 +383,7 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
          smtpfrom : ("Notification email From address", "option"),
          receivers : ("Notification email receives as comma separated string", "option"),
          force : ("Run tests regardless if there have been any repository updates", "flag"),
+         alwaysoutput : ("Print test run output regardless whether test status has changed since the last run", "flag"),
 
          repository : ("Monitored source control repository (SVN)", "positional"), 
          statusfile : ("Status file to hold CI history of tests", "positional"),
@@ -368,19 +430,21 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
     else:
         # No new commits, nothing to do
         return 0
-
-    # Decorate test run output with commit info as the header
-    output = "Last commit %s: %s by %s\n %s" % (commit_id, commit_message, commit_author, output)    
     
+
+
     # Test run status have changed since last run
-    if test_success != status.test_success:
+    if (test_success != status.test_success) or alwaysoutput:
+
+        notification_body = NOTIFICATION_BODY_TEMPLATE % dict(commit = commit_id, author=commit_author, 
+            commit_message=commit_message, test_output=output)
 
         if test_success:
             subject = "Test now succeed @ %s" % repository
         else:
             subject = "Test now fail @ %s" % repository
 
-        notifier.notify(subject, output)
+        notifier.notify(subject, notification_body)
 
     # Update persistent test status 
     new_status = Status()

@@ -33,6 +33,7 @@ Setting up VVV in development mode::
     virtualenv -p python3.2 venv
     source venv/bin/activate
     python setup.py develop
+    
     # Set-up precommit hook to lint vvv's own files
     vvv-install-git-pre-commit-hook
 
