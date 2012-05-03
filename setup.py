@@ -44,5 +44,6 @@ setup(name = "vvv",
       vvv-install-git-pre-commit-hook = vvv.hooks.git:setup_hook
       vvv-validate-rst = vvv.scripts.validaterst:run
       vvv-expand-tabs = vvv.scripts.expandtabs:run
+      ghetto-ci = ghettoci.main:entry_point
       """,        
 ) 
