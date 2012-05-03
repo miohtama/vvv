@@ -203,7 +203,7 @@ Example ``.travis.yml`` using the latest `VVV trunk from Github <https://github.
 
 .. note ::
 
-    Travis CI uses .yml extension, VVV uses .yaml extension. VVV is better.
+    Travis CI uses .yml extension, VVV uses .yaml extension. VVV wins.
 
 More info
 
@@ -212,3 +212,57 @@ More info
 * http://about.travis-ci.org/docs/user/build-configuration/
 
 * https://github.com/travis-ci/travis-lint
+
+Integration with buildout / Plone / Zope 
+============================================
+
+`Plone CMS <http://plone.org>`_ community 
+uses `buildout <http://www.buildout.org>`_
+tool to automatically configure, compile, install, etc.
+software.
+
+Because buildout determines Python environment under 
+which ``pylint`` must be executed some special considerations 
+are needed.
+
+Add pylint to buildout
+------------------------
+
+First you need to install ``pylint`` using buildout. In your ``buildout.cfg`` add::
+
+    parts =
+      pylint
+      ...
+
+    # Install pylint command needed for VVV package validator
+    [pylint]
+    recipe = zc.recipe.egg
+    eggs =
+        ${instance:eggs}
+        pylint
+    entry-points = pylint=pylint.lint:Run
+    arguments = sys.argv[1:]
+
+Install git pre-commit hooks
+--------------------------------
+
+You are probably checking out and managing source code with 
+`Mr. Developer <http://pypi.python.org/pypi/mr.developer/>`_
+and buildout.
+
+For now, manually activate git pre-commit hooks 
+as instructed above, after the source code has been checked out.
+
+.. note ::
+  
+  This can be forced in the future via buildout, so everyone
+  who gets the source code will be forced to use pre-commit hook validation.
+
+Add validation-options.yaml configuration
+---------------------------------------------
+
+For example configuration files to be dropped
+in your project root, please see `youraddon Plone add-on template package on Github <https://github.com/miohtama/sane_plone_addon_template/tree/master/youraddon>`_.
+
+
+
