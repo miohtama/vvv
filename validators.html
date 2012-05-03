@@ -92,6 +92,7 @@
 <li><a class="reference internal" href="#id9">Supported files</a></li>
 <li><a class="reference internal" href="#id10">Options</a><ul>
 <li><a class="reference internal" href="#host-python-env">host-python-env</a></li>
+<li><a class="reference internal" href="#pylint-command">pylint-command</a></li>
 <li><a class="reference internal" href="#id11">command-line</a></li>
 <li><a class="reference internal" href="#id12">configuration</a></li>
 <li><a class="reference internal" href="#python3k">python3k</a></li>
@@ -386,6 +387,22 @@ the active <tt class="docutils literal"><span class="pre">python</span></tt> env
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you change this you need run <tt class="docutils literal"><span class="pre">vvv</span> <span class="pre">--reinstall</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="pylint-command">
+<h5>pylint-command<a class="headerlink" href="#pylint-command" title="Permalink to this headline">¶</a></h5>
+<p>A path spec pointing to used <tt class="docutils literal"><span class="pre">pylint</span></tt> command.</p>
+<p>Use this command to run pylint. This is for cases where <tt class="docutils literal"><span class="pre">host-python-env</span></tt> 
+is not enough to tame your Python package dependencies.</p>
+<p>If this option starts with . it is considered to be a directory reference relative to the project root.</p>
+<p>IF this option starts with / it is considered to be absolute directory reference.</p>
+<p>Otherwise normal path look behavior is used (UNIX <tt class="docutils literal"><span class="pre">which</span></tt> commmand behavior).</p>
+<p>Example:</p>
+<div class="highlight-python"><pre>pylint:
+  enabled: true
+  python3k: false
+  # Points to buildout/bin/pylint command two levels below project folder
+  pylint-command: ../../bin/pylint</pre>
 </div>
 </div>
 <div class="section" id="id11">

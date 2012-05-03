@@ -1,0 +1,236 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ghetto, continuous integration server &mdash; VVV 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="VVV 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Extend and develop" href="develop.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Extend and develop"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Ghetto, continuous integration server</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#module-ghettoci.main">Ghetto CI</a><ul>
+<li><a class="reference internal" href="#what-it-is">What it is</a></li>
+<li><a class="reference internal" href="#what-it-does">What it does</a></li>
+<li><a class="reference internal" href="#why-to-use">Why to use</a></li>
+<li><a class="reference internal" href="#how-to-use">How to use</a></li>
+<li><a class="reference internal" href="#future-tasks">Future tasks</a></li>
+<li><a class="reference internal" href="#source-and-credits">Source and credits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="develop.html"
+                        title="previous chapter">Extend and develop</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ghetto.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ghetto-continuous-integration-server">
+<h1>Ghetto, continuous integration server<a class="headerlink" href="#ghetto-continuous-integration-server" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#module-ghettoci.main" id="id2">Ghetto CI</a><ul>
+<li><a class="reference internal" href="#what-it-is" id="id3">What it is</a></li>
+<li><a class="reference internal" href="#what-it-does" id="id4">What it does</a></li>
+<li><a class="reference internal" href="#why-to-use" id="id5">Why to use</a></li>
+<li><a class="reference internal" href="#how-to-use" id="id6">How to use</a></li>
+<li><a class="reference internal" href="#future-tasks" id="id7">Future tasks</a></li>
+<li><a class="reference internal" href="#source-and-credits" id="id8">Source and credits</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Ghetto CI is your 500 lines of Python code
+for running continuos integration (CI) tests.
+Please note that this 500 lines includes comments
+and documentation.</p>
+<p>Ghetto CI started as internal script in the need of
+having a quick and dirty test bot for
+a closed project. It is a perfect piece of software
+to demostrate the power of Python - how you can
+create so much with so little. <strong>I doubt
+no other programming language in the world could
+have this elegant and simple solution</strong>
+(yes, it was a challenge).</p>
+</div>
+<div class="section" id="module-ghettoci.main">
+<span id="ghetto-ci"></span><h2><a class="toc-backref" href="#id2">Ghetto CI</a><a class="headerlink" href="#module-ghettoci.main" title="Permalink to this headline">¶</a></h2>
+<p>Continuous integration server, ghetto style</p>
+<div class="section" id="what-it-is">
+<h3><a class="toc-backref" href="#id3">What it is</a><a class="headerlink" href="#what-it-is" title="Permalink to this headline">¶</a></h3>
+<p>Python script in few hundred lines fullfilling your dirty little continuos integration needs.</p>
+</div>
+<div class="section" id="what-it-does">
+<h3><a class="toc-backref" href="#id4">What it does</a><a class="headerlink" href="#what-it-does" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Runs update on a source folder from a Subversion repository (note: VCS backend easy to change)</li>
+<li>See if there are new commits since the last run</li>
+<li>Run tests if the source code in fact was changed</li>
+<li>See if the tests status has changed from success to failure or vice versa</li>
+<li>Send email notifications to the team that now shit has hit the fan</li>
+</ol>
+</div>
+<div class="section" id="why-to-use">
+<h3><a class="toc-backref" href="#id5">Why to use</a><a class="headerlink" href="#why-to-use" title="Permalink to this headline">¶</a></h3>
+<p>To improve your software project quality and cost effectiveness, 
+you want to automatically detect bad commits breaking your project 
+<a class="reference external" href="http://jenkins-ci.org/">without need to install 48 MB of Java software</a>.
+This script is mostly self-contained, easy to understand, easy to hack into pieces and customize for your very own need.</p>
+</div>
+<div class="section" id="how-to-use">
+<h3><a class="toc-backref" href="#id6">How to use</a><a class="headerlink" href="#how-to-use" title="Permalink to this headline">¶</a></h3>
+<p>Create Python 3 virtualenv and run ghetto script using Python interpreter configured under this virtualenv:</p>
+<div class="highlight-python"><pre># We install directly under our UNIX user home folder
+cd ~
+virtualenv -p python3.2 ghetto
+source ghetto/bin/activate
+pip install plac
+
+# Install ghetto-ci.py command by downloading it from Github using wget
+wget --no-check-certificate -O ghetto-ci.py https://raw.github.com/miohtama/vvv/master/ghettoci/main.py
+
+# Running the script, using the Python environment prepared 
+# to see that everything works
+ghetto/bin/python ghettoci.py</pre>
+</div>
+<p>Now you need have</p>
+<ul class="simple">
+<li>A software repository folder. This must be pre-checked out Subversion repository where
+you can run <tt class="docutils literal"><span class="pre">svn</span> <span class="pre">up</span></tt> command.</li>
+<li>A command to execute unit tests and such. Must return process exit code 0 on success.
+If you don&#8217;t bother write tests, at least <a class="reference external" href="http://pypi.python.org/pypi/vvv">lint and validate your source code</a>.</li>
+<li>A file storing the test status. Status file keeps track whether the last round
+or tests succeeded or failed. You&#8217;ll get email reports only when the test status changed -
+there is little need to get &#8220;tests succeeded&#8221; email for every commit.</li>
+<li>Email server details to send out notifications. Gmail works perfectly.</li>
+</ul>
+<p>Example of a command:</p>
+<div class="highlight-python"><pre># Will print output to console because email notification details are not given
+ghetto/bin/python ghettoci.py </pre>
+</div>
+<p>If the tests status have changed since the last run, or the running fails
+due to internal error, the command outputs the result. Otherwise
+command outputs nothing. Exit code 0 indicates that test succeeded.</p>
+<p>Then just make <em>ghettoci</em> to poll the repository in UNIX crom (Ubuntu example).
+Create file <tt class="docutils literal"><span class="pre">/etc/cron.hourly/ghetto-ci</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span> <span class="ow">or</span> <span class="n">just</span> <span class="n">use</span> <span class="n">OSX</span> <span class="ow">or</span> <span class="n">Windows</span> <span class="n">task</span> <span class="n">automators</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="future-tasks">
+<h3><a class="toc-backref" href="#id7">Future tasks</a><a class="headerlink" href="#future-tasks" title="Permalink to this headline">¶</a></h3>
+<p>To make this script even more neat, the folowing could be considered</p>
+<ul class="simple">
+<li>Using some Python library as the abstraction layer for different
+version control systems</li>
+<li>Using more intelligent Python library for the notifications:
+have email, IRC and Skype notifications (How Skype bots are built nowadays?)</li>
+</ul>
+</div>
+<div class="section" id="source-and-credits">
+<h3><a class="toc-backref" href="#id8">Source and credits</a><a class="headerlink" href="#source-and-credits" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="https://github.com/miohtama/vvv">Ghetto CI lives on Github, in VVV project</a>.</p>
+<p>Mikko Ohtamaa, the original author (<a class="reference external" href="http://opensourcehacker.com">blog</a>, <a class="reference external" href="http://twitter.com/moo9000">Twitter</a>)</p>
+<p>Licensed under <a class="reference external" href="http://sam.zoy.org/wtfpl/COPYING">WTFPL</a>.</p>
+<p><a class="reference external" href="http://www.urbandictionary.com/define.php?term=ghetto+style">Ghetto style explained</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="develop.html" title="Extend and develop"
+             >previous</a> |</li>
+        <li><a href="index.html">VVV 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Mikko Ohtamaa.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
