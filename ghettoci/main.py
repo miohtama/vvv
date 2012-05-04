@@ -6,18 +6,19 @@ Continuous integration server, ghetto style
 What it is
 --------------
 
-Python script in few hundred lines fullfilling your dirty continuos integration needs.
+Python script in 145 statements fullfilling your dirty `continuous integration <https://en.wikipedia.org/wiki/Continuous_integration>`_ needs.
 
-`Source code (one file, 500 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
-and for your convenience
-the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_. 
+`Source code (one file, only 145 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
+and for your convenience the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_. 
 
 What it does
 --------------
 
-1. Runs update on a source folder from a Subversion repository (VCS backend easy to customize)
+0. The script must be run on your server periodically
 
-2. See if there are new commits since the last run
+1. Runs svn update on a source folder (VCS backend easy to customize)
+
+2. Checks if there are new commits since the last run
 
 3. Run tests if the source code in fact was changed
 
@@ -32,18 +33,16 @@ To improve quality and cost effectiveness of your little software project,
 you want to detect code changes breaking your project [automated tests].
 
 You might want to do this 
-`without need to install 48 MB of Java software <http://jenkins-ci.org/>`_.
+`without installing 48 MB of Java software <http://jenkins-ci.org/>`_ on your server.
 On the other hand, 
 `very good SaaS oriented alternatives are tied to public Github repositories <travis-ci.org>´_.
-
-Shell scripts for such task are nice. But no one wants to read or maintain shell scripts
+Homebrew shell scripts for tasks like this are nice. But no one wants to read or touch shell scripts
 written by others.  
 
 *Ghetto-CI* script is mostly self-contained, 
-easy to understand, easy to hack into pieces and customize for your very own need.
+easy to understand, easy to hack into pieces, for your very own need.
 It is a solution that *scales down*. Just toss it on a corner of a server
 and it will churn happily and keep its owners proud.
-
 *Ghetto-CI* does not you give fancy web interface, statistics, bling bling
 or even a pony. However, it tells when someone breaks something and
 it is time for team building via `blanket party <http://en.wikipedia.org/wiki/Blanket_party>`_.
@@ -59,11 +58,11 @@ Installation
 
 .. note ::
 
-    Even if there instructions use VVV package to install ghetto-ci, you can 
-    do just fine by `grabbing the source file <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
+    If you don't feel eggy you can 
+    just `grab the self-contained source file <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
     as long as you have plac package also installed for your Python.
 
-Create Python 3 virtualenv and run ghetto script using Python interpreter configured under this virtualenv::
+Create Python 3 virtualenv and run Ghetto-CI script using Python interpreter configured under this virtualenv::
 
     # We install GhettoCI directly under our UNIX user home folder
     cd ~
@@ -75,8 +74,8 @@ Create Python 3 virtualenv and run ghetto script using Python interpreter config
 
     # Running the script, using the Python environment prepared 
     # to see that everything works (source command above 
-    # has added
-    ghetto-ci
+    # has added this to PATH)
+    ghetto-ci -h
 
 Usage
 --------
@@ -97,7 +96,7 @@ You need to prepare
 * Email server details to send out notifications. Gmail works perfectly if you
   are in short of SMTP servers.
 
-Example of a command for running continous integration against ``/my/svn/repo`` checkout where 
+Example of a command for running continuous integration against ``/my/svn/repo`` checkout where 
 ``bin/test`` command is used to run the unit tests::
 
     # Will print output to console because email notification details are not given
@@ -108,14 +107,25 @@ due to internal error, the command outputs the result. Otherwise
 command outputs nothing. Exit code 0 indicates that test succeeded.
     
 Then just make Ghetto-CI to poll the repository in UNIX cron clock deamon.
+Create a dummy UNIX user which can checkout and pull updates on the source code. 
 Create file ``/etc/cron.hourly/continuous-integration-tests`` which will hourly run the tests (Ubuntu example)::
 
     #/bin/sh
-    ghetto-ci /my/svn/repo /tmp/status-file.ci "cd /my/svn/repo && bin/test"
+    sudo -i -u yourunixuser "ghetto-ci /my/svn/repo /tmp/status-file.ci 'cd /my/svn/repo && bin/test'
 
 Naturally the command to launch the tests is specific to your software project.
 
-On Windows you can accomplish  automator provided by your operating system vendor.
+On Windows you can accomplish this using any automator provided by your operating system vendor.
+
+Tips
+------------------------
+
+You might to use ``-force -alwaysoutput`` arguments with test runs.
+
+You can also evaluate against UNIX command `true` and `false` to e.g.
+test email output::
+
+    ghetto-ci -force -alwaysoutput ...email settings here... /repo /tmp/status-file.ci true
 
 Complex usage example
 ------------------------
@@ -123,23 +133,81 @@ Complex usage example
 Below is a real life example how you define one shell script, again triggered
 by Cron job, to poll several SVN repositories which have different tests to run.
 
+``continuous-integration.sh``::
 
+    #!/bin/sh
+    #
+    # Example ghetto-ci integration for Plone buildout and custom add-ons.
+    # Using dummy gmail account for outgoing messages.
+    #
+    # Install VVV under buildout
+    #
+    # Run this file in buildout main folder:
+    #
+    # cd ~/mybuildoutfolder
+    # src/my-repo/continuos-integration.sh 
+    #
+    #
+
+    # The list of persons who will receive resports of test status changes
+    RECEIVERS="person@asdf.com, person2@asdf.com, person3@example.com"
+
+    # Ghetto-CI template command which is run against multiple repos / multiple test commands
+    # We use localhost 25 as the SMTP server -> assume your UNIX server has postfix 
+    # or something configured... could be gmail.com servers also here
+    GHETTOCI="vvv-venv/bin/ghetto-ci \
+        -smtpserver smtp.gmail.com \
+        -smtpport 465 \
+        -smtpuser mailer@gmail.com \
+        -smtppassword OMGITISFULLofKITT3NS \
+        -receivers \"$RECEIVERS\" \
+        -envelopefrom \"Continuous integration service <mailer@gmail.com>\" \
+        -smtpfrom mailer@gmail.com"
+
+    # Note that SVN revision info is folding down in the folders
+    # so you can target tests to a specific SVN repo subfolder
+
+    # Note: eval needs to be used due to shell script quotation mark fuzz 
+
+    # See that buildout completes (no changes in the external environment, like someone accidentally 
+    # publishing broken packages on PyPI). We actually place buildout.cfg under this SVN repo
+    # and then just symlink it
+    eval $GHETTOCI src/my-repo buildout.ci 'bin/buildout'
+
+    # Run tests against hospital product
+    eval $GHETTOCI src/my-repo/Products.Hospital hospital.ci \"bin/test -s Products.Hospital\"
+
+    # Run tests against patient product
+    eval $GHETTOCI src/my-repo/Products.Patient patient.ci \"bin/test -s Products.Patient\" 
+
+
+Internals
+------------------------
+
+`plac rocks for command line parsing <http://plac.googlecode.com/hg/doc/plac.html>`_, 
+especially with Python 3. 
+
+The code is pylint valid - and beautiful, Pythonic.
 
 Future tasks
 -------------------
 
 To make this script even more awesome, the following can be considered
 
-* Using some Python library as the abstraction layer for different
+* Using some Python library as the abstraction layer over different
   version control systems
 
 * Using more intelligent Python library for the notifications:
   have email, IRC and Skype notifications (How Skype bots are built nowadays?)
 
-* Use a proper emailing library. I still believe it is easier to configure one GMail account for SMTP purposes, instead of Postfix or Exim.
+* Use a proper emailing library. I still believe it is easier to configure one GMail account for SMTP purposes instead of Postfix or Exim.
   Also GMail nicely collects outgoing messages to log even if email delivery has temporary problems.
 
 * I would be happy if someone told how to change *-smtpport* styles options to *--smtp-port* with plac
+
+* I would be also happy if someone shows how to tame shell script quotation marks properly
+
+* All tips to make Python source even more beautiful welcome
 
 Source and credits
 --------------------
@@ -150,9 +218,12 @@ Mikko Ohtamaa, the original author (`blog <http://opensourcehacker.com>`_, `Twit
 
 Licensed under `WTFPL <http://sam.zoy.org/wtfpl/COPYING>`_.
 
-`Ghetto style explained <http://www.urbandictionary.com/define.php?term=ghetto+style>`_.
+`Ghetto style? <http://www.urbandictionary.com/define.php?term=ghetto+style>`_.
 
 """
+
+__author__ = "Mikko Ohtamaa <mikko@opensourcehacker.com>"
+__license__ = "WTFPL"
 
 # pylint complains about abstract Python 3 members and ABCMeta, this will be fixed in the future
 # pylint: disable=R0201, W0611
@@ -167,7 +238,7 @@ import subprocess
 from smtplib import SMTP_SSL, SMTP 
 
 #: Template used in email notifications
-NOTIFICATION_BODY_TEMPLATE="""
+NOTIFICATION_BODY_TEMPLATE = """
 Last commit %(commit)s by %(author)s:
 
 %(commit_message)s
@@ -205,7 +276,7 @@ def shell(cmdline):
 
 class Status:
     """
-    Store CI status of a test run.
+    Stored pickled CI status of a test run.
 
     Use Python pickling serialization for making status info persistent.
     """
@@ -243,7 +314,7 @@ class Status:
         Write status file
         """        
         f = open(path, "wb")
-        content = pickle.dump(status, f)
+        pickle.dump(status, f)
         f.close()
 
 
@@ -285,16 +356,19 @@ class SVNRepo(Repo):
         """
         Get the last commit status.
         """
+
+        # Get output from svn info
         info, output = self.get_svn_info()
 
         if not info:
             return (None, None, None, output)
 
+        # Get output from svn log
         log_success, author, log = self.get_svn_log()
         if not log_success:
             return (None, None, None, log)
 
-        return (info["Revision"], author, log, output)
+        return (info["Last Changed Rev"], author, log, output)
 
     def get_svn_log(self):
         """
@@ -338,7 +412,7 @@ class Notifier:
     SMTP server details are available.
     """
 
-    def __init__(self, server, port, username, password, receivers, from_address):
+    def __init__(self, server, port, username, password, receivers, from_address, envelope_from):
         """
         :param server: SMTP server
         
@@ -359,9 +433,7 @@ class Notifier:
         self.password = password
         self.receivers = receivers
         self.from_address = from_address
-
-        # This would be nice trick, but let's keep linter happy
-        # self.__dict__.update(kwargs)
+        self.envelope_from = envelope_from
 
     def send_email_notification(self, subject, output):
         """
@@ -376,6 +448,9 @@ class Notifier:
 
         :param output: Email payload
         """
+
+        if not self.receivers:
+            raise RuntimeError("Cannot send email - no receivers given")
     
         if self.port == 465:
             # SSL encryption from the start
@@ -386,17 +461,27 @@ class Notifier:
 
         msg = MIMEText(output, "text/plain")
         msg['Subject'] = subject
-        msg['From'] = self.from_address
+
+        if self.envelope_from:
+            msg['From'] = self.envelope_from
+        else:
+            msg['From'] = self.from_address
+
+        # Add visible receivers header
+        msg["To"] = self.receivers
 
         # SMTP never works on the first attempt...
-        smtp.set_debuglevel(True)
+        smtp.set_debuglevel(False)
 
         # SMTP authentication is optional
         if self.username and self.password:
             smtp.login(self.username, self.password)
 
+        # Convert comma-separated sl
+        receivers = [email.strip() for email in self.receivers.split(",")]
+
         try:
-            smtp.sendmail(self.from_address, self.receivers, msg.as_string())
+            smtp.sendmail(self.from_address, receivers, msg.as_string())
         finally:
             smtp.close()
 
@@ -429,11 +514,12 @@ def run_tests(test_command):
 
 # Parsing command line with plac rocks
 # http://plac.googlecode.com/hg/doc/plac.html
-def main(smtpserver : ("SMTP server address for mail out", "option"), 
+def main(smtpserver : ("SMTP server address for mail out. Required if you indent to use email notifications.", "option"), 
          smtpport : ("SMTP server port for mail out", "option", None, int), 
          smtpuser : ("SMTP server username", "option"),
          smtppassword : ("SMTP server password", "option"),
          smtpfrom : ("Notification email From address", "option"),
+         envelopefrom : ("Verbose Name <from@site.com> sender address in outgoing email", "option"),
          receivers : ("Notification email receives as comma separated string", "option"),
          force : ("Run tests regardless if there have been any repository updates", "flag"),
          alwaysoutput : ("Print test run output regardless whether test status has changed since the last run", "flag"),
@@ -445,7 +531,7 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
     """
     ghetto-ci
 
-    A simple continous integration server.
+    A simple continuous integration server.
     
     ghetto-ci will monitor the software repository.
     Give a (Subversion) software repository and a test command run test against it.
@@ -455,10 +541,9 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
     For more information see https://github.com/miohtama/vvv
     """
 
-
     notifier = Notifier(server=smtpserver, port=smtpport, 
                       username=smtpuser, password=smtppassword, from_address=smtpfrom,
-                      receivers=receivers)
+                      receivers=receivers, envelope_from=envelopefrom)
 
     repo = SVNRepo(repository)    
     status = Status.read(statusfile)
@@ -482,10 +567,9 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
         test_success, output = run_tests(testcommand)
     else:
         # No new commits, nothing to do
+        print("No changes in repo %s" % repository)
         return 0
     
-
-
     # Test run status have changed since last run
     if (test_success != status.test_success) or alwaysoutput:
 
@@ -493,9 +577,9 @@ def main(smtpserver : ("SMTP server address for mail out", "option"),
             commit_message=commit_message, test_output=output)
 
         if test_success:
-            subject = "Test now succeed @ %s" % repository
+            subject = "Test now succeed for %s" % testcommand
         else:
-            subject = "Test now fail @ %s" % repository
+            subject = "Test now fail for %s" % testcommand
 
         notifier.notify(subject, notification_body)
 
