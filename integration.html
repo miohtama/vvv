@@ -71,6 +71,7 @@
 </li>
 <li><a class="reference internal" href="#integrating-with-travis-ci">Integrating with Travis CI</a></li>
 <li><a class="reference internal" href="#integration-with-buildout-plone-zope">Integration with buildout / Plone / Zope</a><ul>
+<li><a class="reference internal" href="#add-vvv-to-buildout">Add VVV to buildout</a></li>
 <li><a class="reference internal" href="#add-pylint-to-buildout">Add pylint to buildout</a></li>
 <li><a class="reference internal" href="#install-git-pre-commit-hooks">Install git pre-commit hooks</a></li>
 <li><a class="reference internal" href="#add-validation-options-yaml-configuration">Add validation-options.yaml configuration</a></li>
@@ -134,9 +135,10 @@
 </li>
 <li><a class="reference internal" href="#integrating-with-travis-ci" id="id12">Integrating with Travis CI</a></li>
 <li><a class="reference internal" href="#integration-with-buildout-plone-zope" id="id13">Integration with buildout / Plone / Zope</a><ul>
-<li><a class="reference internal" href="#add-pylint-to-buildout" id="id14">Add pylint to buildout</a></li>
-<li><a class="reference internal" href="#install-git-pre-commit-hooks" id="id15">Install git pre-commit hooks</a></li>
-<li><a class="reference internal" href="#add-validation-options-yaml-configuration" id="id16">Add validation-options.yaml configuration</a></li>
+<li><a class="reference internal" href="#add-vvv-to-buildout" id="id14">Add VVV to buildout</a></li>
+<li><a class="reference internal" href="#add-pylint-to-buildout" id="id15">Add pylint to buildout</a></li>
+<li><a class="reference internal" href="#install-git-pre-commit-hooks" id="id16">Install git pre-commit hooks</a></li>
+<li><a class="reference internal" href="#add-validation-options-yaml-configuration" id="id17">Add validation-options.yaml configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -330,8 +332,26 @@ software.</p>
 <p>Because buildout determines Python environment under
 which <tt class="docutils literal"><span class="pre">pylint</span></tt> must be executed some special considerations
 are needed.</p>
+<div class="section" id="add-vvv-to-buildout">
+<h3><a class="toc-backref" href="#id14">Add VVV to buildout</a><a class="headerlink" href="#add-vvv-to-buildout" title="Permalink to this headline">¶</a></h3>
+<p>This will install VVV with buildout run. In <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt>:</p>
+<div class="highlight-python"><pre>parts =
+  ...
+  vvv
+
+# Install VVV under Python 3&#x27;s virtualenv vvv-venv in buildout root
+# If you get &quot;SyntaxError: invalid syntax&quot; make sure your operating system&#x27;s virtualenv command is up-to-date
+# for Python 3
+[vvv]
+recipe = plone.recipe.command
+stop-on-error = true
+location ${buildout:directory}/vvv-venv
+command = virtualenv -p python3 vvv-venv &amp;&amp; source vvv-venv/bin/activate &amp;&amp; pip install vvv
+update-command =</pre>
+</div>
+</div>
 <div class="section" id="add-pylint-to-buildout">
-<h3><a class="toc-backref" href="#id14">Add pylint to buildout</a><a class="headerlink" href="#add-pylint-to-buildout" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id15">Add pylint to buildout</a><a class="headerlink" href="#add-pylint-to-buildout" title="Permalink to this headline">¶</a></h3>
 <p>First you need to install <tt class="docutils literal"><span class="pre">pylint</span></tt> using buildout. In your <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt> add:</p>
 <div class="highlight-python"><pre>parts =
   pylint
@@ -348,7 +368,7 @@ arguments = sys.argv[1:]</pre>
 </div>
 </div>
 <div class="section" id="install-git-pre-commit-hooks">
-<h3><a class="toc-backref" href="#id15">Install git pre-commit hooks</a><a class="headerlink" href="#install-git-pre-commit-hooks" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id16">Install git pre-commit hooks</a><a class="headerlink" href="#install-git-pre-commit-hooks" title="Permalink to this headline">¶</a></h3>
 <p>You are probably checking out and managing source code with
 <a class="reference external" href="http://pypi.python.org/pypi/mr.developer/">Mr. Developer</a>
 and buildout.</p>
@@ -361,7 +381,7 @@ who gets the source code will be forced to use pre-commit hook validation.</p>
 </div>
 </div>
 <div class="section" id="add-validation-options-yaml-configuration">
-<h3><a class="toc-backref" href="#id16">Add validation-options.yaml configuration</a><a class="headerlink" href="#add-validation-options-yaml-configuration" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id17">Add validation-options.yaml configuration</a><a class="headerlink" href="#add-validation-options-yaml-configuration" title="Permalink to this headline">¶</a></h3>
 <p>For example configuration files to be dropped
 in your project root, please see <a class="reference external" href="https://github.com/miohtama/sane_plone_addon_template/tree/master/youraddon">youraddon Plone add-on template package on Github</a>.</p>
 </div>

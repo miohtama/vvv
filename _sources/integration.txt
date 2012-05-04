@@ -225,6 +225,25 @@ Because buildout determines Python environment under
 which ``pylint`` must be executed some special considerations 
 are needed.
 
+Add VVV to buildout
+------------------------
+
+This will install VVV with buildout run. In ``buildout.cfg``::
+
+  parts =
+    ...
+    vvv
+
+  # Install VVV under Python 3's virtualenv vvv-venv in buildout root
+  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date 
+  # for Python 3
+  [vvv]
+  recipe = plone.recipe.command
+  stop-on-error = true
+  location ${buildout:directory}/vvv-venv
+  command = virtualenv -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv  
+  update-command = 
+
 Add pylint to buildout
 ------------------------
 
@@ -263,6 +282,4 @@ Add validation-options.yaml configuration
 
 For example configuration files to be dropped
 in your project root, please see `youraddon Plone add-on template package on Github <https://github.com/miohtama/sane_plone_addon_template/tree/master/youraddon>`_.
-
-
 
