@@ -6,80 +6,129 @@ Continuous integration server, ghetto style
 What it is
 --------------
 
-Python script in few hundred lines fullfilling your dirty little continuos integration needs.
+Python script in few hundred lines fullfilling your dirty continuos integration needs.
+
+`Source code (one file, 500 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
+and for your convenience
+the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_. 
 
 What it does
 --------------
 
-1. Runs update on a source folder from a Subversion repository (note: VCS backend easy to change)
+1. Runs update on a source folder from a Subversion repository (VCS backend easy to customize)
 
 2. See if there are new commits since the last run
 
 3. Run tests if the source code in fact was changed
 
-4. See if the tests status has changed from success to failure or vice versa
+4. See if the tests status since the last run has changed from success to failure or vice versa
 
 5. Send email notifications to the team that now shit has hit the fan 
 
 Why to use
 ---------------
 
-To improve your software project quality and cost effectiveness, 
-you want to automatically detect bad commits breaking your project 
-`without need to install 48 MB of Java software <http://jenkins-ci.org/>`_.
-This script is mostly self-contained, easy to understand, easy to hack into pieces and customize for your very own need.
+To improve quality and cost effectiveness of your little software project, 
+you want to detect code changes breaking your project [automated tests].
 
-How to use
+You might want to do this 
+`without need to install 48 MB of Java software <http://jenkins-ci.org/>`_.
+On the other hand, 
+`very good SaaS oriented alternatives are tied to public Github repositories <travis-ci.org>´_.
+
+Shell scripts for such task are nice. But no one wants to read or maintain shell scripts
+written by others.  
+
+*Ghetto-CI* script is mostly self-contained, 
+easy to understand, easy to hack into pieces and customize for your very own need.
+It is a solution that *scales down*. Just toss it on a corner of a server
+and it will churn happily and keep its owners proud.
+
+*Ghetto-CI* does not you give fancy web interface, statistics, bling bling
+or even a pony. However, it tells when someone breaks something and
+it is time for team building via `blanket party <http://en.wikipedia.org/wiki/Blanket_party>`_.
+
+Installation
 --------------
+
+.. note ::
+
+    As a prerequisitement you need a working Python 3 command  
+    installed on your operating system with virtualenv package. 
+    For detailed instructions see `VVV installation manual <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_
+
+.. note ::
+
+    Even if there instructions use VVV package to install ghetto-ci, you can 
+    do just fine by `grabbing the source file <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
+    as long as you have plac package also installed for your Python.
 
 Create Python 3 virtualenv and run ghetto script using Python interpreter configured under this virtualenv::
 
-    # We install directly under our UNIX user home folder
+    # We install GhettoCI directly under our UNIX user home folder
     cd ~
-    virtualenv -p python3.2 ghetto
-    source ghetto/bin/activate
-    pip install plac
+    virtualenv -p python3 vvv-venv
+    source vvv-venv/bin/activate
+    pip install vvv
 
-    # Install ghetto-ci.py command by downloading it from Github using wget
-    wget --no-check-certificate -O ghetto-ci.py https://raw.github.com/miohtama/vvv/master/ghettoci/main.py
+    # ghetto-ci now lives in vvv-venv/bin/ghetto-ci
 
     # Running the script, using the Python environment prepared 
-    # to see that everything works
-    ghetto/bin/python ghettoci.py
+    # to see that everything works (source command above 
+    # has added
+    ghetto-ci
 
-Now you need have
+Usage
+--------
+
+You need to prepare
 
 * A software repository folder. This must be pre-checked out Subversion repository where
-  you can run ``svn up`` command.
+  ghetto-ci can run ``svn up`` command.
 
-* A command to execute unit tests and such. Must return process exit code 0 on success.
-  If you don't bother write tests, at least `lint and validate your source code <http://pypi.python.org/pypi/vvv>`_. 
+* A command to execute unit tests and such. This command must return process exit code 0 on success.
+  If you don't bother writing tests, low end alternative is just 
+  `lint and validate your source code <http://pypi.python.org/pypi/vvv>`_. 
 
-* A file storing the test status. Status file keeps track whether the last round
+* A file storing the test status. Ghetto-CI status file keeps track whether the last round
   or tests succeeded or failed. You'll get email reports only when the test status changed -
   there is little need to get "tests succeeded" email for every commit. 
 
-* Email server details to send out notifications. Gmail works perfectly.
+* Email server details to send out notifications. Gmail works perfectly if you
+  are in short of SMTP servers.
 
-Example of a command::
+Example of a command for running continous integration against ``/my/svn/repo`` checkout where 
+``bin/test`` command is used to run the unit tests::
 
     # Will print output to console because email notification details are not given
-    ghetto/bin/python ghettoci.py 
+    ghetto-ci /my/svn/repo /tmp/status-file.ci "cd /my/svn/repo && bin/test"
 
 If the tests status have changed since the last run, or the running fails
 due to internal error, the command outputs the result. Otherwise
 command outputs nothing. Exit code 0 indicates that test succeeded.
     
-Then just make *ghettoci* to poll the repository in UNIX crom (Ubuntu example).
-Create file ``/etc/cron.hourly/ghetto-ci``::
+Then just make Ghetto-CI to poll the repository in UNIX cron clock deamon.
+Create file ``/etc/cron.hourly/continuous-integration-tests`` which will hourly run the tests (Ubuntu example)::
+
+    #/bin/sh
+    ghetto-ci /my/svn/repo /tmp/status-file.ci "cd /my/svn/repo && bin/test"
+
+Naturally the command to launch the tests is specific to your software project.
+
+On Windows you can accomplish  automator provided by your operating system vendor.
+
+Complex usage example
+------------------------
+
+Below is a real life example how you define one shell script, again triggered
+by Cron job, to poll several SVN repositories which have different tests to run.
 
 
-... or just use OSX or Windows task automators.
 
 Future tasks
 -------------------
 
-To make this script even more neat, the folowing could be considered
+To make this script even more awesome, the following can be considered
 
 * Using some Python library as the abstraction layer for different
   version control systems
@@ -87,6 +136,10 @@ To make this script even more neat, the folowing could be considered
 * Using more intelligent Python library for the notifications:
   have email, IRC and Skype notifications (How Skype bots are built nowadays?)
 
+* Use a proper emailing library. I still believe it is easier to configure one GMail account for SMTP purposes, instead of Postfix or Exim.
+  Also GMail nicely collects outgoing messages to log even if email delivery has temporary problems.
+
+* I would be happy if someone told how to change *-smtpport* styles options to *--smtp-port* with plac
 
 Source and credits
 --------------------

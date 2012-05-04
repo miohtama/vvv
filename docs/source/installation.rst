@@ -30,7 +30,7 @@ Tested on Ubuntu 10.04 and should work on are later versions.
 
 Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder::
 
-    sudo apt-get install python3 python3-setuptools wget
+    sudo apt-get install python3 python3-setuptools 
     # Please enter the following commands as non-root user 
     cd ~
     wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py"

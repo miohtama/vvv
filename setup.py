@@ -24,7 +24,9 @@ setup(name = "vvv",
     classifiers=[
         "Programming Language :: Python",
     ],     
-    license="GPL",
+    license="GPL3+",
+    # Don't install as zipped as we want to poke non-py files inside dist archive
+    zip_safe = False,
     include_package_data = True,
     entry_points="""
       # -*- Entry points: -*-
