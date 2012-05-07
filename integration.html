@@ -73,7 +73,7 @@
 <li><a class="reference internal" href="#integration-with-buildout-plone-zope">Integration with buildout / Plone / Zope</a><ul>
 <li><a class="reference internal" href="#add-vvv-to-buildout">Add VVV to buildout</a></li>
 <li><a class="reference internal" href="#add-pylint-to-buildout">Add pylint to buildout</a></li>
-<li><a class="reference internal" href="#install-git-pre-commit-hooks">Install git pre-commit hooks</a></li>
+<li><a class="reference internal" href="#automatically-install-git-pre-commit-hooks">Automatically install git pre-commit hooks</a></li>
 <li><a class="reference internal" href="#add-validation-options-yaml-configuration">Add validation-options.yaml configuration</a></li>
 </ul>
 </li>
@@ -137,7 +137,7 @@
 <li><a class="reference internal" href="#integration-with-buildout-plone-zope" id="id13">Integration with buildout / Plone / Zope</a><ul>
 <li><a class="reference internal" href="#add-vvv-to-buildout" id="id14">Add VVV to buildout</a></li>
 <li><a class="reference internal" href="#add-pylint-to-buildout" id="id15">Add pylint to buildout</a></li>
-<li><a class="reference internal" href="#install-git-pre-commit-hooks" id="id16">Install git pre-commit hooks</a></li>
+<li><a class="reference internal" href="#automatically-install-git-pre-commit-hooks" id="id16">Automatically install git pre-commit hooks</a></li>
 <li><a class="reference internal" href="#add-validation-options-yaml-configuration" id="id17">Add validation-options.yaml configuration</a></li>
 </ul>
 </li>
@@ -226,6 +226,10 @@ the commit if the incoming files contain validation errors.</p>
 <p class="first admonition-title">Note</p>
 <p class="last">Currently vvv does not optimize and check only commited files.
 This will be future feature.</p>
+</div>
+<p>You may want to skip precommit hook when you commit to Git when
+you are intentionally committing bad code or you want to skip runnign validators:</p>
+<div class="highlight-python"><pre>git commit --no-verify -m &quot;Those validator hooks prevent me committing crappy code, damn it!&quot;</pre>
 </div>
 <p>More info</p>
 <ul class="simple">
@@ -345,9 +349,13 @@ are needed.</p>
 [vvv]
 recipe = plone.recipe.command
 stop-on-error = true
-location ${buildout:directory}/vvv-venv
-command = virtualenv -p python3 vvv-venv &amp;&amp; source vvv-venv/bin/activate &amp;&amp; pip install vvv
-update-command =</pre>
+location = ${buildout:directory}/vvv-venv
+update-command = true
+command = wget --no-check-certificate &quot;https://raw.github.com/pypa/virtualenv/master/virtualenv.py&quot; &amp;&amp; python3 virtualenv.py -p python3 ${buildout:directory}/vvv-venv &amp;&amp; source vvv-venv/bin/activate &amp;&amp; pip install vvv</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This assumes your operating system is using <strong>python3</strong> command. You can perfectly fine use commands <strong>python3.2</strong> or <strong>python3.1</strong> too.</p>
 </div>
 </div>
 <div class="section" id="add-pylint-to-buildout">
@@ -367,17 +375,33 @@ entry-points = pylint=pylint.lint:Run
 arguments = sys.argv[1:]</pre>
 </div>
 </div>
-<div class="section" id="install-git-pre-commit-hooks">
-<h3><a class="toc-backref" href="#id16">Install git pre-commit hooks</a><a class="headerlink" href="#install-git-pre-commit-hooks" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="automatically-install-git-pre-commit-hooks">
+<h3><a class="toc-backref" href="#id16">Automatically install git pre-commit hooks</a><a class="headerlink" href="#automatically-install-git-pre-commit-hooks" title="Permalink to this headline">¶</a></h3>
 <p>You are probably checking out and managing source code with
 <a class="reference external" href="http://pypi.python.org/pypi/mr.developer/">Mr. Developer</a>
 and buildout.</p>
-<p>For now, manually activate git pre-commit hooks
-as instructed above, after the source code has been checked out.</p>
+<p>The following snippet forces VVV pre-commit hook on checked out
+Git repositories. Never commit bad code anymore!</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This can be forced in the future via buildout, so everyone
-who gets the source code will be forced to use pre-commit hook validation.</p>
+<p class="last"><strong>precommit-hooks</strong> must come after <strong>vvv</strong> in buildout <strong>parts</strong> order.</p>
+</div>
+<p>Exampe <tt class="docutils literal"><span class="pre">buildout.cfg</span></tt> code:</p>
+<div class="highlight-python"><pre>parts =
+  vvv
+  precommit-hooks
+  ...
+
+# Install git repository precommit hooks.
+# Run this command against every git repository checked out by Mr. Developer
+[precommit-hooks]
+recipe = plone.recipe.command
+stop-on-error = true
+command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can use UNIX &amp;&amp; operator to run multiple commands in one line in <strong>plone.recipe.command</strong>.</p>
 </div>
 </div>
 <div class="section" id="add-validation-options-yaml-configuration">

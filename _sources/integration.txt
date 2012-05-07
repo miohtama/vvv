@@ -105,6 +105,11 @@ the commit if the incoming files contain validation errors.
     Currently vvv does not optimize and check only commited files.
     This will be future feature.    
 
+You may want to skip precommit hook when you commit to Git when
+you are intentionally committing bad code or you want to skip runnign validators::
+  
+  git commit --no-verify -m "Those validator hooks prevent me committing crappy code, damn it!"
+
 More info 
 
 * http://book.git-scm.com/5_git_hooks.html
@@ -235,14 +240,18 @@ This will install VVV with buildout run. In ``buildout.cfg``::
     vvv
 
   # Install VVV under Python 3's virtualenv vvv-venv in buildout root
-  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date 
+  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date
   # for Python 3
   [vvv]
   recipe = plone.recipe.command
   stop-on-error = true
-  location ${buildout:directory}/vvv-venv
-  command = virtualenv -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv  
-  update-command = 
+  location = ${buildout:directory}/vvv-venv
+  update-command = true
+  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 ${buildout:directory}/vvv-venv && source vvv-venv/bin/activate && pip install vvv 
+
+.. note ::
+
+     This assumes your operating system is using **python3** command. You can perfectly fine use commands **python3.2** or **python3.1** too.
 
 Add pylint to buildout
 ------------------------
@@ -262,20 +271,37 @@ First you need to install ``pylint`` using buildout. In your ``buildout.cfg`` ad
     entry-points = pylint=pylint.lint:Run
     arguments = sys.argv[1:]
 
-Install git pre-commit hooks
---------------------------------
+Automatically install git pre-commit hooks
+-------------------------------------------
 
 You are probably checking out and managing source code with 
 `Mr. Developer <http://pypi.python.org/pypi/mr.developer/>`_
 and buildout.
 
-For now, manually activate git pre-commit hooks 
-as instructed above, after the source code has been checked out.
+The following snippet forces VVV pre-commit hook on checked out 
+Git repositories. Never commit bad code anymore! 
 
 .. note ::
   
-  This can be forced in the future via buildout, so everyone
-  who gets the source code will be forced to use pre-commit hook validation.
+    **precommit-hooks** must come after **vvv** in buildout **parts** order.
+
+Exampe ``buildout.cfg`` code::
+
+    parts =
+      vvv
+      precommit-hooks
+      ...
+
+    # Install git repository precommit hooks.
+    # Run this command against every git repository checked out by Mr. Developer
+    [precommit-hooks]
+    recipe = plone.recipe.command
+    stop-on-error = true
+    command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO
+
+.. note ::
+
+  You can use UNIX && operator to run multiple commands in one line in **plone.recipe.command**.
 
 Add validation-options.yaml configuration
 ---------------------------------------------
