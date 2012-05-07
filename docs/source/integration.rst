@@ -241,7 +241,7 @@ This will install VVV with buildout run. In ``buildout.cfg``::
   recipe = plone.recipe.command
   stop-on-error = true
   location ${buildout:directory}/vvv-venv
-  command = virtualenv -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv  
+  command = wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" ; python3 virtualenv.py -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv 
   update-command = 
 
 Add pylint to buildout

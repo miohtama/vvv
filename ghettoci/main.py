@@ -6,7 +6,7 @@ Continuous integration server, ghetto style
 What it is
 --------------
 
-Python script in 145 statements fullfilling your dirty `continuous integration <https://en.wikipedia.org/wiki/Continuous_integration>`_ needs.
+Ghetto-CI is a Python script in 145 statements fullfilling your dirty `continuous integration <https://en.wikipedia.org/wiki/Continuous_integration>`_ needs.
 
 `Source code (one file, only 145 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
 and for your convenience the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_. 
@@ -29,14 +29,14 @@ What it does
 Why to use
 ---------------
 
-To improve quality and cost effectiveness of your little software project, 
+To improve the quality and cost effectiveness of your little software project, 
 you want to detect code changes breaking your project [automated tests].
 
 You might want to do this 
 `without installing 48 MB of Java software <http://jenkins-ci.org/>`_ on your server.
 On the other hand, 
-`very good SaaS oriented alternatives are tied to public Github repositories <travis-ci.org>´_.
-Homebrew shell scripts for tasks like this are nice. But no one wants to read or touch shell scripts
+`very good SaaS oriented alternatives are tied to public Github repositories <travis-ci.org>`_.
+Homebrew shell scripts for tasks like this are nice, but no one wants to read or touch shell scripts
 written by others.  
 
 *Ghetto-CI* script is mostly self-contained, 
@@ -212,7 +212,7 @@ To make this script even more awesome, the following can be considered
 Source and credits
 --------------------
 
-`Ghetto CI lives on Github, in VVV project <https://github.com/miohtama/vvv>`_.
+`Ghetto-CI lives on Github, in VVV project <https://github.com/miohtama/vvv>`_.
 
 Mikko Ohtamaa, the original author (`blog <http://opensourcehacker.com>`_, `Twitter <http://twitter.com/moo9000>`_)
 
@@ -529,16 +529,16 @@ def main(smtpserver : ("SMTP server address for mail out. Required if you indent
          testcommand : ("Command to run tests. Exit code 0 indicates test success", "positional"), 
          ):
     """
-    ghetto-ci
+    Ghetto-CI
 
     A simple continuous integration server.
     
-    ghetto-ci will monitor the software repository.
+    Ghetto-CI will monitor the software repository.
     Give a (Subversion) software repository and a test command run test against it.
     Make this command run regularly e.g. using UNIX cron service.    
     You will get email notification when test command status changes from exit code 0.
 
-    For more information see https://github.com/miohtama/vvv
+    For more information see http://pypi.python.org/pypi/vvv
     """
 
     notifier = Notifier(server=smtpserver, port=smtpport, 

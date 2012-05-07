@@ -6,10 +6,10 @@
 
 from setuptools import setup, find_packages
 
-LONG_DESCRIPTION = open("README.rst").read()
+LONG_DESCRIPTION = open("README.rst").read() + "\n" + open("CHANGELOG.rst").read()
 
 setup(name = "vvv",
-    version = "0.1.1",
+    version = "0.2.1",
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",

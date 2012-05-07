@@ -36,7 +36,7 @@ Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder
     wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py"
     python3 virtualenv.py vvv-venv
     source vvv-venv/bin/activate
-    pip install https://github.com/miohtama/vvv/tarball/master
+    pip install vvv
 
 .. note ::
 
@@ -58,8 +58,7 @@ Then create environment e.g. in your home folder::
     cd ~
     virtualenv-3.2 vvv-venv
     source ~/vvv-venv/bin/activate
-
-    easy_install vvv
+    pip install vvv
 
 Running 
 ++++++++++
