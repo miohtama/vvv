@@ -92,7 +92,7 @@ This prevents you to commit files violating policy.
 If you have :doc:`a local installation using virtualenv </installation>`::
 
     # Activate the virtualenv
-    source ~/vvv-venv/bin/activate
+    . ~/vvv-venv/bin/activate
 
     # Run pre-commit hook installation
     vvv-install-git-pre-commit-hook
@@ -247,7 +247,7 @@ This will install VVV with buildout run. In ``buildout.cfg``::
   stop-on-error = true
   location = ${buildout:directory}/vvv-venv
   update-command = true
-  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 ${buildout:directory}/vvv-venv && source vvv-venv/bin/activate && pip install vvv 
+  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 vvv-venv && . ./vvv-venv/bin/activate && pip install vvv 
 
 .. note ::
 

@@ -1,6 +1,11 @@
 Changelog
 ===================
 
+0.2.4 - 0.2.5
+---------------
+
+- Depend on docutils as RST validator soft-depends on it, but cannot install docutils in host environment [miohtama]
+
 0.2.3 - 0.2.4
 ---------------
 

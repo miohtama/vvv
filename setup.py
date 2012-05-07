@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 LONG_DESCRIPTION = open("README.rst").read() + "\n" + open("CHANGELOG.rst").read()
 
 setup(name = "vvv",
-    version = "0.2.4",
+    version = "0.2.5",
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",
@@ -18,7 +18,8 @@ setup(name = "vvv",
     install_requires = ["setuptools", 
         "PyYAML==3.10",
         "plac==0.9.0",
-        "requests==0.11.1"
+        "requests==0.11.1",
+        "docutils==0.8.1" # TODO: Could be upgraded to 0.9, but not tested
     ],
     packages = find_packages(exclude=["tests"]),
     classifiers=[
