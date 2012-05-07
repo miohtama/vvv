@@ -240,9 +240,11 @@ This will install VVV with buildout run. In ``buildout.cfg``::
   [vvv]
   recipe = plone.recipe.command
   stop-on-error = true
-  location ${buildout:directory}/vvv-venv
-  command = wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" ; python3 virtualenv.py -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv 
+  location = ${buildout:directory}/vvv-venv
   update-command = 
+  # This is a long line...
+  command = wget "http://raw.github.com/pypa/virtualenv/master/virtualenv.py" ; python3 virtualenv.py -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv 
+  
 
 Add pylint to buildout
 ------------------------
@@ -262,20 +264,38 @@ First you need to install ``pylint`` using buildout. In your ``buildout.cfg`` ad
     entry-points = pylint=pylint.lint:Run
     arguments = sys.argv[1:]
 
-Install git pre-commit hooks
---------------------------------
+Automatically install git pre-commit hooks
+-------------------------------------------
 
 You are probably checking out and managing source code with 
 `Mr. Developer <http://pypi.python.org/pypi/mr.developer/>`_
 and buildout.
 
-For now, manually activate git pre-commit hooks 
-as instructed above, after the source code has been checked out.
+The following snippet forces VVV pre-commit hook on checked out 
+Git repositories. Never commit bad code anymore! 
 
 .. note ::
   
-  This can be forced in the future via buildout, so everyone
-  who gets the source code will be forced to use pre-commit hook validation.
+    **precommit-hooks** must come after **vvv** in buildout **parts** order.
+
+
+    parts =
+      vvv
+      precommit-hooks
+      ...
+
+    # Install pylint command needed for VVV package validator
+    [pylint]
+    recipe = zc.recipe.egg
+    eggs =
+        ${instance:eggs}
+        pylint
+    entry-points = pylint=pylint.lint:Run
+    arguments = sys.argv[1:]
+
+.. note ::
+
+  You can use UNIX && operator to run multiple commands in one line in **plone.recipe.command**.
 
 Add validation-options.yaml configuration
 ---------------------------------------------
