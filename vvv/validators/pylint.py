@@ -347,7 +347,9 @@ class PylintPlugin(Plugin):
             download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
 
         self.run_virtualenv_command("easy_install logilab-common", raise_error=True)
-        self.run_virtualenv_command("easy_install logilab-astng", raise_error=True)
+
+        # Use py3k patched logilab-astng
+        self.run_virtualenv_command("easy_install https://github.com/downloads/miohtama/vvv/logilab-astng-0.23.1-py3-patched.tar.gz", raise_error=True)
         self.run_virtualenv_command("cd %s ; NO_SETUPTOOLS=1 %s setup.py install --no-compile" % (pylint_extract_path, python), raise_error=True)
 
     def validate(self, fname):
