@@ -297,7 +297,7 @@ Exampe ``buildout.cfg`` code::
     [precommit-hooks]
     recipe = plone.recipe.command
     stop-on-error = true
-    command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO
+    command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO --silent
 
 .. note ::
 
