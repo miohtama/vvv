@@ -1,6 +1,13 @@
 Changelog
 ===================
 
+0.2 - 0.2.2
+---------------
+
+- Smarter way to detect vvv command location when installing a precommit hook [miohtama]
+
+- Integration documentation updates [miohtama]
+
 0.2 - 0.2.1
 ---------------
 

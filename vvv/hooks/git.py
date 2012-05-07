@@ -16,7 +16,19 @@ PRECOMMIT_HOOK_TEMPLATE = """#!/bin/sh
 """
 
 def get_vvv_command():
-    return sysdeps.which("vvv")
+    """
+    Get the location of installed VVV command.
+
+    Assume we are installed via setup.py script entry point and VVV script lies in the same folder with us
+    """
+
+    current_path = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
+
+    vvv = os.path.join(current_path, "vvv")
+    if not os.path.exists(vvv):
+        return None
+
+    return vvv
 
 def setup_hook():
     """ 
@@ -29,7 +41,7 @@ def setup_hook():
 
     command = get_vvv_command()
     if not command:
-        print("Cannot find vvv command")
+        print("Cannot find vvv command associated with precommit hook installer")
         sys.exit(1)
 
     if len(sys.argv) < 2:

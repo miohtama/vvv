@@ -108,7 +108,7 @@ the commit if the incoming files contain validation errors.
 You may want to skip precommit hook when you commit to Git when
 you are intentionally committing bad code or you want to skip runnign validators::
   
-  git commit --no-verify "Those validator hooks prevent me committing crappy code, damn it!"
+  git commit --no-verify -m "Those validator hooks prevent me committing crappy code, damn it!"
 
 More info 
 
