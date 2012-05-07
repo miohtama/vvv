@@ -105,6 +105,11 @@ the commit if the incoming files contain validation errors.
     Currently vvv does not optimize and check only commited files.
     This will be future feature.    
 
+You may want to skip precommit hook when you commit to Git when
+you are intentionally committing bad code or you want to skip runnign validators::
+  
+  git commit --no-verify "Those validator hooks prevent me committing crappy code, damn it!"
+
 More info 
 
 * http://book.git-scm.com/5_git_hooks.html
@@ -242,9 +247,13 @@ This will install VVV with buildout run. In ``buildout.cfg``::
   stop-on-error = true
   location = ${buildout:directory}/vvv-venv
   update-command = 
+
   # This is a long line...
   command = wget "http://raw.github.com/pypa/virtualenv/master/virtualenv.py" ; python3 virtualenv.py -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv 
   
+.. note ::
+
+     This assumes you have **python3** command. You can perfectly fine use **python3.2** or **python3.1** too.
 
 Add pylint to buildout
 ------------------------
