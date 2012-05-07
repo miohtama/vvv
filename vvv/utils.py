@@ -165,7 +165,7 @@ def get_bin_path():
 
     vvv = os.path.join(current_path, "vvv")
     if not os.path.exists(vvv):
-        return None
-
+        raise RuntimeError("vvv runnable did not exist at %s" % vvv)
+        
     return current_path
 
