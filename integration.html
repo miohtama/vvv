@@ -215,7 +215,7 @@ and incomplete files</p>
 This prevents you to commit files violating policy.</p>
 <p>If you have <a class="reference internal" href="installation.html"><em>a local installation using virtualenv</em></a>:</p>
 <div class="highlight-python"><pre># Activate the virtualenv
-source ~/vvv-venv/bin/activate
+. ~/vvv-venv/bin/activate
 
 # Run pre-commit hook installation
 vvv-install-git-pre-commit-hook</pre>
@@ -351,7 +351,7 @@ recipe = plone.recipe.command
 stop-on-error = true
 location = ${buildout:directory}/vvv-venv
 update-command = true
-command = wget --no-check-certificate &quot;https://raw.github.com/pypa/virtualenv/master/virtualenv.py&quot; &amp;&amp; python3 virtualenv.py -p python3 ${buildout:directory}/vvv-venv &amp;&amp; source vvv-venv/bin/activate &amp;&amp; pip install vvv</pre>
+command = wget --no-check-certificate &quot;https://raw.github.com/pypa/virtualenv/master/virtualenv.py&quot; &amp;&amp; python3 virtualenv.py -p python3 vvv-venv &amp;&amp; . ./vvv-venv/bin/activate &amp;&amp; pip install vvv</pre>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
