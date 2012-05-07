@@ -40,6 +40,7 @@ import os
 from vvv.plugin import Plugin
 
 from vvv import sysdeps
+from vvv import utils
 
 #: Command-line options given to jshint always
 DEFAULT_COMMAND_LINE = ""
@@ -98,7 +99,9 @@ class RestructuredTextPlugin(Plugin):
         Run .rst against our custom validation script.
         """
 
-        exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "vvv-validate-rst %s" % fname)
+        binloc = os.path.join(utils.get_bin_path(), "vvv-validate-rst")
+
+        exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "%s %s" % (binloc, fname))
     
         if exitcode != 0:
             self.reporter.report_unstructured(self.id, output, fname=fname)

@@ -9,8 +9,6 @@ import os
 import sys
 import stat
 
-from vvv import sysdeps
-
 PRECOMMIT_HOOK_TEMPLATE = """#!/bin/sh
 %s
 """
@@ -37,6 +35,8 @@ def setup_hook():
     Use --silent option if you want to supress output if the hook already exists. E.g.::
 
     vvv-install-git-pre-commit-hook . --silent
+
+    In silent mode exit code is always 0.
     """
 
     command = get_vvv_command()
@@ -57,8 +57,11 @@ def setup_hook():
             silent = True
 
     if not os.path.exists(os.path.join(path, ".git")):
-        print("Not a git repo: %s" % path)
-        sys.exit(1)
+        if not silent:
+            print("Not a git repo: %s" % path)
+            sys.exit(1)
+        else:
+            sys.exit(0)
 
     path = os.path.abspath(path)
     
@@ -71,7 +74,9 @@ def setup_hook():
             print("Precommit hook already exists: %s" % precommit)
             print("Manually add in the command:")
             print(cmdline)
-        sys.exit(1)
+            sys.exit(1)
+        else:
+            sys.exit(0)
 
     hook = PRECOMMIT_HOOK_TEMPLATE % cmdline
     
@@ -84,6 +89,7 @@ def setup_hook():
     mode += stat.S_IXOTH + stat.S_IXGRP + stat.S_IXUSR
     os.chmod(precommit, mode)
 
-    print("Installed git precommit hook %s" % precommit)
+    if not silent:
+        print("Installed git precommit hook %s" % precommit)
     sys.exit(0)
         

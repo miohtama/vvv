@@ -8,6 +8,7 @@
 import os
 import subprocess
 import tempfile
+import sys
 
 class ShellCommandFailed(Exception):
     """ Executing a shell command failed """
@@ -152,3 +153,19 @@ def snip_output(output, marker):
 
 
     return "\n".join(passed)
+
+def get_bin_path():
+    """
+    Get the path where VVV binaries lie.
+
+    Assume we are installed via setup.py script entry point and VVV script lies in the same folder with us
+    """
+
+    current_path = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
+
+    vvv = os.path.join(current_path, "vvv")
+    if not os.path.exists(vvv):
+        return None
+
+    return current_path
+

@@ -240,20 +240,18 @@ This will install VVV with buildout run. In ``buildout.cfg``::
     vvv
 
   # Install VVV under Python 3's virtualenv vvv-venv in buildout root
-  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date 
+  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date
   # for Python 3
   [vvv]
   recipe = plone.recipe.command
   stop-on-error = true
   location = ${buildout:directory}/vvv-venv
-  update-command = 
+  update-command = true
+  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 ${buildout:directory}/vvv-venv && source vvv-venv/bin/activate && pip install vvv 
 
-  # This is a long line...
-  command = wget "http://raw.github.com/pypa/virtualenv/master/virtualenv.py" ; python3 virtualenv.py -p python3 vvv-venv && source vvv-venv/bin/activate && pip install vvv 
-  
 .. note ::
 
-     This assumes you have **python3** command. You can perfectly fine use **python3.2** or **python3.1** too.
+     This assumes your operating system is using **python3** command. You can perfectly fine use commands **python3.2** or **python3.1** too.
 
 Add pylint to buildout
 ------------------------
@@ -287,20 +285,19 @@ Git repositories. Never commit bad code anymore!
   
     **precommit-hooks** must come after **vvv** in buildout **parts** order.
 
+Exampe ``buildout.cfg`` code::
 
     parts =
       vvv
       precommit-hooks
       ...
 
-    # Install pylint command needed for VVV package validator
-    [pylint]
-    recipe = zc.recipe.egg
-    eggs =
-        ${instance:eggs}
-        pylint
-    entry-points = pylint=pylint.lint:Run
-    arguments = sys.argv[1:]
+    # Install git repository precommit hooks.
+    # Run this command against every git repository checked out by Mr. Developer
+    [precommit-hooks]
+    recipe = plone.recipe.command
+    stop-on-error = true
+    command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO --silent
 
 .. note ::
 

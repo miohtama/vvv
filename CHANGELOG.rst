@@ -1,7 +1,17 @@
 Changelog
 ===================
 
-0.2 - 0.2.2
+0.2.3 - 0.2.4
+---------------
+
+- Correctly pick up RST validator script from path if not under virtualenv [miohtama]
+
+0.2.2 - 0.2.3
+---------------
+
+- More git hook silent install corner case fixes
+
+0.2.1 - 0.2.2
 ---------------
 
 - Smarter way to detect vvv command location when installing a precommit hook [miohtama]
