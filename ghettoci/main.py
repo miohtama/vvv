@@ -24,7 +24,7 @@ What it does
 
 4. See if the tests status since the last run has changed from success to failure or vice versa
 
-5. Send email notifications to the team that now shit has hit the fan 
+5. Send email notifications to the team that now fecal matter impacts the rotary ventlidation device 
 
 Why to use
 ---------------
