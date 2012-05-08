@@ -270,3 +270,5 @@ class Plugin(metaclass=ABCMeta):
             self.reporter.report_unstructured(self.id, combined)
 
         return success
+
+

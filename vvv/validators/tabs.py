@@ -54,9 +54,9 @@ More info
 
 import logging
 
-from vvv.plugin import Plugin
+from vvv.textlineplugin import TextLinePlugin
 
-class TabsPlugin(Plugin):
+class TabsPlugin(TextLinePlugin):
     """
     Hard tab banisher plug-in.
     """
@@ -75,26 +75,12 @@ class TabsPlugin(Plugin):
             "!*.mk"
         ]
 
-    def validate(self, fname):
-        """
-        Tabs validator code runs in-line.
+    def process_line(self, fname, line_number, line):
         """
 
-        errors = False
+        """        
+        if "\t" in line:
+            self.reporter.report_detailed(self.id, logging.ERROR, fname, line_number, None, None, "Line contains hard tabs", excerpt=line)
+            return True
 
-        i = 0
-        f = open(fname, "rt", encoding="utf-8")
-        try:
-            for line in f:
-                i += 1
-                if "\t" in line:
-                    errors = True
-                    self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains hard tabs", excerpt=line)
-        except UnicodeDecodeError:
-            # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
-            # For now, how to handle?
-            self.logger.info("Bad encoding: %s" % fname)
-            
-        f.close()
-
-        return not errors
+        return False
