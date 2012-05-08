@@ -106,9 +106,6 @@ Your can self-validate the vvv codebase::
 
     source venv/bin/activate
 
-    # Make sure you have docutils installed, as it is referred by some files
-    easy_install docutils
-
     vvv .
 
 Releasing egg
@@ -138,6 +135,6 @@ rtfd.org does not seem to support Python 3 auto import modules.
 
 To publish docs on GitHub::
 
-    source venv/bin/activate
+    . venv/bin/activate
     easy_install Sphinx
     sh scripts/publish-docs.sh    
