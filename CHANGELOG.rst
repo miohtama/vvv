@@ -1,6 +1,11 @@
 Changelog
 ===================
 
+0.2.5 - current
+------------------
+
+- Evil spacebar buster added [miohtama]
+
 0.2.4 - 0.2.5
 ---------------
 
