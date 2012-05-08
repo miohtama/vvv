@@ -13,15 +13,17 @@ Here are listed different validator and linting modules
 supported by VVV.
 
 --------------------------------------------
-Generic text file validators
+Text files, generic
 --------------------------------------------
 
 .. automodule:: vvv.validators.tabs 
 
 .. automodule:: vvv.validators.linelength
+
+.. automodule:: vvv.validators.evilspace
  
 --------------------------------------------
-Programming language linting
+Programming languages
 --------------------------------------------
 
 .. automodule:: vvv.validators.jshint
@@ -31,13 +33,13 @@ Programming language linting
 .. automodule:: vvv.validators.pdb
 
 --------------------------------------------
-Web development validators
+Web development 
 --------------------------------------------
 
 .. automodule:: vvv.validators.css
 
 --------------------------------------------
-Mark-up validators
+Other mark-up 
 --------------------------------------------
 
 .. automodule:: vvv.validators.rst

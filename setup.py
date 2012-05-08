@@ -39,7 +39,8 @@ setup(name = "vvv",
       pylint = vvv.validators.pylint:PylintPlugin
       pdb = vvv.validators.pdb:PdbPlugin
       rst = vvv.validators.rst:RestructuredTextPlugin
-
+      evil-spacebar = vvv.validators.evilspace:EvilSpacePlugin
+      
       [console_scripts]
       vvv = vvv.main:entry_point
       stn = vvv.main:entry_point

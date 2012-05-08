@@ -1,7 +1,18 @@
+"""
+
+    Base class for plug-ins operating on Python on per text line basis
+
+"""
+
+# ABCMeta workarounds, still waiting for pylint patches
+# pylint: disable=R0201, W0102, R0921, W0611
+
+
 # Python imports
 from abc import ABCMeta, abstractmethod
 
 from .plugin import Plugin
+
 
 class TextLinePlugin(Plugin, metaclass=ABCMeta):
     """
