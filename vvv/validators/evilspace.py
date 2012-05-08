@@ -5,7 +5,7 @@ Evil spacebar buster
 
 Validator name:: ``evilspace``
 
-Make sure text files do not contain non-breaking space (NBSP) character.
+Make sure text files do not contain no-break space (NBS) character.
 
 * ALT + spacebar inserts non-breaking spacebar on Linux systems. It kind of makes sense ALT means alternative and
   evil space is the alter ego of normal space. Its invisibly grins when your code falls apart. 
@@ -20,11 +20,7 @@ Make sure text files do not contain non-breaking space (NBSP) character.
 * A lot of compilers, linters, Javascript compressors, etc. cannot handle this character properly and fall into very interesting failure modes 
   which are hard to debug
 
-* This is especially important when creating Javascript code because browsers threat NBSP differently
-
-More info
-
-* http://apple.stackexchange.com/questions/34672/whats-altspacebar-character-and-how-to-disable-it
+* This is especially important when creating Javascript code because browsers threat NBS differently
 
 Supported files
 ----------------
@@ -39,7 +35,7 @@ No options.
 More info
 -------------
 
-* `Instructions how to disable ALT + spacebar character on OSX  <http://apple.stackexchange.com/questions/34672/whats-altspacebar-character-and-how-to-disable-it/>`_. 
+* `Insight and instructions how to disable ALT + spacebar character on OSX  <http://apple.stackexchange.com/questions/34672/whats-altspacebar-character-and-how-to-disable-it/>`_. 
 
 """
 
