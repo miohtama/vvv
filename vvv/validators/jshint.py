@@ -43,6 +43,10 @@ Example ``validation-options.yaml``::
                 eqeqeq : true
             }
             
+.. warning::
+
+    Make sure **configuration** is valid JSON. *jshint* silently ignores these options otherwise. 
+
 configuration
 ++++++++++++++
 
@@ -147,7 +151,7 @@ class JSHintPlugin(Plugin):
 
             options = self.extra_options
             if not "--config" in options:
-                options += " --config=%s" % config_fname
+                options += " --config '%s'" % config_fname
 
             # W:100,10:Unused variable'
             # pylint: disable = W0612    

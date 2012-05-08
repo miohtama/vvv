@@ -37,6 +37,7 @@ import sys
 import shutil
 
 from vvv.main import VVV
+from vvv.config import Config
 
 VERBOSE = os.environ.get("VVV_TEST_OUTPUT", None) == "verbose"
 
@@ -132,7 +133,8 @@ class ValidatorTestCase(unittest.TestCase):
                   quiet=quiet, 
                   verbose=verbose, 
                   installation=install_path, 
-                  reinstall=reinstall)
+                  reinstall=reinstall,
+                  options=self.options)
 
         vvv.set_project_path(self.path)
         
@@ -154,7 +156,7 @@ def scan_test_cases():
 
     Add folders ending with -pass or -fail to the test queue.
 
-    :return: List of tuples (fullname, name, success, options)
+    :return: List of tuples (fullname, name, success, Config file path)
     """
 
     out = []
@@ -176,9 +178,10 @@ def scan_test_cases():
                     continue
     
             # Read test driver options
-            #options = utils.load_yaml_file(os.path.join(fullname, "test-options.yaml"))
-            # XXX: Not needed ATM
-            options = {}
+            options = os.path.join(fullname, "validation-options.yaml")
+            if not os.path.exists(options):
+                # No optinos for this test case
+                options = None
 
             if d.endswith("-pass"):
                 out.append((fullname, name, True, options))

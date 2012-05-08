@@ -59,7 +59,9 @@ class Config:
 
         # Return empty options
         if not os.path.exists(fpath):
-            return {}
+            print("*** No config: %s" % fpath)
+            self.config = {}
+            return
 
         f = open(fpath, "rt")
         try:
