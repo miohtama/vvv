@@ -37,7 +37,6 @@ import sys
 import shutil
 
 from vvv.main import VVV
-from vvv.config import Config
 
 VERBOSE = os.environ.get("VVV_TEST_OUTPUT", None) == "verbose"
 

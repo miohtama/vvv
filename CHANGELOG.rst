@@ -6,6 +6,8 @@ Changelog
 
 - Evil spacebar buster added [miohtama]
 
+- ``jshint`` now properly reads config files (was non-std parsing by Node.js argument library) [miohtama]
+
 0.2.4 - 0.2.5
 ---------------
 
