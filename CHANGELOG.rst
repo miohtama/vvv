@@ -4,6 +4,9 @@ Changelog
 0.2.5 - current
 ------------------
 
+- vvv-add-js-globals helper command added to add jslint global statements
+  to multiple Javascript files once [miohtama]
+
 - Evil spacebar buster added [miohtama]
 
 - ``jshint`` now properly reads config files (was non-std parsing by Node.js argument library) [miohtama]
