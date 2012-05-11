@@ -121,7 +121,9 @@ class TestAddJsGlobals(unittest.TestCase):
     """
 
 
-    def run_script(self, text):
+
+    @staticmethod
+    def run_script(text):
         """
         """
         text = addjsglobals.process_text(text, "jQuery, $")
@@ -131,8 +133,5 @@ class TestAddJsGlobals(unittest.TestCase):
     def test_process_text(self):
         for intext, outtext in test_cases:
             result = self.run_script(intext)
-            print("Got output:")
-            print(result)
-
             self.assertEqual(result, outtext)
 

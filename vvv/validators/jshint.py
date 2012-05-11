@@ -151,7 +151,9 @@ class JSHintPlugin(Plugin):
 
             options = self.extra_options
             if not "--config" in options:
-                options += " --config '%s'" % config_fname
+                if self.configuration and self.configuration.strip() != "":
+                    # Make sure we don't pass empty config file as jshint seems to choke on it
+                    options += " --config '%s'" % config_fname
 
             # W:100,10:Unused variable'
             # pylint: disable = W0612    

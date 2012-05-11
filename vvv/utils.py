@@ -8,7 +8,6 @@
 import os
 import subprocess
 import tempfile
-import sys
 
 class ShellCommandFailed(Exception):
     """ Executing a shell command failed """
@@ -154,27 +153,4 @@ def snip_output(output, marker):
 
     return "\n".join(passed)
 
-def get_bin_path():
-    """
-    Get the path where VVV scripts lie.
-
-    Assume we are installed via setup.py script entry point and VVV script lies in the same folder with us    
-    """
-
-    current_path = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
-
-    if "vvv/tests" in current_path:
-        # Test runner uses non setup.py entry points, 
-        # which cause great confusion. 
-        # For now, we handle this as an ugly special case - 
-        # tests actually could not potentially access these scripts
-        #  vvv runnable did not exist at /Users/moo/code/vvv/tests/vvv
-        current_path = os.path.join(current_path, "..", "venv", "bin")
-
-    # Sanity check
-    vvv = os.path.join(current_path, "vvv")
-    if not os.path.exists(vvv):
-        raise RuntimeError("vvv runnable did not exist at %s" % os.path.abspath(vvv))
-        
-    return current_path
 

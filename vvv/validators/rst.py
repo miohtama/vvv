@@ -99,7 +99,7 @@ class RestructuredTextPlugin(Plugin):
         Run .rst against our custom validation script.
         """
 
-        binloc = os.path.join(utils.get_bin_path(), "vvv-validate-rst")
+        binloc = os.path.join(sysdeps.get_bin_path(), "vvv-validate-rst")
 
         exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "%s %s" % (binloc, fname))
     
