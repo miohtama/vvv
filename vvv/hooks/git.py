@@ -93,3 +93,17 @@ def setup_hook():
         print("Installed git precommit hook %s" % precommit)
     sys.exit(0)
         
+def precommit_hook():
+    """
+    Run pre-commit hook.
+    """
+
+    # Assume repository root is the single argument
+    if len(sys.argv) < 1:
+        print("Missing git repository as argument")
+        sys.exit(1)
+
+    
+
+
+

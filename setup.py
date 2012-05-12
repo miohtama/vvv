@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 LONG_DESCRIPTION = open("README.rst").read() + "\n" + open("CHANGELOG.rst").read()
 
 setup(name = "vvv",
-    version = "0.2.6",
+    version = "0.2.7",
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",
@@ -46,6 +46,7 @@ setup(name = "vvv",
       stn = vvv.main:entry_point
       prkl = vvv.main:entry_point
       vvv-install-git-pre-commit-hook = vvv.hooks.git:setup_hook
+      vvv-git-pre-commit-hook = vvv.hooks.git:precommit_hook 
       vvv-validate-rst = vvv.scripts.validaterst:run
       vvv-expand-tabs = vvv.scripts.expandtabs:run
       vvv-add-js-globals = vvv.scripts.addjsglobals:entry_point
