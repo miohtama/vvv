@@ -25,6 +25,7 @@ You must use Node ``npm`` to install ``node-jshint`` package.
 
 * https://github.com/jshint/node-jshint/
 
+
 Supported files
 ----------------
 
@@ -60,6 +61,13 @@ command-line
 ++++++++++++++
 
 Pass in extra arguments for the jshint command line.
+
+Mass adding global hints
+--------------------------------
+
+VVV provides a Python script to add ``/* global */`` hints to several Javascript files once.
+
+See :doc:`vvv-add-js-globals </tools/addjsglobals>`.
 
 More info
 ------------
