@@ -232,8 +232,6 @@ class VVV(object):
 
         relative = os.path.relpath(abs_path, self.project_path)
 
-        print(abs_path)
-
         if self.print_files:
             logger.info(abs_path)
 

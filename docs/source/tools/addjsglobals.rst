@@ -1,5 +1,5 @@
 ========================================================
-Javascript global hint batch edit
+Batch add Javascript global hints
 ========================================================
 
 .. contents :: :local:
@@ -45,5 +45,8 @@ Example how to scan the current source tree add add ``/* globals jQuery, $ */`` 
 
 Another example - add console global to all JS files under tests::
 
-    find tests -iname "*.js" -print  -exec vvv-add-js-globals "$" {} \;  
+    find tests -iname "*.js" -print  -exec vvv-add-js-globals "console" {} \;  
 
+Another example - add console global to all JS files in the source tree, but exclude files in thirdparty/ folder::
+
+    find . -iname "*.js" -not -path "*thirdparty*"  -print  -exec vvv-add-js-globals "console" {} \;  
