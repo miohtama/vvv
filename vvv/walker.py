@@ -71,6 +71,34 @@ class Walker:
         
         return files          
 
+    def is_whitelisted(self, fpath, project_path, matchlist):
+        """
+        Check whether an individual file is whitelisted or blacklisted.
+        """
+
+        project_path = os.path.abspath(project_path)
+
+        path = fpath
+
+        # Walk each part of the path from top to project root and see
+        # that each path part is on the whitelist
+        while path and path != "/":
+
+            # Get project root relative presentation of the file
+            abspath = os.path.abspath(os.path.join(project_path, path))
+            relative = os.path.relpath(abspath, project_path)
+
+            if relative == ".":
+                # Reached project_path root
+                return True
+
+            if not utils.match_file(relative, matchlist):
+                return False
+
+            # http://docs.python.org/library/os.path.html#os.path.split
+            path, tail = os.path.split(path)
+
+        return True
 
     def get_match_list(self, config, section, entry=None, default=[]):
         """

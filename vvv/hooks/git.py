@@ -126,7 +126,8 @@ def precommit_hook():
     Validate all files. If any of the files fail then abort the commit.
     """
 
-    logging.basicConfig(level=logging.WARN, stream=sys.stdout, format="%(message)s")
+
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(message)s")
     logger = logging.getLogger("precommit-hook")
 
     # Assume repository root is the single argument
@@ -178,5 +179,5 @@ def precommit_hook():
 
     # Signal git that the fecal has hitted the rotatory device etc.
     if not success:
-        sys.exit(1)
+        sys.exit("VVV validatoin and linting failed")
 
