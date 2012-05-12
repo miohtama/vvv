@@ -28,7 +28,7 @@ from vvv import main
 
 #: Command giving you git staging list
 #: http://stackoverflow.com/a/10164204/315168
-GIT_COMMIT_LIST = "git diff-index --cached HEAD --name-only"
+GIT_COMMIT_LIST = "git diff-index -z --cached HEAD --name-only"
 
 PRECOMMIT_HOOK_TEMPLATE = """#!/bin/sh
 #
@@ -65,12 +65,10 @@ def setup_hook():
 
     command = get_precommit_command()
     if not command:
-        print("Cannot find vvv command associated with precommit hook installer")
-        sys.exit(1)
+        sys.exit("Cannot find vvv command associated with precommit hook installer")
 
     if len(sys.argv) < 2:
-        print("Please give a path as argument")
-        sys.exit(1)     
+        sys.exit("Please give a path as argument")
 
     silent = False
 
@@ -133,14 +131,12 @@ def precommit_hook():
 
     # Assume repository root is the single argument
     if len(sys.argv) < 2:
-        print("Missing git repository as argument")
-        sys.exit(1)
+        sys.exit("Missing git repository as argument")
 
     repo_path = sys.argv[-1]
 
     if not os.path.exists(repo_path):
-        print("Repositoty path does not exist: %s" % repo_path)
-        sys.exit(1)
+        sys.exit("Repositoty path does not exist: %s" % repo_path)
 
     # Get git diff-index output for the repo
     with utils.temporary_working_directory(repo_path):
@@ -149,10 +145,10 @@ def precommit_hook():
     if exit_code != 0:
         print("Failed to execute: %s" % GIT_COMMIT_LIST)
         print(diff_output)
-        sys.exit(2)
+        sys.exit(1) 
 
     # Output is just new line separated list of filenames
-    files = diff_output.split("\n")
+    files = diff_output.split("\0")
 
     success = True
 
