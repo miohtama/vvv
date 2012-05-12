@@ -40,7 +40,6 @@ import os
 from vvv.plugin import Plugin
 
 from vvv import sysdeps
-from vvv import utils
 
 #: Command-line options given to jshint always
 DEFAULT_COMMAND_LINE = ""

@@ -2,18 +2,42 @@
 
     Git commit hook integration.
 
+    This module contains 
+
+    - Precommit hook installer
+
+    - Precommit hook command itself (setup.py entry point)
+
     http://book.git-scm.com/5_git_hooks.html
 
 """
+
+# Python core
 import os
 import sys
 import stat
+import logging
+
+# Third party
+import plac
+
+# Local
+from vvv import utils
+from vvv import main
+
+
+#: Command giving you git staging list
+#: http://stackoverflow.com/a/10164204/315168
+GIT_COMMIT_LIST = "git diff-index --cached HEAD --name-only"
 
 PRECOMMIT_HOOK_TEMPLATE = """#!/bin/sh
+#
+# Please feel free to add any additional VVV command line switches for this command
+#
 %s
 """
 
-def get_vvv_command():
+def get_precommit_command():
     """
     Get the location of installed VVV command.
 
@@ -22,11 +46,11 @@ def get_vvv_command():
 
     current_path = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
 
-    vvv = os.path.join(current_path, "vvv")
-    if not os.path.exists(vvv):
+    hook = os.path.join(current_path, "vvv-git-pre-commit-hook")
+    if not os.path.exists(hook):
         return None
 
-    return vvv
+    return hook
 
 def setup_hook():
     """ 
@@ -39,7 +63,7 @@ def setup_hook():
     In silent mode exit code is always 0.
     """
 
-    command = get_vvv_command()
+    command = get_precommit_command()
     if not command:
         print("Cannot find vvv command associated with precommit hook installer")
         sys.exit(1)
@@ -92,18 +116,73 @@ def setup_hook():
     if not silent:
         print("Installed git precommit hook %s" % precommit)
     sys.exit(0)
+
+
         
 def precommit_hook():
     """
     Run pre-commit hook.
+
+    Pass all command line options to VVV main process and add filename as the last paramter to these. 
+
+    Validate all files. If any of the files fail then abort the commit.
     """
 
+    logging.basicConfig(level=logging.WARN, stream=sys.stdout, format="%(message)s")
+    logger = logging.getLogger("precommit-hook")
+
     # Assume repository root is the single argument
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 2:
         print("Missing git repository as argument")
         sys.exit(1)
 
-    
+    repo_path = sys.argv[-1]
+
+    if not os.path.exists(repo_path):
+        print("Repositoty path does not exist: %s" % repo_path)
+        sys.exit(1)
+
+    # Get git diff-index output for the repo
+    with utils.temporary_working_directory(repo_path):
+        exit_code, diff_output = utils.shell(logger, GIT_COMMIT_LIST) 
+
+    if exit_code != 0:
+        print("Failed to execute: %s" % GIT_COMMIT_LIST)
+        print(diff_output)
+        sys.exit(2)
+
+    # Output is just new line separated list of filenames
+    files = diff_output.split("\n")
+
+    success = True
+
+    for f in files:
+
+        # Empty newline after list
+        if f == "":
+            continue
+
+        f = os.path.join(repo_path, f)
+
+        if not os.path.exists(f):
+            # Cannot validate files which do not exist
+            # Git delete list?
+            continue
+
+        # Pass arguments to VVV + add file from commit list
+        args = sys.argv[1:-1] + [f]
+
+        print("Got args: %s" % args)
+
+        # Call VVV for this file
+        result = plac.call(main.main, args)
+
+        # Validation failed
+        if result != 0:
+            success = False
 
 
+    # Signal git that the fecal has hitted the rotatory device etc.
+    if not success:
+        sys.exit(1)
 

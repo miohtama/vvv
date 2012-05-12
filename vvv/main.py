@@ -188,9 +188,6 @@ class VVV(object):
 
         # Walk tree
         for fpath in self.walker.walk_project_files(path, self.project_path, self.matchlist):
-
-            if self.print_files:
-                logger.info(fpath)
                     
             if self.process(fpath):
                 return True             
@@ -234,6 +231,11 @@ class VVV(object):
         abs_path = os.path.join(self.project_path, fpath)
 
         relative = os.path.relpath(abs_path, self.project_path)
+
+        print(abs_path)
+
+        if self.print_files:
+            logger.info(abs_path)
 
         for plugin_id, p in self.plugins.items():
             try:
@@ -383,7 +385,7 @@ def main(
     printfiles : ("Output scanned files to stdout", "flag", "print"),
     regexdebug : ("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
     quiet : ("Only output fatal internal errors to stdout", "flag", "q"), 
-    target : ("Path to a project folder or a file. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
+    target : ("Path to a project folder or a file. Use . for the current working directory.", "positional", None, None, None, "PATH-TARGET"),
     ):
     """ 
     A convenience utility for software source code validation and linting.
@@ -399,12 +401,10 @@ def main(
 
     # http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
 
-
     vvv = VVV(options=options, files=files, verbose=verbose, target=target, 
               installation=installation, reinstall=reinstall, quiet = quiet,
               suicidal=suicidal, include = None, regex_debug=regexdebug, print_files=printfiles)
-    sys.exit(vvv.run())
-
+    return vvv.run()
 
 def entry_point():
     """
@@ -414,8 +414,8 @@ def entry_point():
     """
 
     import plac
-    plac.call(main)
+    exit_code = plac.call(main)
+    sys.exit(exit_code)
 
 if __name__ == "__main__":
-    print("foo")
     entry_point()
