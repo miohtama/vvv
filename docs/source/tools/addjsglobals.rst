@@ -15,7 +15,8 @@ to your project and several JS files are in dire need of updating.
 
 .. image:: /images/globals.png
 
-*Sad, but normal situtation.*
+Above is an example screenshot of a sad, but normal situtation when adapting a linter. 
+`However, the situation is was not incurable <https://github.com/miohtama/Krusovice/commit/87e81fe8efce2a0e93de534fde8599600080b847>`_.
 
 ``vvv-add-js-globals``:
 
