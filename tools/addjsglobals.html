@@ -1,0 +1,173 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Batch add Javascript global hints &mdash; VVV 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="VVV 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Tools" href="index.html" />
+    <link rel="next" title="Community" href="../community.html" />
+    <link rel="prev" title="Expand tabs" href="expandtabs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../community.html" title="Community"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="expandtabs.html" title="Expand tabs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">VVV 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Batch add Javascript global hints</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="expandtabs.html"
+                        title="previous chapter">Expand tabs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../community.html"
+                        title="next chapter">Community</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tools/addjsglobals.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="batch-add-javascript-global-hints">
+<h1>Batch add Javascript global hints<a class="headerlink" href="#batch-add-javascript-global-hints" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id2">Usage</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>VVV package provides command <tt class="docutils literal"><span class="pre">vvv-add-js-globals</span></tt> which can be used to
+batch add <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">global</span> <span class="pre">*/</span></tt> hints to Javascript files.
+The tool is designed to situations where you adapt linting practices
+to your project and several JS files are in dire need of updating.</p>
+<img alt="../_images/globals.png" src="../_images/globals.png" />
+<p>Above is an example screenshot of a sad, but normal situtation when adapting a linter.
+<a class="reference external" href="https://github.com/miohtama/Krusovice/commit/87e81fe8efce2a0e93de534fde8599600080b847">However, the situation is was not incurable</a>.</p>
+<p><tt class="docutils literal"><span class="pre">vvv-add-js-globals</span></tt>:</p>
+<ul class="simple">
+<li>Supports jslint / jshint syntax</li>
+<li>Adds globals line to files where it does not exist</li>
+<li>Retrofits new globals to existing globals line</li>
+</ul>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Use carefully. The tool operates on text lines only and does not
+parse Javascript. It may break Javascript files if used</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id2">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Use with <tt class="docutils literal"><span class="pre">find</span></tt> UNIX command.</p>
+<p>Active VVV virtualenv first:</p>
+<div class="highlight-python"><pre>. ~/vvv-venv/bin/activate</pre>
+</div>
+<p>Example how to scan the current source tree add add <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">globals</span> <span class="pre">jQuery,</span> <span class="pre">$</span> <span class="pre">*/</span></tt> in every file:</p>
+<div class="highlight-python"><pre>find . -iname &quot;*.js&quot; | xargs vvv-add-js-globals &quot;$, jQuery&quot;</pre>
+</div>
+<p>Another example - add console global to all JS files under tests:</p>
+<div class="highlight-python"><pre>find tests -iname &quot;*.js&quot; -print  -exec vvv-add-js-globals &quot;console&quot; {} \;</pre>
+</div>
+<p>Another example - add console global to all JS files in the source tree, but exclude files in thirdparty/ folder:</p>
+<div class="highlight-python"><pre>find . -iname &quot;*.js&quot; -not -path &quot;*thirdparty*&quot;  -print  -exec vvv-add-js-globals &quot;console&quot; {} \;</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../community.html" title="Community"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="expandtabs.html" title="Expand tabs"
+             >previous</a> |</li>
+        <li><a href="../index.html">VVV 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Mikko Ohtamaa.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

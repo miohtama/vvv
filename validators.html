@@ -90,6 +90,7 @@
 <li><a class="reference internal" href="#command-line">command-line</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#mass-adding-global-hints">Mass adding global hints</a></li>
 <li><a class="reference internal" href="#id10">More info</a></li>
 </ul>
 </li>
@@ -228,13 +229,7 @@ Instead, use soft tabs and spaces.</p>
 <div class="section" id="mass-converting-tabs-to-spaces">
 <h4>Mass converting tabs to spaces<a class="headerlink" href="#mass-converting-tabs-to-spaces" title="Permalink to this headline">¶</a></h4>
 <p>VVV provides a Python script to expand tabs to spaces in-place.</p>
-<p>With <tt class="docutils literal"><span class="pre">find</span></tt> and <tt class="docutils literal"><span class="pre">xargs</span></tt> you can easily convert the whole project 
-tree away from hard tabs:</p>
-<div class="highlight-python"><pre># Find all ascii files and convert them to use tabs,
-# but watch out not to hit Makefile or any other file needing hard tabs!
-find . -name &quot;*&quot; -type f -print | xargs file | grep ASCII | cut -d: -f1 | xargs vvv-expand-tabs --inplace --tabsize=4 </pre>
-</div>
-<p>You can also try UNIX <tt class="docutils literal"><span class="pre">expand</span></tt> command, but it does not do in-place conversion.</p>
+<p>See <a class="reference internal" href="tools/expandtabs.html"><em>vvv-expand-tabs</em></a>.</p>
 </div>
 <div class="section" id="supported-files">
 <h4>Supported files<a class="headerlink" href="#supported-files" title="Permalink to this headline">¶</a></h4>
@@ -369,6 +364,11 @@ which are hard to debug</li>
 <h5>command-line<a class="headerlink" href="#command-line" title="Permalink to this headline">¶</a></h5>
 <p>Pass in extra arguments for the jshint command line.</p>
 </div>
+</div>
+<div class="section" id="mass-adding-global-hints">
+<h4>Mass adding global hints<a class="headerlink" href="#mass-adding-global-hints" title="Permalink to this headline">¶</a></h4>
+<p>VVV provides a Python script to add <tt class="docutils literal"><span class="pre">/*</span> <span class="pre">global</span> <span class="pre">*/</span></tt> hints to several Javascript files once.</p>
+<p>See <a class="reference internal" href="tools/addjsglobals.html"><em>vvv-add-js-globals</em></a>.</p>
 </div>
 <div class="section" id="id10">
 <h4>More info<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>

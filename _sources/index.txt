@@ -14,15 +14,9 @@ Contents:
    validators
    prerequisites
    guidelines
+   tools/index
    community
    develop
-   ghetto
 
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 

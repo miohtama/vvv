@@ -217,15 +217,18 @@ This prevents you to commit files violating policy.</p>
 <div class="highlight-python"><pre># Activate the virtualenv
 . ~/vvv-venv/bin/activate
 
+# Go to any git repo with cd
+
 # Run pre-commit hook installation
-vvv-install-git-pre-commit-hook</pre>
+vvv-install-git-pre-commit-hook .</pre>
 </div>
-<p>After this git will run vvv for all local commits and aborts
+<p>After this git will run VVV for all local commits
+using <tt class="docutils literal"><span class="pre">vvv-git-precommit-hook</span></tt> command and aborts
 the commit if the incoming files contain validation errors.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Currently vvv does not optimize and check only commited files.
-This will be future feature.</p>
+<p class="last">VVV only validates files in the staging; files which are not
+added with <em>git add</em> are not validated.</p>
 </div>
 <p>You may want to skip precommit hook when you commit to Git when
 you are intentionally committing bad code or you want to skip runnign validators:</p>

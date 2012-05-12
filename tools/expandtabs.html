@@ -1,0 +1,160 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Expand tabs &mdash; VVV 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="VVV 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Tools" href="index.html" />
+    <link rel="next" title="Javascript globals added" href="addjsglobals.html" />
+    <link rel="prev" title="Ghetto-CI, continuous integration script" href="ghetto.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="addjsglobals.html" title="Javascript globals added"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ghetto.html" title="Ghetto-CI, continuous integration script"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">VVV 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Expand tabs</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ghetto.html"
+                        title="previous chapter">Ghetto-CI, continuous integration script</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="addjsglobals.html"
+                        title="next chapter">Javascript globals added</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/tools/expandtabs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="expand-tabs">
+<h1>Expand tabs<a class="headerlink" href="#expand-tabs" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id2">Usage</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>VVV package provides command <tt class="docutils literal"><span class="pre">vvv-expand-tabs</span></tt> command
+to batch convert text files to use spaces (soft tabs) instead of hard tabs.
+It provides in-place replacement, so it can be easily used against source trees.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id2">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Use with <tt class="docutils literal"><span class="pre">find</span></tt> UNIX command.</p>
+<p>Active VVV virtualenv first:</p>
+<div class="highlight-python"><pre>. ~/vvv-venv/bin/activate</pre>
+</div>
+<p>With <tt class="docutils literal"><span class="pre">find</span></tt> and <tt class="docutils literal"><span class="pre">xargs</span></tt> you can easily convert the whole project
+tree away from hard tabs. Use <tt class="docutils literal"><span class="pre">--tabsize</span></tt> command line argument to tell what kind of hard tab size the source files where using:</p>
+<div class="highlight-python"><pre># Find all ascii files and convert them to use tabs,
+# but watch out not to hit Makefile or any other file needing hard tabs!
+find . -name &quot;*&quot; -type f -print | xargs file | grep ASCII | cut -d: -f1 | xargs vvv-expand-tabs --inplace --tabsize=4</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Since the modification is done in-place back-up your files first.</p>
+</div>
+<p>You can also try UNIX <tt class="docutils literal"><span class="pre">expand</span></tt> command, but it does not supports in-place conversion.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="addjsglobals.html" title="Javascript globals added"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ghetto.html" title="Ghetto-CI, continuous integration script"
+             >previous</a> |</li>
+        <li><a href="../index.html">VVV 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Tools</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Mikko Ohtamaa.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
