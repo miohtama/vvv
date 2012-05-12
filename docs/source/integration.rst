@@ -94,16 +94,19 @@ If you have :doc:`a local installation using virtualenv </installation>`::
     # Activate the virtualenv
     . ~/vvv-venv/bin/activate
 
-    # Run pre-commit hook installation
-    vvv-install-git-pre-commit-hook
+    # Go to any git repo with cd
 
-After this git will run vvv for all local commits and aborts
+    # Run pre-commit hook installation
+    vvv-install-git-pre-commit-hook .
+
+After this git will run VVV for all local commits 
+using ``vvv-git-precommit-hook`` command and aborts
 the commit if the incoming files contain validation errors.
 
 .. note ::
 
-    Currently vvv does not optimize and check only commited files.
-    This will be future feature.    
+  VVV only validates files in the staging; files which are not 
+  added with *git add* are not validated.
 
 You may want to skip precommit hook when you commit to Git when
 you are intentionally committing bad code or you want to skip runnign validators::

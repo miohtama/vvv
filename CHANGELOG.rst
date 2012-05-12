@@ -4,6 +4,8 @@ Changelog
 0.2.5 - current
 ------------------
 
+- Intelligent git pre-commit hook; check only changed files [miohtama]
+
 - vvv-add-js-globals helper command added to add jslint global statements
   to multiple Javascript files once [miohtama]
 
