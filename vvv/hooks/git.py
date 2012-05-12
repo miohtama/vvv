@@ -172,8 +172,6 @@ def precommit_hook():
         # Pass arguments to VVV + add file from commit list
         args = sys.argv[1:-1] + [f]
 
-        print("Got args: %s" % args)
-
         # Call VVV for this file
         result = plac.call(main.main, args)
 
