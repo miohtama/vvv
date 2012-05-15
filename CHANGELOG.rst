@@ -1,7 +1,7 @@
 Changelog
 ===================
 
-0.2.5 - current
+0.2.5 - 0.3.0
 ------------------
 
 - Intelligent git pre-commit hook; check only changed files [miohtama]
@@ -12,6 +12,8 @@ Changelog
 - Evil spacebar buster added [miohtama]
 
 - ``jshint`` now properly reads config files (was non-std parsing by Node.js argument library) [miohtama]
+
+- Reorganized docs to have Tools section [miohtama]
 
 0.2.4 - 0.2.5
 ---------------

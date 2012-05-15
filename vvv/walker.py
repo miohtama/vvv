@@ -71,7 +71,8 @@ class Walker:
         
         return files          
 
-    def is_whitelisted(self, fpath, project_path, matchlist):
+    @staticmethod
+    def is_whitelisted(fpath, project_path, matchlist):
         """
         Check whether an individual file is whitelisted or blacklisted.
         """
@@ -94,6 +95,9 @@ class Walker:
 
             if not utils.match_file(relative, matchlist):
                 return False
+
+            # Unused var
+            # pylint: disable=W0612 
 
             # http://docs.python.org/library/os.path.html#os.path.split
             path, tail = os.path.split(path)
