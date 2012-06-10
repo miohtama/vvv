@@ -5,6 +5,8 @@
 
 """
 
+from __future__ import print_function, unicode
+
 # Python imports
 import os
 import logging
@@ -39,8 +41,9 @@ DEFAULT_MATCHLIST = [
   r"!__pycache__"
 ]
 
+
 class VVV(object):
-    """ 
+    """
     Vi like this main class vor this project.
 
     Load plug-ins based on Python setup.py entry point information.
@@ -55,7 +58,6 @@ class VVV(object):
     """
 
     def __init__(self, **kwargs):
-
 
         #: Command line options
         self.options = self.files = self.verbose = self.target = \
@@ -80,7 +82,7 @@ class VVV(object):
         #: Map of plug-ins id -> plugin instance
         self.plugins = dict()
 
-        #: Store test runner output, so that (test) drivers of vvv can print this 
+        #: Store test runner output, so that (test) drivers of vvv can print this
         self.output = None
 
         #: Are we scanning a full source code tree or just one file
@@ -90,7 +92,7 @@ class VVV(object):
         self.project_path = None
 
     def find_plugins(self):
-        """ 
+        """
         Scan all system installed eggs for plug-ins.
 
         We use entry point "vvv" where each entry point points to a constructor of a plug-in.
@@ -99,7 +101,7 @@ class VVV(object):
         """
 
         for loader in iter_entry_points(group='vvv', name=None):
-            
+
             try:
                 # Construct the plug-in instance
                 name = loader.name
@@ -156,31 +158,31 @@ class VVV(object):
         assert os.path.exists(self.project_path)
 
         for plugin_id, instance in self.plugins.items():
-            
+
             try:
 
                 plugin_installation = os.path.join(self.installation, plugin_id)
-        
+
                 instance.init(
-                    plugin_id = plugin_id,
-                    main = self,
-                    reporter = self.reporter,
-                    options = self.options_data,
-                    files = self.files_data,
-                    installation_path = plugin_installation,
-                    walker = self.walker,
-                    project_path = self.project_path
+                    plugin_id=plugin_id,
+                    main=self,
+                    reporter=self.reporter,
+                    options=self.options_data,
+                    files=self.files_data,
+                    installation_path=plugin_installation,
+                    walker=self.walker,
+                    project_path=self.project_path
                 )
 
                 instance.setup_options()
             except Exception as e:
                 logger.error("Could not initialize plug-in: %s", plugin_id)
-                raise e             
+                raise e
 
     def walk(self, path):
         """
         Walk a project tree and run plug-ins.
-        
+
         http://docs.python.org/library/os.html?highlight=walk#os.walk
         """
 
@@ -191,19 +193,19 @@ class VVV(object):
 
             if self.print_files:
                 logger.info(fpath)
-                    
-            if self.process(fpath):
-                return True             
 
-        return False                 
-            
+            if self.process(fpath):
+                return True
+
+        return False
+
     def read_config(self):
         """
         Load config files.
         """
-        
+
         logger.debug("Using options config file: %s" % self.options)
-        
+
         if os.path.exists(self.options):
             self.options_data = Config(self.options)
             self.options_data.load()
@@ -245,7 +247,7 @@ class VVV(object):
                 etype, value, tb = sys.exc_info()
                 msg = ''.join(format_exception(etype, value, tb))
                 self.reporter.report_internal_error(plugin_id, msg)
-                
+
                 if self.suicidal:
                     raise e
 
@@ -261,7 +263,7 @@ class VVV(object):
 
     def post_process_options(self):
         """
-        Set option file real location and VVV installation path. 
+        Set option file real location and VVV installation path.
         """
 
         if self.target is None:
@@ -316,7 +318,7 @@ class VVV(object):
         http://www.youtube.com/watch?v=He82NBjJqf8
         """
 
-        if self.project_tree_scan:            
+        if self.project_tree_scan:
             # Full tree
             logger.debug("Scanning tree: %s" % self.target)
             self.walk(self.target)
@@ -327,7 +329,7 @@ class VVV(object):
 
     def run(self):
         """
-        Run the show. 
+        Run the show.
 
         XXX: Split to several parts which can be called individually,
         so that we can have better control over this from unit tests.
@@ -373,19 +375,20 @@ class VVV(object):
             return 0
 
 
-def main(
-    options : ("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
-    files : ("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
-    installation : ("Where automatically downloaded files are kept. Defaults to hidden .vvv directory in home folder", "option", "i", None, None, ".vvv"),
-    verbose : ("Give verbose output", "flag", "v"),
-    reinstall : ("Redownload and configure all validation software", "flag", "ri"),
-    suicidal : ("Die on first error", "flag", "s"),
-    printfiles : ("Output scanned files to stdout", "flag", "print"),
-    regexdebug : ("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
-    quiet : ("Only output fatal internal errors to stdout", "flag", "q"), 
-    target : ("Path to a project folder or a file. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
-    ):
-    """ 
+@plac.annotations( \
+    options=("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
+    files=("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
+    installation=("Where automatically downloaded files are kept. Defaults to hidden .vvv directory in home folder", "option", "i", None, None, ".vvv"),
+    verbose=("Give verbose output", "flag", "v"),
+    reinstall=("Redownload and configure all validation software", "flag", "ri"),
+    suicidal=("Die on first error", "flag", "s"),
+    printfiles=("Output scanned files to stdout", "flag", "print"),
+    regexdebug=("Print out regex matching information to debug file list regular expressions", "flag", "rd"),
+    quiet=("Only output fatal internal errors to stdout", "flag", "q"),
+    target=("Path to a project folder or a file. Use . for the current working directory.", "positional", None, None, None, "YOUR-SOURCE-CODE-FOLDER"),
+    )
+def main(options, files, installation, verbose, reinstall, suicidal, printfiles, regexdebug, quiet, target):
+    """
     A convenience utility for software source code validation and linting.
 
     More info: https://github.com/miohtama/vvv
@@ -399,10 +402,9 @@ def main(
 
     # http://plac.googlecode.com/hg/doc/plac.html#scripts-with-default-arguments
 
-
-    vvv = VVV(options=options, files=files, verbose=verbose, target=target, 
-              installation=installation, reinstall=reinstall, quiet = quiet,
-              suicidal=suicidal, include = None, regex_debug=regexdebug, print_files=printfiles)
+    vvv = VVV(options=options, files=files, verbose=verbose, target=target,
+              installation=installation, reinstall=reinstall, quiet=quiet,
+              suicidal=suicidal, include=None, regex_debug=regexdebug, print_files=printfiles)
     sys.exit(vvv.run())
 
 
@@ -417,5 +419,4 @@ def entry_point():
     plac.call(main)
 
 if __name__ == "__main__":
-    print("foo")
     entry_point()
