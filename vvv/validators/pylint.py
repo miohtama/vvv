@@ -12,11 +12,11 @@ Installation
 
 .. warning::
 
-    pylint installation is broken for Python 3.x - please see notes below 
+    pylint installation is broken for Python 3.x - please see notes below
 
 A temporarily *virtualenv* environment is automatically created
-where pylint command and its dependencies are is installed. 
-However this is not very good way to run pylint, as if you 
+where pylint command and its dependencies are is installed.
+However this is not very good way to run pylint, as if you
 are using any third party libraries pylint cannot import them
 and thus fails.
 
@@ -59,7 +59,7 @@ the active ``python`` environment where vvv is run.
 
 Default is ``false``.
 
-.. note :: 
+.. note ::
 
     If you change this you need run ``vvv --reinstall``.
 
@@ -68,14 +68,14 @@ pylint-command
 
 A path spec pointing to used ``pylint`` command.
 
-Use this command to run pylint. This is for cases where ``host-python-env`` 
+Use this command to run pylint. This is for cases where ``host-python-env``
 is not enough to tame your Python package dependencies.
 
 If this option starts with . it is considered to be a directory reference relative to the project root.
 
 IF this option starts with / it is considered to be absolute directory reference.
 
-Otherwise normal path look behavior is used (UNIX ``which`` commmand behavior). 
+Otherwise normal path look behavior is used (UNIX ``which`` commmand behavior).
 
 Example::
 
@@ -99,16 +99,16 @@ configuration
 
 Pass in pylint configuration file data.
 This is a block of text which gets passed in as pylint .rc file.
-For rc file example run command::   
+For rc file example run command::
 
-    pylint --generate-rcfile 
+    pylint --generate-rcfile
 
 python3k
 ++++++++++++
 
 If true set-up pylint for Python 3.x. The default is Python 2.x.
 
-.. note :: 
+.. note ::
 
     If you change this you need run ``vvv --reinstall``.
 
@@ -127,7 +127,7 @@ These can be function or module level scoped.
 
 To see all pylint error and warning message ids::
 
-    pylint --list-msgs    
+    pylint --list-msgs
 
 And to find a message id::
 
@@ -177,12 +177,14 @@ More info
 * http://www.logilab.org/4736
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 # Python imports
 import os
 
 # Local imports
 from vvv.plugin import Plugin
-from vvv import utils 
+from vvv import utils
 
 from vvv import sysdeps
 from vvv import download
@@ -193,9 +195,10 @@ DEFAULT_CONFIG = """
 
 """
 
+
 class PylintPlugin(Plugin):
     """
-    Pylint driver.    
+    Pylint driver.
     """
 
     def __init__(self):
@@ -209,20 +212,19 @@ class PylintPlugin(Plugin):
         self.virtualenv = None
 
         #: Configuration file option
-        self.python3k = None 
+        self.python3k = None
 
         #: Configuration file option
-        self.pylint_configuration = None 
+        self.pylint_configuration = None
 
         #: Configuration file option
-        self.host_python = None 
+        self.host_python = None
 
         #: Configuration file option
         self.pylint_command = None
 
         #: Location of virtualenv.py if operating system cannot supply working one
         self.virtualenv_cmd = None
-
 
     def setup_local_options(self):
         """ """
@@ -236,7 +238,7 @@ class PylintPlugin(Plugin):
             self.hint = "Python source code did not pass Pylint validator. Please fix issues or disable warnings in .py file itself or validation-options.yaml file."
 
         self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
-    
+
         self.python3k = self.options.get_boolean_option(self.id, "python3k", False)
 
         self.host_python = self.options.get_boolean_option(self.id, "host-python-env", False)
@@ -248,7 +250,6 @@ class PylintPlugin(Plugin):
         #: Path to the virtual env location,
         # vary by Python version so we don't get conflicting envs
         self.virtualenv = os.path.join(self.installation_path, "pylint-virtualenv-%s" % "python3k" if self.python3k else "python2")
-
 
     def get_default_matchlist(self):
         """
@@ -283,7 +284,7 @@ class PylintPlugin(Plugin):
 
         if cmd.startswith("."):
             cmd = os.path.abspath(os.path.join(self.project_path, cmd))
-        
+
         # abspath, which, do not need special handling
 
         return cmd
@@ -295,7 +296,7 @@ class PylintPlugin(Plugin):
 
     def run_virtualenv_command(self, cmd, raise_error=False):
         """
-        Run cmd under host Python or our own virtualenv 
+        Run cmd under host Python or our own virtualenv
         """
 
         if self.host_python:
@@ -307,7 +308,7 @@ class PylintPlugin(Plugin):
         """
         Download & install the validator app.
 
-        ARGFADSFASF WHY *"#€"#€" NOTHING CANNOT WORK IN THIS WORLD?
+        ARGFADSFASF WHY NOTHING CANNOT WORK IN THIS WORLD?
 
         http://www.logilab.org/82417
 
@@ -315,7 +316,7 @@ class PylintPlugin(Plugin):
         """
 
         if self.pylint_command:
-            return 
+            return
 
         # XXX: Prefix virtualenv name by version so we can have multiple pylints installed
         # in .vvv once
@@ -358,7 +359,7 @@ class PylintPlugin(Plugin):
         """
 
         with utils.temp_config_file(self.pylint_configuration) as config_fname:
-            
+
             options = self.extra_options
             if not "--rcfile" in options:
                 options += " --rcfile=%s" % config_fname

@@ -40,20 +40,20 @@ More info
 
 import logging
 
-from vvv.plugin import Plugin
+from vvv.textlineplugin import TextLinePlugin
 
-class LineLengthPlugin(Plugin):
+
+class LineLengthPlugin(TextLinePlugin):
     """
     Line length driver.
     """
 
     def __init__(self):
 
-        Plugin.__init__(self)
-        
+        TextLinePlugin.__init__(self)
+
         #: Configuration file option
         self.line_length = None
-            
 
     def get_default_matchlist(self):
         return ["*"]
@@ -65,26 +65,13 @@ class LineLengthPlugin(Plugin):
         if not self.hint:
             self.hint = "Text file line length must not exceed %d characteres per line" % self.line_length
 
-    def validate(self, fname):
+    def process_line(self, fname, line_number, line):
         """
-        Tabs validator code runs in-line.
+        Check that line does not contain evil spaces.
         """
 
-        errors = False
+        if len(line) > self.line_length:
+            self.reporter.report_detailed(self.id, logging.ERROR, fname, line_number, None, None, "Line is too long, %d characters" % len(line), excerpt=line)
+            return True
 
-        i = 0
-        f = open(fname, "rt", encoding="ascii")
-        try:
-            for line in f:
-                i += 1
-                if len(line) > self.line_length:
-                    errors = True
-                    self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line is too long, %d characters" % len(line), excerpt=line)
-        except UnicodeDecodeError:
-            # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
-            # For now, how to handle?
-            pass
-
-        f.close()
-
-        return not errors
+        return False

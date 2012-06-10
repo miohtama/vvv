@@ -24,7 +24,7 @@ dist
 *~
 *.bak
 .coverage
-*.pyd 
+*.pyd
 *.so
 *.orig
 *.rej
@@ -49,6 +49,7 @@ docs/build/*
 *.jar
 .vvv
 venv
+venv-py2
 __pycache__
 
 tests/test-installation-environment

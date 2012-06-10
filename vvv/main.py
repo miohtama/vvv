@@ -5,7 +5,7 @@
 
 """
 
-from __future__ import print_function, unicode
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 # Python imports
 import os
@@ -15,6 +15,7 @@ import sys
 import shutil
 
 # Third party
+import plac
 from pkg_resources import iter_entry_points
 
 # Local imports
@@ -393,8 +394,6 @@ class VVV(object):
             #logger.info("All files ok")
             return 0
 
-
-<<<<<<< HEAD
 @plac.annotations( \
     options=("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
     files=("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
@@ -434,8 +433,6 @@ def entry_point():
 
     Can be used from other modules too.
     """
-
-    import plac
     exit_code = plac.call(main)
     sys.exit(exit_code)
 

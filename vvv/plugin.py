@@ -4,6 +4,8 @@
 
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 # :R0201: *Method could be a function*
 # We use dummy methods which subclasses can override
 # W0102 Dangerous default value [] as argument
@@ -12,7 +14,6 @@
 # pylint: disable=R0201, W0102, R0921, W0611
 
 # Python imports
-from abc import ABCMeta, abstractmethod
 import logging
 import os
 import subprocess
@@ -22,7 +23,8 @@ from vvv import utils
 # TODO: Factor there to use utils. prefix
 from .utils import is_binary_file, match_file
 
-class Plugin(metaclass=ABCMeta):
+
+class Plugin(object):
     """
     Base class for VVV plug-ins. Inherit from this class to add a new validator to VVV.
 
@@ -41,11 +43,11 @@ class Plugin(metaclass=ABCMeta):
         self.logger = self.matchlist = self.enabled = None
 
         self.id = self.main = self.reporter = self.options = self.files = self.installation_path = self.project_path = self.walker = None
-        
+
     def init(self, plugin_id, main, reporter, options, files, installation_path, walker, project_path):
         """
 
-        :param plugin_id: internal id is externally set and comes from setup.py entry point name 
+        :param plugin_id: internal id is externally set and comes from setup.py entry point name
 
         :param main: Main VVV instance. You should not rely on this, but use explicitly passed in parameters.
 
@@ -66,7 +68,7 @@ class Plugin(metaclass=ABCMeta):
         self.files = files
         self.logger = logging.getLogger("vvv")
         self.reporter = reporter
-        self.installation_path = installation_path      
+        self.installation_path = installation_path
         self.walker = walker
         self.project_path = project_path
 
@@ -88,17 +90,17 @@ class Plugin(metaclass=ABCMeta):
         """
         return []
 
-    def match(self, fullpath):      
+    def match(self, fullpath):
         """
         Check if a path matches plug-in filtering options.
         """
         return match_file(fullpath, self.matchlist)
-                 
+
     def setup_options(self):
         """
         Initialize method after all plug-ins are loaded.
-        
-        Read options file for local options. 
+
+        Read options file for local options.
         """
 
         self.setup_global_options()
@@ -111,26 +113,25 @@ class Plugin(metaclass=ABCMeta):
 
         * plug-in is enabled
 
-        * plug-in file match list 
+        * plug-in file match list
 
-        * plug-in failed hint text 
+        * plug-in failed hint text
         """
 
-        self.enabled = self.options.get_boolean_option(self.id, "enabled", True)      
+        self.enabled = self.options.get_boolean_option(self.id, "enabled", True)
 
-        self.matchlist = self.walker.get_match_list(self.files, self.id, None, default=self.get_default_matchlist())       
+        self.matchlist = self.walker.get_match_list(self.files, self.id, None, default=self.get_default_matchlist())
         # Hint message how to fix errors
-        self.hint = self.options.get_string_option(self.id, "hint", None)      
-
+        self.hint = self.options.get_string_option(self.id, "hint", None)
 
     def setup_local_options(self):
         """
-        Subclass **should** override this for 
+        Subclass **should** override this for
         """
 
     def finish_options(self):
         """
-        Turn read options to Python objects if needed after both global and local config has been merged.  
+        Turn read options to Python objects if needed after both global and local config has been merged.
         """
 
     def check_is_installed(self):
@@ -147,8 +148,7 @@ class Plugin(metaclass=ABCMeta):
         """ Check that system has necessary facilities (like java) to run the validator.
 
         Throw any exception if something is missing.
-        """     
-
+        """
 
     def init_installation(self):
         """
@@ -169,11 +169,10 @@ class Plugin(metaclass=ABCMeta):
             self.logger.info("Installing software for validator: %s" % self.id)
             self.check_requirements()
             self.init_installation()
-            self.install()      
+            self.install()
         else:
             self.logger.debug("Plug-in was already installed: %s" % self.id)
 
-    @abstractmethod
     def validate(self, fullpath):
         """
         Run the validator against a file.
@@ -194,7 +193,7 @@ class Plugin(metaclass=ABCMeta):
 
     def run(self, project_root_relative_path):
         """
-        :return: True if file was processed 
+        :return: True if file was processed
         """
 
         assert self.project_path, "Project path must be determined before a plug-in can run"
@@ -247,7 +246,7 @@ class Plugin(metaclass=ABCMeta):
         out, err = process.communicate()
 
         # :E1103: *%s %r has no %r member (but some types could not be inferred)*
-        # pylint: disable=E1103 
+        # pylint: disable=E1103
 
         out = out.decode("utf-8")
         err = err.decode("utf-8")
@@ -255,7 +254,7 @@ class Plugin(metaclass=ABCMeta):
         # TODO: Interleave here?
         combined = out + "\n" + err
 
-        self.logger.debug(combined)        
+        self.logger.debug(combined)
 
         if bad_string:
             for match in bad_string:
@@ -270,5 +269,3 @@ class Plugin(metaclass=ABCMeta):
             self.reporter.report_unstructured(self.id, combined)
 
         return success
-
-
