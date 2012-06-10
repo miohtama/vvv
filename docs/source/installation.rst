@@ -30,13 +30,13 @@ Tested on Ubuntu 10.04 and should work on are later versions.
 
 Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder::
 
-    sudo apt-get install python3 python3-setuptools wget
+    sudo apt-get install python3 python3-setuptools 
     # Please enter the following commands as non-root user 
     cd ~
     wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py"
     python3 virtualenv.py vvv-venv
-    source vvv-venv/bin/activate
-    pip install https://github.com/miohtama/vvv/tarball/master
+    . ./vvv-venv/bin/activate
+    pip install vvv
 
 .. note ::
 
@@ -57,9 +57,8 @@ Then create environment e.g. in your home folder::
     # Use Py3.2 - not default Python version which tends to be py2
     cd ~
     virtualenv-3.2 vvv-venv
-    source ~/vvv-venv/bin/activate
-
-    easy_install vvv
+    . ~/vvv-venv/bin/activate
+    pip install vvv
 
 Running 
 ++++++++++
@@ -67,7 +66,7 @@ Running
 Now when virtualenv is active (activated with the ``source`` command above), your ``PATH``
 environment variable pulls in ``vvv`` command from that folder::
 
-    source ~/vvv-venv/bin/activate # Do once per shell session
+    . ~/vvv-venv/bin/activate # Do once per shell session
     # See that we get command line help
     vvv    
 
@@ -85,7 +84,7 @@ Installing trunk version
 
 If you want to use GitHub trunk version do::
 
-    source ~/vvv-venv/bin/activate
+    . ~/vvv-venv/bin/activate
     git clone git://github.com/miohtama/vvv.git
     cd vvv
     python setup.py develop

@@ -98,7 +98,9 @@ class RestructuredTextPlugin(Plugin):
         Run .rst against our custom validation script.
         """
 
-        exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "vvv-validate-rst %s" % fname)
+        binloc = os.path.join(sysdeps.get_bin_path(), "vvv-validate-rst")
+
+        exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "%s %s" % (binloc, fname))
     
         if exitcode != 0:
             self.reporter.report_unstructured(self.id, output, fname=fname)

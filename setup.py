@@ -6,10 +6,10 @@
 
 from setuptools import setup, find_packages
 
-LONG_DESCRIPTION = open("README.rst").read()
+LONG_DESCRIPTION = open("README.rst").read() + "\n" + open("CHANGELOG.rst").read()
 
 setup(name = "vvv",
-    version = "0.1.1",
+    version = "0.3.0",
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",
@@ -18,13 +18,16 @@ setup(name = "vvv",
     install_requires = ["setuptools", 
         "PyYAML==3.10",
         "plac==0.9.0",
-        "requests==0.11.1"
+        "requests==0.11.1",
+        "docutils==0.8.1" # TODO: Could be upgraded to 0.9, but not tested
     ],
     packages = find_packages(exclude=["tests"]),
     classifiers=[
         "Programming Language :: Python",
     ],     
-    license="GPL",
+    license="GPL3+",
+    # Don't install as zipped as we want to poke non-py files inside dist archive
+    zip_safe = False,
     include_package_data = True,
     entry_points="""
       # -*- Entry points: -*-
@@ -36,14 +39,17 @@ setup(name = "vvv",
       pylint = vvv.validators.pylint:PylintPlugin
       pdb = vvv.validators.pdb:PdbPlugin
       rst = vvv.validators.rst:RestructuredTextPlugin
-
+      evil-spacebar = vvv.validators.evilspace:EvilSpacePlugin
+      
       [console_scripts]
       vvv = vvv.main:entry_point
       stn = vvv.main:entry_point
       prkl = vvv.main:entry_point
       vvv-install-git-pre-commit-hook = vvv.hooks.git:setup_hook
+      vvv-git-pre-commit-hook = vvv.hooks.git:precommit_hook 
       vvv-validate-rst = vvv.scripts.validaterst:run
       vvv-expand-tabs = vvv.scripts.expandtabs:run
+      vvv-add-js-globals = vvv.scripts.addjsglobals:entry_point
       ghetto-ci = ghettoci.main:entry_point
       """,        
 ) 

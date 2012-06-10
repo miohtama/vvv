@@ -28,12 +28,12 @@ No options.
 
 import logging
 
-from vvv.plugin import Plugin
+from vvv.textlineplugin import TextLinePlugin
 
 #: Common Python ways to invoke hardcoded breakpoint
 MARKERS = ["pdb.set_trace()", "ipdb.set_trace()"]
 
-class PdbPlugin(Plugin):
+class PdbPlugin(TextLinePlugin):
     """
     Pdb breakpoints not allowed in the code.
     """
@@ -49,24 +49,20 @@ class PdbPlugin(Plugin):
             "*.py",
         ]
 
-    def validate(self, fname):
-        """
-        Check each line for pdb statement and bark if one present and not commented out
+    def process_line(self, fname, line_number, line):
         """
 
-        errors = False
+        """        
 
-        i = 0
-        f = open(fname, "rt")
-        for line in f:
-            i += 1
-        
-            for m in MARKERS:
-                if m in line:
-                    if not line.strip().startswith("#"):
-                        errors = True
-                        self.reporter.report_detailed(self.id, logging.ERROR, fname, i, None, None, "Line contains pdb breakpoint", excerpt=line)
-        
-        f.close()
+        # Ignore comments
+        if line.strip().startswith("#"):
+            return
 
-        return not errors
+        
+        for m in MARKERS:
+            if m in line:
+                self.reporter.report_detailed(self.id, logging.ERROR, fname, line_number, None, None, "Line contains pdb breakpoint", excerpt=line)
+                return True
+
+        return False        
+

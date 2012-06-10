@@ -1,0 +1,6 @@
+jshint:
+
+  configuration: |
+            {
+                "globalstrict" : true
+            }

@@ -92,18 +92,26 @@ This prevents you to commit files violating policy.
 If you have :doc:`a local installation using virtualenv </installation>`::
 
     # Activate the virtualenv
-    source ~/vvv-venv/bin/activate
+    . ~/vvv-venv/bin/activate
+
+    # Go to any git repo with cd
 
     # Run pre-commit hook installation
-    vvv-install-git-pre-commit-hook
+    vvv-install-git-pre-commit-hook .
 
-After this git will run vvv for all local commits and aborts
+After this git will run VVV for all local commits 
+using ``vvv-git-precommit-hook`` command and aborts
 the commit if the incoming files contain validation errors.
 
 .. note ::
 
-    Currently vvv does not optimize and check only commited files.
-    This will be future feature.    
+  VVV only validates files in the staging; files which are not 
+  added with *git add* are not validated.
+
+You may want to skip precommit hook when you commit to Git when
+you are intentionally committing bad code or you want to skip runnign validators::
+  
+  git commit --no-verify -m "Those validator hooks prevent me committing crappy code, damn it!"
 
 More info 
 
@@ -203,7 +211,7 @@ Example ``.travis.yml`` using the latest `VVV trunk from Github <https://github.
 
 .. note ::
 
-    Travis CI uses .yml extension, VVV uses .yaml extension. VVV is better.
+    Travis CI uses .yml extension, VVV uses .yaml extension. VVV wins.
 
 More info
 
@@ -212,3 +220,95 @@ More info
 * http://about.travis-ci.org/docs/user/build-configuration/
 
 * https://github.com/travis-ci/travis-lint
+
+Integration with buildout / Plone / Zope 
+============================================
+
+`Plone CMS <http://plone.org>`_ community 
+uses `buildout <http://www.buildout.org>`_
+tool to automatically configure, compile, install, etc.
+software.
+
+Because buildout determines Python environment under 
+which ``pylint`` must be executed some special considerations 
+are needed.
+
+Add VVV to buildout
+------------------------
+
+This will install VVV with buildout run. In ``buildout.cfg``::
+
+  parts =
+    ...
+    vvv
+
+  # Install VVV under Python 3's virtualenv vvv-venv in buildout root
+  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date
+  # for Python 3
+  [vvv]
+  recipe = plone.recipe.command
+  stop-on-error = true
+  location = ${buildout:directory}/vvv-venv
+  update-command = true
+  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 vvv-venv && . ./vvv-venv/bin/activate && pip install vvv 
+
+.. note ::
+
+     This assumes your operating system is using **python3** command. You can perfectly fine use commands **python3.2** or **python3.1** too.
+
+Add pylint to buildout
+------------------------
+
+First you need to install ``pylint`` using buildout. In your ``buildout.cfg`` add::
+
+    parts =
+      pylint
+      ...
+
+    # Install pylint command needed for VVV package validator
+    [pylint]
+    recipe = zc.recipe.egg
+    eggs =
+        ${instance:eggs}
+        pylint
+    entry-points = pylint=pylint.lint:Run
+    arguments = sys.argv[1:]
+
+Automatically install git pre-commit hooks
+-------------------------------------------
+
+You are probably checking out and managing source code with 
+`Mr. Developer <http://pypi.python.org/pypi/mr.developer/>`_
+and buildout.
+
+The following snippet forces VVV pre-commit hook on checked out 
+Git repositories. Never commit bad code anymore! 
+
+.. note ::
+  
+    **precommit-hooks** must come after **vvv** in buildout **parts** order.
+
+Exampe ``buildout.cfg`` code::
+
+    parts =
+      vvv
+      precommit-hooks
+      ...
+
+    # Install git repository precommit hooks.
+    # Run this command against every git repository checked out by Mr. Developer
+    [precommit-hooks]
+    recipe = plone.recipe.command
+    stop-on-error = true
+    command = ${buildout:directory}/vvv-venv/bin/vvv-install-git-pre-commit-hook ${buildout:directory}/src/YOURREPO --silent
+
+.. note ::
+
+  You can use UNIX && operator to run multiple commands in one line in **plone.recipe.command**.
+
+Add validation-options.yaml configuration
+---------------------------------------------
+
+For example configuration files to be dropped
+in your project root, please see `youraddon Plone add-on template package on Github <https://github.com/miohtama/sane_plone_addon_template/tree/master/youraddon>`_.
+

@@ -1,10 +1,12 @@
 # Don't match hidden dotted files/folders
 # Don't match generated folders
 # Don't match test data (which is bad intentionally)
+# Don't match demo data (which is bad intentionally)
 all: | 
   *
   !RE:.*\/\..*|^\..*
   !**/build/**  
+  !demo/**
   !dist/**
   !venv
   !**/__pycache__

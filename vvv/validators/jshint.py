@@ -25,6 +25,7 @@ You must use Node ``npm`` to install ``node-jshint`` package.
 
 * https://github.com/jshint/node-jshint/
 
+
 Supported files
 ----------------
 
@@ -43,6 +44,10 @@ Example ``validation-options.yaml``::
                 eqeqeq : true
             }
             
+.. warning::
+
+    Make sure **configuration** is valid JSON. *jshint* silently ignores these options otherwise. 
+
 configuration
 ++++++++++++++
 
@@ -56,6 +61,13 @@ command-line
 ++++++++++++++
 
 Pass in extra arguments for the jshint command line.
+
+Mass adding global hints
+--------------------------------
+
+VVV provides a Python script to add ``/* global */`` hints to several Javascript files once.
+
+See :doc:`vvv-add-js-globals </tools/addjsglobals>`.
 
 More info
 ------------
@@ -147,7 +159,9 @@ class JSHintPlugin(Plugin):
 
             options = self.extra_options
             if not "--config" in options:
-                options += " --config=%s" % config_fname
+                if self.configuration and self.configuration.strip() != "":
+                    # Make sure we don't pass empty config file as jshint seems to choke on it
+                    options += " --config '%s'" % config_fname
 
             # W:100,10:Unused variable'
             # pylint: disable = W0612    

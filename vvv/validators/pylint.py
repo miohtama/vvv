@@ -63,6 +63,28 @@ Default is ``false``.
 
     If you change this you need run ``vvv --reinstall``.
 
+pylint-command
++++++++++++++++++++++
+
+A path spec pointing to used ``pylint`` command.
+
+Use this command to run pylint. This is for cases where ``host-python-env`` 
+is not enough to tame your Python package dependencies.
+
+If this option starts with . it is considered to be a directory reference relative to the project root.
+
+IF this option starts with / it is considered to be absolute directory reference.
+
+Otherwise normal path look behavior is used (UNIX ``which`` commmand behavior). 
+
+Example::
+
+    pylint:
+      enabled: true
+      python3k: false
+      # Points to buildout/bin/pylint command two levels below project folder
+      pylint-command: ../../bin/pylint
+
 command-line
 ++++++++++++
 
@@ -195,6 +217,9 @@ class PylintPlugin(Plugin):
         #: Configuration file option
         self.host_python = None 
 
+        #: Configuration file option
+        self.pylint_command = None
+
         #: Location of virtualenv.py if operating system cannot supply working one
         self.virtualenv_cmd = None
 
@@ -215,6 +240,10 @@ class PylintPlugin(Plugin):
         self.python3k = self.options.get_boolean_option(self.id, "python3k", False)
 
         self.host_python = self.options.get_boolean_option(self.id, "host-python-env", False)
+
+        pylint_command = self.options.get_string_option(self.id, "pylint-command", None)
+
+        self.pylint_command = self.resolve_pylint(pylint_command)
 
         #: Path to the virtual env location,
         # vary by Python version so we don't get conflicting envs
@@ -242,8 +271,27 @@ class PylintPlugin(Plugin):
         self.logger.debug("Pylint virtualenv status: %s" % "good" if exists else "bad")
         return exists
 
+    def resolve_pylint(self, cmd):
+        """
+        Resolve location to pylint command.
+
+        :param cmd: Command spec according to rules
+        """
+
+        if not cmd:
+            return None
+
+        if cmd.startswith("."):
+            cmd = os.path.abspath(os.path.join(self.project_path, cmd))
+        
+        # abspath, which, do not need special handling
+
+        return cmd
+
     def check_requirements(self):
-        sysdeps.has_virtualenv(needed_for="Pylint validator")
+
+        if not self.pylint_command:
+            sysdeps.has_virtualenv(needed_for="Pylint validator")
 
     def run_virtualenv_command(self, cmd, raise_error=False):
         """
@@ -266,6 +314,9 @@ class PylintPlugin(Plugin):
         http://comments.gmane.org/gmane.comp.python.logilab/1193
         """
 
+        if self.pylint_command:
+            return 
+
         # XXX: Prefix virtualenv name by version so we can have multiple pylints installed
         # in .vvv once
 
@@ -283,6 +334,10 @@ class PylintPlugin(Plugin):
         else:
             sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, py3=self.python3k)
 
+        if self.pylint_command:
+            # Use given Python commamnd
+            python = self.pylint_command
+
         # Extract and download manually
         pylint_download_path = os.path.join(self.installation_path, "pylint-extract.tar.gz")
         pylint_extract_path = os.path.join(self.installation_path, "pylint-extract", pkg)
@@ -292,7 +347,9 @@ class PylintPlugin(Plugin):
             download.download_and_extract_gz(self.logger, pylint_download_path, "http://pypi.python.org/packages/source/p/pylint/pylint-0.25.1.tar.gz")
 
         self.run_virtualenv_command("easy_install logilab-common", raise_error=True)
-        self.run_virtualenv_command("easy_install logilab-astng", raise_error=True)
+
+        # Use py3k patched logilab-astng
+        self.run_virtualenv_command("easy_install https://github.com/downloads/miohtama/vvv/logilab-astng-0.23.1-py3-patched.tar.gz", raise_error=True)
         self.run_virtualenv_command("cd %s ; NO_SETUPTOOLS=1 %s setup.py install --no-compile" % (pylint_extract_path, python), raise_error=True)
 
     def validate(self, fname):
@@ -306,7 +363,10 @@ class PylintPlugin(Plugin):
             if not "--rcfile" in options:
                 options += " --rcfile=%s" % config_fname
 
-            exitcode, output = self.run_virtualenv_command('pylint %s "%s"' % (options, fname))
+            if self.pylint_command:
+                exitcode, output = utils.shell(self.logger, '%s %s "%s"' % (self.pylint_command, options, fname))
+            else:
+                exitcode, output = self.run_virtualenv_command('pylint %s "%s"' % (options, fname))
 
         if exitcode == 0:
             return True # Validation ok

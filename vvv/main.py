@@ -222,6 +222,18 @@ class VVV(object):
             logger.warn("No validation-files.yaml config file found, using defaults")
             self.files_data = Config()
 
+    def check_is_processable(self, fpath):
+        """
+        Checks that a file is not on all files blacklist.
+
+        Normally directory walker does this when walking thru files.
+        But we might directly refer to individual files thru commit hook.
+        For these files, we need to check if they can be procesed or not.
+        """
+
+        # XXX: Individual plug-ins need this check also
+        return self.walker.is_whitelisted(fpath, self.project_path, self.matchlist)
+
     def process(self, fpath):
         """
         Run all validators against one file.
@@ -236,6 +248,9 @@ class VVV(object):
         abs_path = os.path.join(self.project_path, fpath)
 
         relative = os.path.relpath(abs_path, self.project_path)
+
+        if self.print_files:
+            logger.info(abs_path)
 
         for plugin_id, p in self.plugins.items():
             try:
@@ -324,6 +339,10 @@ class VVV(object):
             self.walk(self.target)
         else:
             # Single file
+            if not self.check_is_processable(self.target):
+                logger.warn("Single target was not scan whitelist: %s" % self.target)
+                return
+
             logger.debug("Scanning single file: %s" % self.target)
             self.process(self.target)
 
@@ -371,10 +390,11 @@ class VVV(object):
             logger.info(self.output)
             return 2
         else:
-            logger.info("All files ok")
+            #logger.info("All files ok")
             return 0
 
 
+<<<<<<< HEAD
 @plac.annotations( \
     options=("Validation options file. Default is validation-options.yaml", 'option', 'o', None, None, "validation-options.yaml"),
     files=("Validation allowed files list file. Default is validation-files.yaml", "option", "f", None, None, "validation-files.yaml"),
@@ -416,7 +436,8 @@ def entry_point():
     """
 
     import plac
-    plac.call(main)
+    exit_code = plac.call(main)
+    sys.exit(exit_code)
 
 if __name__ == "__main__":
     entry_point()

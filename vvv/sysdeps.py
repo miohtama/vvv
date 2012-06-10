@@ -9,6 +9,7 @@
 
 # Python imports
 import os
+import sys
 
 # Local imports
 from .utils import shell, temporary_working_directory
@@ -224,4 +225,36 @@ def install_npm(logger, target, package, raise_error=False):
     """
     with temporary_working_directory(target):
         return shell(logger, 'npm install  %s' % package, raise_error=raise_error)
+
+def get_bin_path():
+    """
+    Get the path where VVV scripts lie.
+
+    Assume we are installed via setup.py script entry point and VVV script lies in the same folder with us    
+    """
+
+    current_path = os.path.dirname(os.path.join(os.getcwd(), sys.argv[0]))
+
+    if "vvv/tests" in current_path:
+        # Test runner uses non setup.py entry points, 
+        # which cause great confusion. 
+        # For now, we handle this as an ugly special case - 
+        # tests actually could not potentially access these scripts
+        #  vvv runnable did not exist at /Users/moo/code/vvv/tests/vvv
+        current_path = os.path.join(current_path, "..", "venv", "bin")
+
+    # Sanity check
+    vvv = os.path.join(current_path, "vvv")
+    if not os.path.exists(vvv):
+
+        # Then try this trick, assume we are running in activated virtualenv
+        # Like in the case of Travis-CI
+        vvv = which("vvv")
+        if vvv:
+            return os.path.dirname(vvv)
+
+
+        raise RuntimeError("vvv runnable did not exist at %s" % os.path.abspath(vvv))
+        
+    return current_path
 
