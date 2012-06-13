@@ -9,6 +9,13 @@ VVV prevents bad stuff to be committed in your software source control or makes 
 
 .. contents :: :local:
 
+Installation 
+==============
+
+**Do not try to install this package using pip, easy_install, buildout** before reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_.
+
+Currently this package is Python 3 compatible only.
+
 Benefits
 =========
 
