@@ -292,7 +292,7 @@ evil space is the alter ego of normal space. Its invisibly grins when your code 
 <li>It is totally possible that you accidentally type plenty of these characters if you are workign on non-US keyboard
 when you frequently need to press ALT to for characters for proramming grammar. Example. <tt class="docutils literal"><span class="pre">if(foobar</span> <span class="pre">||</span> <span class="pre">foobar2)</span> <span class="pre">{</span></tt>.</li>
 <li>Non-breaking spacebar (NBSP) character cannot be distinguished from normal space, as they both are, well..., invisible</li>
-<li>A lot of compilers, linters, Javascript compressors, etc. cannot handle this character properly and fall into very interesting failure modes 
+<li>A lot of compilers, linters, Javascript compressors, etc. cannot handle this character properly and fall into very interesting failure modes
 which are hard to debug</li>
 <li>This is especially important when creating Javascript code because browsers threat NBS differently</li>
 </ul>
@@ -388,8 +388,8 @@ which are hard to debug</li>
 <p class="last">pylint installation is broken for Python 3.x - please see notes below</p>
 </div>
 <p>A temporarily <em>virtualenv</em> environment is automatically created
-where pylint command and its dependencies are is installed. 
-However this is not very good way to run pylint, as if you 
+where pylint command and its dependencies are is installed.
+However this is not very good way to run pylint, as if you
 are using any third party libraries pylint cannot import them
 and thus fails.</p>
 <p>It is recommended to use <tt class="docutils literal"><span class="pre">host-python-env</span></tt> option -
@@ -433,7 +433,7 @@ the active <tt class="docutils literal"><span class="pre">python</span></tt> env
 <div class="section" id="pylint-command">
 <h5>pylint-command<a class="headerlink" href="#pylint-command" title="Permalink to this headline">¶</a></h5>
 <p>A path spec pointing to used <tt class="docutils literal"><span class="pre">pylint</span></tt> command.</p>
-<p>Use this command to run pylint. This is for cases where <tt class="docutils literal"><span class="pre">host-python-env</span></tt> 
+<p>Use this command to run pylint. This is for cases where <tt class="docutils literal"><span class="pre">host-python-env</span></tt>
 is not enough to tame your Python package dependencies.</p>
 <p>If this option starts with . it is considered to be a directory reference relative to the project root.</p>
 <p>IF this option starts with / it is considered to be absolute directory reference.</p>
@@ -459,7 +459,7 @@ is not enough to tame your Python package dependencies.</p>
 <p>Pass in pylint configuration file data.
 This is a block of text which gets passed in as pylint .rc file.
 For rc file example run command:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">rcfile</span> 
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">rcfile</span>
 </pre></div>
 </div>
 </div>
@@ -484,7 +484,7 @@ For rc file example run command:</p>
 </div>
 <p>These can be function or module level scoped.</p>
 <p>To see all pylint error and warning message ids:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">msgs</span>    
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pylint</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">msgs</span>
 </pre></div>
 </div>
 <p>And to find a message id:</p>
