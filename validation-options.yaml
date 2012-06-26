@@ -46,4 +46,6 @@ pylint:
     # :C0112: *Empty docstring*
     # :R0903: *Too few public methods (%s/%s)*
     # :R0904: *Too many public methods (%s/%s)*
-    disable = C0111, C0112, R0903, R0904
+    # The following conflicts with PEP-8:
+    # :C0322:156,0:main: Operator not preceded by a space
+    disable = C0111, C0112, R0903, R0904, C0322

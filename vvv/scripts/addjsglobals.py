@@ -8,15 +8,18 @@
 
 """
 
+import plac
 import re
 import sys
 import os
 import tempfile
 from shutil import move
 
+
 def is_globals_line(line):
     line = line.strip()
     return line.startswith("/* global") or line.startswith("/*global")
+
 
 def is_comment_line(line):
     line = line.strip()
@@ -26,6 +29,7 @@ def is_comment_line(line):
     for m in markers:
         if line.startswith(m):
             return True
+
 
 def generate_globals_line(line, jsglobals):
     """
@@ -48,7 +52,6 @@ def generate_globals_line(line, jsglobals):
 
             if not token in bad_tokens:
                 parsed_globals.append(token)
-
 
     for newglobal in jsglobals:
         if not newglobal in parsed_globals:
@@ -81,8 +84,8 @@ def add_new_globals_after_comment(text, jsglobals):
 
         output.append(line)
 
-
     return "\n".join(output)
+
 
 def replace_existing_globals(text, jsglobals):
     """
@@ -90,13 +93,14 @@ def replace_existing_globals(text, jsglobals):
     """
     output = []
 
-    for line in text.split("\n"):    
+    for line in text.split("\n"):
         if is_globals_line(line):
             line = generate_globals_line(line, jsglobals)
-        
+
         output.append(line)
 
     return "\n".join(output)
+
 
 def in_place_replace(fname, text):
     """ Atomic replace of file contents.
@@ -117,10 +121,10 @@ def process_text(text, jsglobals):
     current_globals_line = None
 
     jsglobals = jsglobals.split(",")
-    jsglobals  = [ g.strip() for g in jsglobals ]
+    jsglobals = [g.strip() for g in jsglobals]
 
     if len(jsglobals) == 0:
-        raise RuntimeError("Where are those globals...")    
+        raise RuntimeError("Where are those globals...")
 
     for line in text.split("\n"):
         if is_globals_line(line):
@@ -133,11 +137,12 @@ def process_text(text, jsglobals):
 
     return text
 
+
 def run(jsglobals, target):
     """
     Process the target file.
     """
-    
+
     with open(target, "rt") as f:
         text = f.read()
         text = process_text(text, jsglobals)
@@ -146,28 +151,30 @@ def run(jsglobals, target):
 
     return 0
 
-def main(
-    jsglobals : ("Comma separated list to globals to be added", "positional", None, None, None, "GLOBALSLIST"),    
-    target : ("Javascript file where globals are added. Will be replaced in-place.", "positional", None, None, None, "JSFILE"),    
-    ):
-    """ 
+
+@plac.annotations(
+    jsglobals=("Comma separated list to globals to be added", "positional", None, None, None, "GLOBALSLIST"),
+    target=("Javascript file where globals are added. Will be replaced in-place.", "positional", None, None, None, "JSFILE"),
+)
+def main(jsglobals, target):
+    """
     A convenience utility for adding globals declaration to multiple js files
 
     More info: https://github.com/miohtama/vvv
 
     Example how to scan the current source tree add add /* globals jQuery, $ */ in every file:
 
-        find . -iname "*.js" | xargs vvv-add-js-globals "$, jQuery" 
+        find . -iname "*.js" | xargs vvv-add-js-globals "$, jQuery"
 
     Another example - add console global to all JS files under tests:
 
-        find tests -iname "*.js" -print  -exec vvv-add-js-globals "$" {} \;  
+        find tests -iname "*.js" -print  -exec vvv-add-js-globals "$" {} \;
 
     Note that the replce is smart and does not destroy existing global declarations.
     The script understand /* globals foo, bar */ style declarations and this declaration only.
-    
+
     NO WARRANTY. USE AT YOUR OWN RISK.
-    """    
+    """
     sys.exit(run(jsglobals, target))
 
 
@@ -178,7 +185,7 @@ def entry_point():
     Can be used from other modules too.
     """
 
-    import plac
+
     plac.call(main)
 
 if __name__ == "__main__":

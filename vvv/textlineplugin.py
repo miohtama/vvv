@@ -7,19 +7,20 @@
 # ABCMeta workarounds, still waiting for pylint patches
 # pylint: disable=R0201, W0102, R0921, W0611
 
-import sys
+import io
 
 from .plugin import Plugin
 
 
-def _open(file, flags, encoding):
+def _open(file, flags):
     """
-    Python 2.x encoding compatible shim.
+    Python 2.x / Python 3 cross-compatible file opener.
+
+    Ignore UTF-8 errors (otherwise readline() would raise an exception).
+
+    Don't try to undertand other encodings.
     """
-    if sys.version_info[0] >= 3:
-        return open(file, flags, encoding=encoding)
-    else:
-        return open(file, flags)
+    return io.open(file, flags, encoding="utf-8", errors="replace")
 
 
 class TextLinePlugin(Plugin):
@@ -52,16 +53,11 @@ class TextLinePlugin(Plugin):
 
         i = 0
 
-        with _open(fname, "rt", encoding="utf-8") as f:
+        with _open(fname, "rt") as f:
 
-            try:
-                for line in f:
-                    i += 1
-                    if self.process_line(fname, i, line):
-                        errors = True
-            except UnicodeDecodeError:
-                # UnicodeDecodeError: 'utf8' codec can't decode byte 0xa5 in position 2: invalid start byte
-                # TODO: For now, how to handle? Should attempt to detect encoding?
-                self.logger.warn("Bad encoding: %s" % fname)
+            for line in f:
+                i += 1
+                if self.process_line(fname, i, line):
+                    errors = True
 
         return not errors
