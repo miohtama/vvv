@@ -8,6 +8,12 @@ Changelog
 
 - Refactored text plug-ins to silently ignore bad encoding [miohtama]
 
+0.4.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 0.4.0 (2012-06-26)
 ------------------
 

@@ -12,7 +12,7 @@ VVV prevents bad stuff to be committed in your software source control or makes 
 Installation
 ==============
 
-**Please read reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_ before proceeding.**
+Please read reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_ before proceeding.
 
 Currently this package is known to be compatible with
 
