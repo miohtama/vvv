@@ -8,10 +8,12 @@ import os
 
 from setuptools import setup, find_packages
 
-LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "HISTORY.txt").read()
+LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "HISTORY.txt")).read()
+
+VERSION = "0.4.0"
 
 setup(name = "vvv",
-    version='0.4.0',
+    version=VERSION,
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",

@@ -2,13 +2,14 @@
 # Don't match generated folders
 # Don't match test data (which is bad intentionally)
 # Don't match demo data (which is bad intentionally)
-all: | 
+all: |
   *
   !RE:.*\/\..*|^\..*
-  !**/build/**  
+  !**/build/**
   !demo/**
   !dist/**
   !venv
+  !venv-py2
   !**/__pycache__
   !*.egg-info
   !tests/validators

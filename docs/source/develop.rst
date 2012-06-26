@@ -100,7 +100,7 @@ To run a single test / test group you can use a filter which uses substring matc
 TODO: Use HTTP proxy (polipo) to speed up tests by caching downloads locally.
 
 Python 2.7 tests
-+++++++++++++++++++
+----------------------
 
 Create a new virtualenv with Python 2.7, activte it and run the tests in similar manner.
 
@@ -115,11 +115,19 @@ Your can self-validate the vvv codebase::
 Releasing egg
 ==========================
 
-Use `jarn.mkrelease <http://pypi.python.org/pypi/jarn.mkrelease>`_::
+Use ``zest.releaser`` with *Python 2*::
 
-    source PYTHON2-VENV/bin/activate
-    easy_install mkrelease
-    mkrelease -C -T -d pypi .
+    virtualenv -p python2.7 venv-py2
+    source venv-py2/bin/activate
+    easy_install zest.releaser
+    easy_install setuptools-git
+
+Then for each release::
+
+    # edit setup.py and update the version number first
+    python setup.py develop
+    cd tests ;  VVV_TEST_SKIP_REINSTALL=true VVV_TEST_OUTPUT=verbose python -m unittest discover ; cd ..
+    fullrelease
 
 .. note ::
 

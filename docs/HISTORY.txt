@@ -6,6 +6,8 @@ Changelog
 
 - Python 2.7 compatibility added [miohtama]
 
+- Refactored text plug-ins to silently ignore bad encoding [miohtama]
+
 0.4.0 (2012-06-26)
 ------------------
 
