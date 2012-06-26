@@ -4,12 +4,14 @@
 
 """
 
+import os
+
 from setuptools import setup, find_packages
 
-LONG_DESCRIPTION = open("README.rst").read() + "\n" + open("CHANGELOG.rst").read()
+LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "HISTORY.txt").read()
 
 setup(name = "vvv",
-    version = "0.3.0",
+    version='0.4.0',
     long_description = LONG_DESCRIPTION,
     description = "A convenience utility for software source code validation and linting",
     author = "Mikko Ohtamaa",

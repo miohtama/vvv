@@ -1,7 +1,12 @@
 Changelog
 ===================
 
-0.2.5 - 0.3.0
+0.4.0
+------------------
+
+- Python 2.7 compatibility added [miohtama]
+
+0.4.0 (2012-06-26)
 ------------------
 
 - Intelligent git pre-commit hook; check only changed files [miohtama]
@@ -40,7 +45,7 @@ Changelog
 0.2 - 0.2.1
 ---------------
 
-- Fixed changelog formatting now that PyPi README page is intact again 
+- Fixed changelog formatting now that PyPi README page is intact again
 
 0.1.1 - 0.2
 ---------------
