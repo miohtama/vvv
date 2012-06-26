@@ -11,7 +11,7 @@ Prerequisites
 Runs on OSX and Linux. Windows support is on way.
 
 Compatibility
-===============
+++++++++++++++
 
 - Python 2.7 or higher
 
