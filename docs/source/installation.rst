@@ -1,4 +1,4 @@
-Installation 
+Installation
 ============================
 
 .. contents :: :local:
@@ -8,13 +8,19 @@ Installation
 Prerequisites
 ----------------
 
-Runs on OSX and Linux. Windows is not (yet) supported. 
-Requires Python 3 environment to run. 
+Runs on OSX and Linux. Windows support is on way.
+
+Compatibility
+===============
+
+- Python 2.7 or higher
+
+- Python 3.2 or higher
 
 Installing locally using virtualenv
 --------------------------------------
 
-`virtualenv based <http://pypi.python.org/pypi/virtualenv>`_ installation is recommended. 
+`virtualenv based <http://pypi.python.org/pypi/virtualenv>`_ installation is recommended.
 virtualenv is a tool to manage self-contained Python software installations without
 need to install Python packages in your system folders using super-user priviledges.
 Becuse VVV is still much in development, this kind of installation allows
@@ -26,22 +32,21 @@ where VVV and all it dependencies are downloaded from `PyPi <http://pypi.python.
 Ubuntu
 +++++++++
 
-Tested on Ubuntu 10.04 and should work on are later versions. 
+Tested on Ubuntu 10.04 and should work on are later versions.
 
 Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder::
 
-    sudo apt-get install python3 python3-setuptools 
-    # Please enter the following commands as non-root user 
+    sudo apt-get install python-virtualenv
+    # Please enter the following commands as non-root user
     cd ~
-    wget "https://raw.github.com/pypa/virtualenv/master/virtualenv.py"
-    python3 virtualenv.py vvv-venv
+    virtualenv vvv-venv
     . ./vvv-venv/bin/activate
     pip install vvv
 
 .. note ::
 
     Later Ubuntus may provide virtualenv package directly for Python 3 and
-    you do not need to wget anything. 
+    you do not need to wget anything.
     When writing of this it was not the case.
 
 OSX
@@ -49,7 +54,7 @@ OSX
 
 Installing prerequisites (OSX, `Macports <http://www.macports.org>`_)::
 
-    sudo port install python32  
+    sudo port install python32
     sudo port install py32-distribute py32-virtualenv py32-pip
 
 Then create environment e.g. in your home folder::
@@ -60,7 +65,7 @@ Then create environment e.g. in your home folder::
     . ~/vvv-venv/bin/activate
     pip install vvv
 
-Running 
+Running
 ++++++++++
 
 Now when virtualenv is active (activated with the ``source`` command above), your ``PATH``
@@ -68,10 +73,10 @@ environment variable pulls in ``vvv`` command from that folder::
 
     . ~/vvv-venv/bin/activate # Do once per shell session
     # See that we get command line help
-    vvv    
+    vvv
 
 Just ``cd`` to the any source tree and type in the command::
-    
+
     vvv .
 
 VVV will validate your source code.
@@ -98,8 +103,8 @@ Each target programming language may require its own system-wide
 dependencies before you can run the validtor.
 
 You'll get an error message when running VVV if you are lacking something.
-If you get such an error for more information installing 
-the dependencies please see :doc:`prerequisites </prerequisites>`. 
+If you get such an error for more information installing
+the dependencies please see :doc:`prerequisites </prerequisites>`.
 
 vvv will automatically try to install software needed to run the
 validator. This software is installed locally in hidden ``.vvv``

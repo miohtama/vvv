@@ -9,12 +9,16 @@ VVV prevents bad stuff to be committed in your software source control or makes 
 
 .. contents :: :local:
 
-Installation 
+Installation
 ==============
 
-**Do not try to install this package using pip, easy_install, buildout** before reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_.
+**Please read reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_ before proceeding.
 
-Currently this package is Python 3 compatible only.
+Currently this package is known to be compatible with
+
+- Python 3.2+
+
+- Python 2.7
 
 Benefits
 =========
@@ -34,21 +38,21 @@ What VVV doesn't do
 
 * This is not automated testing tool. We just scan files against a **policy**, not for
   programming errors. Linting tools tend to pick up programming errors, too though,
-  like mistyped names. 
+  like mistyped names.
 
 Features
 =========
 
 * Set-up for your software repository with two files ``validation-options.yaml`` (configuration) and ``validation-files.yaml`` (whitelist/blacklist)
 
-* VVV automatically downloads and locally installs required software - you don't need to spend time hunting downloads or distribution packages   
+* VVV automatically downloads and locally installs required software - you don't need to spend time hunting downloads or distribution packages
 
 * Check file against hard tabs and whitespace policies - no more different tab width ever
 
 * Prevent committing hard source code breakpoints, like Python's ``import pdb ; pdb.set_trace()``
 
 * Support (on its way) for Subversion, Git, Github, Travis CI, Jenkings and other popular version control and continuous integration
-  systems 
+  systems
 
 Documentation and code
 =========================
@@ -74,5 +78,5 @@ Mikko Ohtamaa (`blog <http://opensourcehacker.com>`_, `Twitter <http://twitter.c
 
 Please use Github issue tracker to contact the authors in the project related matters.
 
-    
+
 
