@@ -125,8 +125,11 @@ Use ``zest.releaser`` with *Python 2*::
 Then for each release::
 
     # edit setup.py and update the version number first
+    source venv/bin/activate
     python setup.py develop
     cd tests ;  VVV_TEST_SKIP_REINSTALL=true VVV_TEST_OUTPUT=verbose python -m unittest discover ; cd ..
+    source venv-py2/bin/activate
+    python setup.py develop
     fullrelease
 
 .. note ::
