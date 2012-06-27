@@ -1,7 +1,7 @@
 Changelog
 ===================
 
-0.4.1 (unreleased)
+0.4.1 (2012-06-27)
 ------------------
 
 - Handle empty / missing config files more gracefully [miohtama]
