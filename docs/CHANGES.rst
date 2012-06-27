@@ -1,21 +1,17 @@
 Changelog
 ===================
 
-0.4.0
+0.4.1 (unreleased)
+------------------
+
+- Handle empty / missing config files more gracefully [miohtama]
+
+0.4.0 (2012-06-26)
 ------------------
 
 - Python 2.7 compatibility added [miohtama]
 
 - Refactored text plug-ins to silently ignore bad encoding [miohtama]
-
-0.4.1 (unreleased)
-------------------
-
-- Nothing changed yet.
-
-
-0.4.0 (2012-06-26)
-------------------
 
 - Intelligent git pre-commit hook; check only changed files [miohtama]
 

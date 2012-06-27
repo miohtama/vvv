@@ -59,17 +59,19 @@ class Config:
         """
         fpath = self.filename
 
-        # Return empty options
-        if not os.path.exists(fpath):
-            print("*** No config: %s" % fpath)
-            self.config = {}
-            return
+        # We might not have config file at all if upwind
+        # path look-up has failed in find_config_file()
+        if fpath:
 
-        f = open(fpath, "rt")
-        try:
-            self.config = yaml.safe_load(f)
-        finally:
-            f.close()
+            # Return empty options
+            if not os.path.exists(fpath):
+                return
+
+            f = open(fpath, "rt")
+            try:
+                self.config = yaml.safe_load(f)
+            finally:
+                f.close()
 
         # If the file is empty yaml.safe_load() sets result to None
         if self.config is None:
@@ -121,7 +123,7 @@ class Config:
         """
         return self.get_option(section, entry, default)
 
-    def get_match_option(self, section, entry = None, default=[], debug=False):
+    def get_match_option(self, section, entry=None, default=[], debug=False):
         """
         Read YAML config which is a block string of file ignore pattern.
 
@@ -167,7 +169,6 @@ class Config:
             if os.path.exists(config_file):
                 return config_file
 
-
             old_path = path
             path = os.path.abspath(os.path.join(path, os.path.pardir))
             if old_path == path:
@@ -180,5 +181,3 @@ class Config:
 
         # Hit a mount point
         return None
-
-
