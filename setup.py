@@ -8,7 +8,7 @@ import os
 
 from setuptools import setup, find_packages
 
-LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "HISTORY.txt")).read()
+LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "CHANGES.rst")).read()
 
 VERSION = "0.4.0"
 

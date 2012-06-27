@@ -1,0 +1,5 @@
+Demostrate a case where we have
+
+- validation-options.yaml
+
+- But no validation-files.yaml

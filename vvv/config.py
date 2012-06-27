@@ -6,7 +6,7 @@
 """
 
 # Dangerous default value [] as argument
-# pylint: disable=W0102 
+# pylint: disable=W0102
 
 # Python imports
 import os
@@ -17,10 +17,12 @@ import yaml
 # Local imports
 from .bzrlib.globster import ExceptionGlobster
 
+
 class ConfigException(Exception):
     """
     Having bad input in a config file.
     """
+
 
 class Config:
     """
@@ -36,12 +38,12 @@ class Config:
 
             entry2
                 - foo
-                - bar 
+                - bar
 
     """
 
     def __init__(self, filename):
-        """ 
+        """
         :param filename: Full path to the config file or None if we don't read any options
         """
 
@@ -67,15 +69,19 @@ class Config:
         try:
             self.config = yaml.safe_load(f)
         finally:
-            f.close()            
+            f.close()
+
+        # If the file is empty yaml.safe_load() sets result to None
+        if self.config is None:
+            self.config = dict()
 
     def get_option(self, section_name, entry, default=None):
         """
         Convert YAML tree entry to a Python list.
 
         If section does not exist return empty list.
-        
-        http://pyyaml.org/wiki/PyYAMLDocumentation#Blocksequences 
+
+        http://pyyaml.org/wiki/PyYAMLDocumentation#Blocksequences
 
         :param config: Configuration as Python dict
         """
@@ -99,19 +105,19 @@ class Config:
 
     def get_boolean_option(self, section, entry, default=False):
         """
-        Read YAML true/false config 
+        Read YAML true/false config
         """
         return self.get_option(section, entry, default)
 
     def get_int_option(self, section, entry, default=0):
         """
-        Read YAML int config 
+        Read YAML int config
         """
-        return self.get_option(section, entry, default)    
+        return self.get_option(section, entry, default)
 
     def get_string_option(self, section, entry, default=""):
         """
-        Read YAML string config 
+        Read YAML string config
         """
         return self.get_option(section, entry, default)
 
@@ -120,7 +126,7 @@ class Config:
         Read YAML config which is a block string of file ignore pattern.
 
 
-        """    
+        """
         if entry:
             opt = self.get_option(section, entry, default)
         else:
@@ -128,7 +134,7 @@ class Config:
 
         if type(opt) == str:
             # Split space or new line separated list to pieces
-            opt = opt.split() 
+            opt = opt.split()
         elif type(opt) == list:
             pass
         else:
