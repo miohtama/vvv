@@ -1,5 +1,5 @@
 recursive-include vvv *
-recursive-include ghetto *
+recursive-include ghettoci *
 recursive-include scripts *
 recursive-include docs *
 include *
