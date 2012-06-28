@@ -109,7 +109,7 @@ Example ``validation-files.yaml``::
 
 
     # Include all text files, ignore hard tab checking for Makefiles
-    tabs:
+    tabs: |
         *
         !Makefile
         !*.mk
