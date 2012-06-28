@@ -34,18 +34,18 @@ Windows
 
 Tested on Windows 7 with Python 2.7
 
-Make sure ``virtualenv`` is installed:
+Make sure ``virtualenv`` is installed::
 
     pip install virtualenv
 
-Installing prerequisites by creating vvv-venv virtualenv in your home folder:
+Installing prerequisites by creating vvv-venv virtualenv in your home folder::
 
     cd %HOME%
     virtualenv vvv-venv
     .\venv-vvv\Scripts\activate
     pip install vvv
 
-Or if you are using PowerShell:
+Or if you are using PowerShell::
 
     cd ~
     virtualenv vvv-env
