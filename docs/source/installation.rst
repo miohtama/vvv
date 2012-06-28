@@ -29,6 +29,29 @@ fast update cycles without messing with system files or distribution packages.
 This creates a local Python package repository
 where VVV and all it dependencies are downloaded from `PyPi <http://pypi.python.org>`_.
 
+Windows
++++++++++
+
+Tested on Windows 7 with Python 2.7
+
+Make sure ``virtualenv`` is installed:
+
+    pip install virtualenv
+
+Installing prerequisites by creating vvv-venv virtualenv in your home folder:
+
+    cd %HOME%
+    virtualenv vvv-venv
+    .\venv-vvv\Scripts\activate
+    pip install vvv
+
+Or if you are using PowerShell:
+
+    cd ~
+    virtualenv vvv-env
+    .\venv-vvv\Scripts\activate.ps1
+    pip install vvv
+
 Ubuntu
 +++++++++
 
