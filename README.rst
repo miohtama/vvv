@@ -35,10 +35,7 @@ Installation
 ==============
 
 VVV is writte in in `Python <http://www.python.org>`_ programming language and is compatible with
-
-- Python 3.2 or later
-
-- Python 2.7
+**Python interpreter 2.7 or later, including 3.x series**.
 
 Installating instructions for `Windows <http://miohtama.github.com/vvv/installation.html#windows>`_ -
 `Linux <http://miohtama.github.com/vvv/installation.html#linux-ubuntu-debian>`_ -
