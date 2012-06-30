@@ -2,23 +2,47 @@
 VVV - validation and linting integrator
 ========================================
 
-VVV is a tool for easy validation and linting integration for your software project.
-With a single command validate all files, no matter in which programming language,
-in a source tree against a policy you specify in a simple configuration file.
-VVV prevents bad stuff to be committed in your software source control or makes cleaning it up easier.
+VVV is a tool for easy validation and linting integration for your software project
+containing multiple kinds of files. It integrates with version control and
+prevents committing files containing bad formatting or syntax errors.
+
+An example use case would be a web project containing HTML, CSS, Javascript
+and backend programming language files: with VVV you can check with a single command
+all files conform the policy you set.
 
 .. contents :: :local:
+
+Usage
+==============
+
+Example output from validating the demo repository where we find errors in a Python and a CSS file.
+You enter the folder and run ``vvv`` against the current folder (``.``) ::
+
+    $ vvv .
+    Running vvv against .
+    /Users/moo/code/vvv/demo/demo.py validation output:
+    ************* Module demo
+    E0602:  1,9: Undefined variable 'get_magic'
+
+    W3C CSS Validator results for file:/Users/moo/code/vvv/demo/foobar.css
+
+    Line : 2 .foo
+           Property backgrnd doesn&#39;t exist :
+           yellow
+
 
 Installation
 ==============
 
-Please read reading `installation instructions <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_ before proceeding.
+VVV is writte in in `Python <http://www.python.org>`_ programming language and is compatible with
 
-Currently this package is known to be compatible with
-
-- Python 3.2+
+- Python 3.2 or later
 
 - Python 2.7
+
+Installating instructions for `Windows <http://miohtama.github.com/vvv/installation.html#windows>`_ -
+`Linux <http://miohtama.github.com/vvv/installation.html#linux-ubuntu-debian>`_ -
+`OSX <http://miohtama.github.com/vvv/installation.html#osx>`_.
 
 Benefits
 =========
