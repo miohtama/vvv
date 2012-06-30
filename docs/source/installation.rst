@@ -65,12 +65,6 @@ Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder
     please contact the author via issue tracker to provide exact
     installation instructions.
 
-.. note ::
-
-    Later Ubuntus may provide virtualenv package directly for Python 3 and
-    you do not need to wget anything.
-    When writing of this it was not the case.
-
 OSX
 +++++++++
 
