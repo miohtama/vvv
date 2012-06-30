@@ -6,6 +6,7 @@ all: |
   *
   !RE:.*\/\..*|^\..*
   !**/build/**
+  !*.pyc
   !demo/**
   !dist/**
   !venv
