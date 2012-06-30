@@ -52,8 +52,8 @@ Or if you are using PowerShell::
     .\venv-vvv\Scripts\activate.ps1
     pip install vvv
 
-Ubuntu
-+++++++++
+Linux (Ubuntu / Debian)
+++++++++++++++++++++++++++
 
 Tested on Ubuntu 10.04 and should work on are later versions.
 
@@ -65,6 +65,13 @@ Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder
     virtualenv vvv-venv
     . ./vvv-venv/bin/activate
     pip install vvv
+
+.. note ::
+
+    Red Hat, CentOS users can adapt these instructions for
+    your own package manager. If you are using VVV on these platforms
+    please contact the author via issue tracker to provide exact
+    installation instructions.
 
 .. note ::
 
