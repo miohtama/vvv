@@ -4,8 +4,9 @@ Changelog
 0.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Windows compatibility confirmed [jsalonen]
 
+- Fixed more issues with bad command line options [miohtama]
 
 0.4.1 (2012-06-27)
 ------------------

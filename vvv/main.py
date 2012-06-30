@@ -42,6 +42,15 @@ DEFAULT_MATCHLIST = [
   r"!__pycache__"
 ]
 
+#: sys.exit() value used for bad command line options
+BAD_COMMAND_LINE_EXIT_CODE = 64
+
+
+class BadCommmandLineError(RuntimeError):
+    """
+    Risen when the command line option do not make sense.
+    """
+
 
 class VVV(object):
     """
@@ -220,8 +229,7 @@ class VVV(object):
             self.files_data = Config(self.files)
             self.files_data.load()
         else:
-            logger.warn("No validation-files.yaml config file found, using defaults")
-            self.files_data = Config()
+            raise BadCommmandLineError("Given validation-files.yaml does not exist")
 
     def check_is_processable(self, fpath):
         """
@@ -356,26 +364,32 @@ class VVV(object):
 
         :return: System exit return code
         """
-        self.post_process_options()
 
-        self.setup_output()
+        try:
+            self.post_process_options()
 
-        self.read_config()
+            self.setup_output()
 
-        self.find_plugins()
+            self.read_config()
 
-        self.prepare()
+            self.find_plugins()
 
-        self.setup_options()
+            self.prepare()
 
-        self.determine_project_path()
+            self.setup_options()
 
-        self.determine_target()
+            self.determine_project_path()
 
-        self.init_plugins()
+            self.determine_target()
 
-        if self.reinstall:
-            self.nuke()
+            self.init_plugins()
+
+            if self.reinstall:
+                self.nuke()
+
+        except BadCommmandLineError as cmd_line_error:
+            print(cmd_line_error, file=sys.stderr)
+            return BAD_COMMAND_LINE_EXIT_CODE
 
         self.validate_files()
 
