@@ -131,6 +131,7 @@ Then for each release::
     source venv-py2/bin/activate
     python setup.py develop
     fullrelease
+    sh scripts/publish-docs.sh
 
 
 Publishing docs
