@@ -225,17 +225,7 @@ vvv-install-git-pre-commit-hook</pre>
 <span class="go">source venv-py2/bin/activate</span>
 <span class="go">python setup.py develop</span>
 <span class="go">fullrelease</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For mkrelease you need to Python 2.x virtualenv.</p>
-</div>
-<p>mkrelease bug:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">  File &quot;/Users/moo/code/vvv/venv/lib/python3.2/site-packages/jarn.mkrelease-3.5-py3.2.egg/jarn/mkrelease/mkrelease.py&quot;, line 237</span>
-<span class="go">    except getopt.GetoptError, e:</span>
-<span class="go">                             ^</span>
-<span class="go">SyntaxError: invalid syntax</span>
+<span class="go">sh scripts/publish-docs.sh</span>
 </pre></div>
 </div>
 </div>

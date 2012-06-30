@@ -8,26 +8,18 @@ Installation
 Prerequisites
 ----------------
 
-Runs on OSX and Linux. Windows support is on way.
+Python 2.7 or higher, including Python 3.x series.
 
-Compatibility
-++++++++++++++
+For individual validators you might need to configure :doc:`Java or NodeJS </prerequisites>`.
+Further information available after the installation.
 
-- Python 2.7 or higher
-
-- Python 3.2 or higher
-
-Installing locally using virtualenv
+Installing VVV using virtualenv
 --------------------------------------
 
 `virtualenv based <http://pypi.python.org/pypi/virtualenv>`_ installation is recommended.
-virtualenv is a tool to manage self-contained Python software installations without
-need to install Python packages in your system folders using super-user priviledges.
-Becuse VVV is still much in development, this kind of installation allows
-fast update cycles without messing with system files or distribution packages.
 
-This creates a local Python package repository
-where VVV and all it dependencies are downloaded from `PyPi <http://pypi.python.org>`_.
+virtualenv is a tool to manage self-contained Python software installations without
+need for super-user priviledges.
 
 Windows
 +++++++++
@@ -82,40 +74,56 @@ Installing prerequisites by creating ``vvv-venv`` virtualenv in your home folder
 OSX
 +++++++++
 
-Installing prerequisites (OSX, `Macports <http://www.macports.org>`_)::
+OSX 10.7 Lion or later comes with compatible Python 2.7.
+
+To install VVV into a current folder::
+
+    curl -L -o virtualenv.py https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+    python virtualenv.py vvv-venv
+    . vvv-venv/bin/activate
+    pip install vvv
+
+For older OSX versions you might need to use a package manager
+like `Macports <http://www.macports.org>`_ to install a compatible
+Python interpreter::
 
     sudo port install python32
     sudo port install py32-distribute py32-virtualenv py32-pip
 
-Then create environment e.g. in your home folder::
-
-    # Use Py3.2 - not default Python version which tends to be py2
-    cd ~
-    virtualenv-3.2 vvv-venv
-    . ~/vvv-venv/bin/activate
-    pip install vvv
-
 Running
-++++++++++
+---------
 
-Now when virtualenv is active (activated with the ``source`` command above), your ``PATH``
-environment variable pulls in ``vvv`` command from that folder::
+VVV is installed under virtualenv. When you *activate* this virtualenv
+your command-line *PATH* environment variable is modified so that
+the active command line session starts using commandss from virtualenv.
 
-    . ~/vvv-venv/bin/activate # Do once per shell session
-    # See that we get command line help
+This must be done once per each command line session.
+
+To activate virtualenv under UNIX::
+
+    . vvv-venv/bin/activate
+
+To activate virtualenv under Windows::
+
+    .\venv-vvv\Scripts\activate
+
+Now when the virtualenv is active you have ``vvv`` command available.
+Type it to see the command line help text::
+
     vvv
 
+Now you can test ``vvv`` against your source tree.
 Just ``cd`` to the any source tree and type in the command::
 
     vvv .
 
 VVV will validate your source code.
 
-Now you can proceed to :doc:`configuring VVV for your project </configuration>`,
-to get rid of those pesky validation errors.
+From here you can proceed to :doc:`configuring VVV for your project </configuration>`,
+to make VVV to conform your project policy.
 
 Installing trunk version
-++++++++++++++++++++++++++++
+--------------------------
 
 If you want to use GitHub trunk version do::
 
@@ -126,8 +134,8 @@ If you want to use GitHub trunk version do::
 
 This will install vvv development version under ``vvv-venv`` virtualenv.
 
-Automatically pulled in software
---------------------------------------
+Software downloaded and installed by vvv command
+----------------------------------------------------
 
 Each target programming language may require its own system-wide
 dependencies before you can run the validtor.
