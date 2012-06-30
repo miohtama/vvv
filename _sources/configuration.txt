@@ -19,7 +19,7 @@ Configuration files are specified in `YAML syntax <http://ess.khhq.net/wiki/YAML
 Configuration file
 ===================================
 
-In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below. 
+In your project root add ``validation-options.yaml``. If this file does not exist default settings are used as described below.
 
 ``validation-options.yaml`` example::
 
@@ -45,7 +45,7 @@ Each validator can has its own settings, but there exist some options which are 
 
 *hint*: Helpful message printed user if this validator fails. Can be multiline.
 
-For validator specific options please consult validators manual. 
+For validator specific options please consult validators manual.
 
 Example ``validation-options.yaml``::
 
@@ -56,7 +56,7 @@ Example ``validation-options.yaml``::
         enable false
 
     linelength:
-        length: 250      
+        length: 250
 
     jslint:
         hint: This project follows jQuery Core Javascript coding conventions http://docs.jquery.com/JQuery_Core_Style_Guidelines
@@ -66,7 +66,7 @@ File whitelisting and blacklisting
 
 ``validation-files.yaml`` allows you to whitelist and blacklist files for validation.
 It's main purpose is to ignore files which do not conform your policies 100%.
-This is e.g. useful if your source code repository contains third party library files which 
+This is e.g. useful if your source code repository contains third party library files which
 do not inherit your project coding conventions.
 
 The file contains YAML sections which follow `Bazaar ignore path matching rules <http://doc.bazaar.canonical.com/beta/en/user-reference/ignore-help.html>`_.
@@ -75,17 +75,17 @@ The file contains YAML sections which follow `Bazaar ignore path matching rules 
 
     Unlike with Bazaar path specs are inclusive (list of matched), not exclusive (list of ignored files)
 
-There is one global ``all`` section with blacklist and whitelist and then validator specific sections by the validator id. 
+There is one global ``all`` section with blacklist and whitelist and then validator specific sections by the validator id.
 
 Example ``validation-files.yaml``::
 
     # Don't match hidden dotted files/folders
     # Don't match generated folders
     # Don't match test data (which is bad intentionally)
-    all: | 
+    all: |
       *
       !RE:.*\/\..*|^\..*
-      !**/build/**  
+      !**/build/**
       !venv
       !**/__pycache__
       !*.egg-info
@@ -109,7 +109,7 @@ Example ``validation-files.yaml``::
 
 
     # Include all text files, ignore hard tab checking for Makefiles
-    tabs:
+    tabs: |
         *
         !Makefile
         !*.mk

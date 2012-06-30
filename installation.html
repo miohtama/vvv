@@ -58,6 +58,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#installing-locally-using-virtualenv">Installing locally using virtualenv</a><ul>
+<li><a class="reference internal" href="#windows">Windows</a></li>
 <li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
 <li><a class="reference internal" href="#osx">OSX</a></li>
 <li><a class="reference internal" href="#running">Running</a></li>
@@ -110,13 +111,14 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#installing-locally-using-virtualenv" id="id3">Installing locally using virtualenv</a><ul>
-<li><a class="reference internal" href="#ubuntu" id="id4">Ubuntu</a></li>
-<li><a class="reference internal" href="#osx" id="id5">OSX</a></li>
-<li><a class="reference internal" href="#running" id="id6">Running</a></li>
-<li><a class="reference internal" href="#installing-trunk-version" id="id7">Installing trunk version</a></li>
+<li><a class="reference internal" href="#windows" id="id4">Windows</a></li>
+<li><a class="reference internal" href="#ubuntu" id="id5">Ubuntu</a></li>
+<li><a class="reference internal" href="#osx" id="id6">OSX</a></li>
+<li><a class="reference internal" href="#running" id="id7">Running</a></li>
+<li><a class="reference internal" href="#installing-trunk-version" id="id8">Installing trunk version</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#automatically-pulled-in-software" id="id8">Automatically pulled in software</a></li>
+<li><a class="reference internal" href="#automatically-pulled-in-software" id="id9">Automatically pulled in software</a></li>
 </ul>
 </div>
 <div class="section" id="prerequisites">
@@ -139,8 +141,30 @@ Becuse VVV is still much in development, this kind of installation allows
 fast update cycles without messing with system files or distribution packages.</p>
 <p>This creates a local Python package repository
 where VVV and all it dependencies are downloaded from <a class="reference external" href="http://pypi.python.org">PyPi</a>.</p>
+<div class="section" id="windows">
+<h3><a class="toc-backref" href="#id4">Windows</a><a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Tested on Windows 7 with Python 2.7</p>
+<p>Make sure <tt class="docutils literal"><span class="pre">virtualenv</span></tt> is installed:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">pip install virtualenv</span>
+</pre></div>
+</div>
+<p>Installing prerequisites by creating vvv-venv virtualenv in your home folder:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cd %HOME%</span>
+<span class="go">virtualenv vvv-venv</span>
+<span class="go">.\venv-vvv\Scripts\activate</span>
+<span class="go">pip install vvv</span>
+</pre></div>
+</div>
+<p>Or if you are using PowerShell:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cd ~</span>
+<span class="go">virtualenv vvv-env</span>
+<span class="go">.\venv-vvv\Scripts\activate.ps1</span>
+<span class="go">pip install vvv</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="ubuntu">
-<h3><a class="toc-backref" href="#id4">Ubuntu</a><a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id5">Ubuntu</a><a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
 <p>Tested on Ubuntu 10.04 and should work on are later versions.</p>
 <p>Installing prerequisites by creating <tt class="docutils literal"><span class="pre">vvv-venv</span></tt> virtualenv in your home folder:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">sudo apt-get install python-virtualenv</span>
@@ -159,7 +183,7 @@ When writing of this it was not the case.</p>
 </div>
 </div>
 <div class="section" id="osx">
-<h3><a class="toc-backref" href="#id5">OSX</a><a class="headerlink" href="#osx" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id6">OSX</a><a class="headerlink" href="#osx" title="Permalink to this headline">¶</a></h3>
 <p>Installing prerequisites (OSX, <a class="reference external" href="http://www.macports.org">Macports</a>):</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">sudo port install python32</span>
 <span class="go">sudo port install py32-distribute py32-virtualenv py32-pip</span>
@@ -175,7 +199,7 @@ When writing of this it was not the case.</p>
 </div>
 </div>
 <div class="section" id="running">
-<h3><a class="toc-backref" href="#id6">Running</a><a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id7">Running</a><a class="headerlink" href="#running" title="Permalink to this headline">¶</a></h3>
 <p>Now when virtualenv is active (activated with the <tt class="docutils literal"><span class="pre">source</span></tt> command above), your <tt class="docutils literal"><span class="pre">PATH</span></tt>
 environment variable pulls in <tt class="docutils literal"><span class="pre">vvv</span></tt> command from that folder:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">. ~/vvv-venv/bin/activate # Do once per shell session</span>
@@ -192,7 +216,7 @@ environment variable pulls in <tt class="docutils literal"><span class="pre">vvv
 to get rid of those pesky validation errors.</p>
 </div>
 <div class="section" id="installing-trunk-version">
-<h3><a class="toc-backref" href="#id7">Installing trunk version</a><a class="headerlink" href="#installing-trunk-version" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id8">Installing trunk version</a><a class="headerlink" href="#installing-trunk-version" title="Permalink to this headline">¶</a></h3>
 <p>If you want to use GitHub trunk version do:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">. ~/vvv-venv/bin/activate</span>
 <span class="go">git clone git://github.com/miohtama/vvv.git</span>
@@ -204,7 +228,7 @@ to get rid of those pesky validation errors.</p>
 </div>
 </div>
 <div class="section" id="automatically-pulled-in-software">
-<h2><a class="toc-backref" href="#id8">Automatically pulled in software</a><a class="headerlink" href="#automatically-pulled-in-software" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Automatically pulled in software</a><a class="headerlink" href="#automatically-pulled-in-software" title="Permalink to this headline">¶</a></h2>
 <p>Each target programming language may require its own system-wide
 dependencies before you can run the validtor.</p>
 <p>You&#8217;ll get an error message when running VVV if you are lacking something.

@@ -55,7 +55,10 @@
 <li><a class="reference internal" href="#other">Other</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#running-tests">Running tests</a></li>
+<li><a class="reference internal" href="#running-tests">Running tests</a><ul>
+<li><a class="reference internal" href="#python-2-7-tests">Python 2.7 tests</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#validating-code">Validating code</a></li>
 <li><a class="reference internal" href="#releasing-egg">Releasing egg</a></li>
 <li><a class="reference internal" href="#publishing-docs">Publishing docs</a></li>
@@ -102,10 +105,13 @@
 <li><a class="reference internal" href="#other" id="id4">Other</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#running-tests" id="id5">Running tests</a></li>
-<li><a class="reference internal" href="#validating-code" id="id6">Validating code</a></li>
-<li><a class="reference internal" href="#releasing-egg" id="id7">Releasing egg</a></li>
-<li><a class="reference internal" href="#publishing-docs" id="id8">Publishing docs</a></li>
+<li><a class="reference internal" href="#running-tests" id="id5">Running tests</a><ul>
+<li><a class="reference internal" href="#python-2-7-tests" id="id6">Python 2.7 tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#validating-code" id="id7">Validating code</a></li>
+<li><a class="reference internal" href="#releasing-egg" id="id8">Releasing egg</a></li>
+<li><a class="reference internal" href="#publishing-docs" id="id9">Publishing docs</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -189,22 +195,36 @@ vvv-install-git-pre-commit-hook</pre>
 <p class="last">All slashes and dashes are converted to underscores in test case names.</p>
 </div>
 <p>TODO: Use HTTP proxy (polipo) to speed up tests by caching downloads locally.</p>
+<div class="section" id="python-2-7-tests">
+<h3><a class="toc-backref" href="#id6">Python 2.7 tests</a><a class="headerlink" href="#python-2-7-tests" title="Permalink to this headline">¶</a></h3>
+<p>Create a new virtualenv with Python 2.7, activte it and run the tests in similar manner.</p>
+</div>
 </div>
 <div class="section" id="validating-code">
-<h2><a class="toc-backref" href="#id6">Validating code</a><a class="headerlink" href="#validating-code" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id7">Validating code</a><a class="headerlink" href="#validating-code" title="Permalink to this headline">¶</a></h2>
 <p>Your can self-validate the vvv codebase:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">source venv/bin/activate</span>
-
 <span class="go">vvv .</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="releasing-egg">
-<h2><a class="toc-backref" href="#id7">Releasing egg</a><a class="headerlink" href="#releasing-egg" title="Permalink to this headline">¶</a></h2>
-<p>Use <a class="reference external" href="http://pypi.python.org/pypi/jarn.mkrelease">jarn.mkrelease</a>:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="go">source PYTHON2-VENV/bin/activate</span>
-<span class="go">easy_install mkrelease</span>
-<span class="go">mkrelease -C -T -d pypi .</span>
+<h2><a class="toc-backref" href="#id8">Releasing egg</a><a class="headerlink" href="#releasing-egg" title="Permalink to this headline">¶</a></h2>
+<p>Use <tt class="docutils literal"><span class="pre">zest.releaser</span></tt> with <em>Python 2</em>:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">virtualenv -p python2.7 venv-py2</span>
+<span class="go">source venv-py2/bin/activate</span>
+<span class="go">easy_install zest.releaser</span>
+<span class="go">easy_install setuptools-git</span>
+</pre></div>
+</div>
+<p>Then for each release:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> edit setup.py and update the version number first
+<span class="go">source venv/bin/activate</span>
+<span class="go">python setup.py develop</span>
+<span class="go">cd tests ;  VVV_TEST_SKIP_REINSTALL=true VVV_TEST_OUTPUT=verbose python -m unittest discover ; cd ..</span>
+<span class="go">source venv-py2/bin/activate</span>
+<span class="go">python setup.py develop</span>
+<span class="go">fullrelease</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -220,7 +240,7 @@ vvv-install-git-pre-commit-hook</pre>
 </div>
 </div>
 <div class="section" id="publishing-docs">
-<h2><a class="toc-backref" href="#id8">Publishing docs</a><a class="headerlink" href="#publishing-docs" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">Publishing docs</a><a class="headerlink" href="#publishing-docs" title="Permalink to this headline">¶</a></h2>
 <p>rtfd.org does not seem to support Python 3 auto import modules.</p>
 <p>To publish docs on GitHub:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="go">. venv/bin/activate</span>
