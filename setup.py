@@ -10,7 +10,7 @@ from setuptools import setup, find_packages
 
 LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", "CHANGES.rst")).read()
 
-VERSION = "0.4.1"
+VERSION = "0.4.2"
 
 setup(name = "vvv",
     version=VERSION,

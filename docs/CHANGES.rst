@@ -1,7 +1,7 @@
 Changelog
 ===================
 
-0.4.2 (unreleased)
+0.4.2 (2012-06-30)
 ------------------
 
 - Windows compatibility confirmed [jsalonen]

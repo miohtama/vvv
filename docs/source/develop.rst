@@ -132,16 +132,6 @@ Then for each release::
     python setup.py develop
     fullrelease
 
-.. note ::
-
-    For mkrelease you need to Python 2.x virtualenv.
-
-mkrelease bug::
-
-      File "/Users/moo/code/vvv/venv/lib/python3.2/site-packages/jarn.mkrelease-3.5-py3.2.egg/jarn/mkrelease/mkrelease.py", line 237
-        except getopt.GetoptError, e:
-                                 ^
-    SyntaxError: invalid syntax
 
 Publishing docs
 ============================
