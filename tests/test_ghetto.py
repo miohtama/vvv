@@ -4,15 +4,11 @@
 
 """
 
-"""
-
-    test addjsglobals.py for various JS file styles
-
-"""
 
 import unittest
 
-from vvv.scripts import addjsglobals
+# R0201: 21,4:TestGhetto.test_import: Method could be a function
+# pylint: disable=R0201
 
 
 class TestGhetto(unittest.TestCase):
@@ -25,3 +21,4 @@ class TestGhetto(unittest.TestCase):
         See that script imports both Python 2.7 and Python 3.x
         """
         import ghettoci
+        ghettoci.POkE = True

@@ -216,7 +216,7 @@ class VVV(object):
 
         logger.debug("Using options config file: %s" % self.options)
 
-        if os.path.exists(self.options):
+        if self.options and os.path.exists(self.options):
             self.options_data = Config(self.options)
             self.options_data.load()
         else:
@@ -225,7 +225,7 @@ class VVV(object):
 
         logger.debug("Using files config file: %s" % self.files)
 
-        if os.path.exists(self.files):
+        if self.files and os.path.exists(self.files):
             self.files_data = Config(self.files)
             self.files_data.load()
         else:
