@@ -4,8 +4,9 @@ Changelog
 0.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Better instructions for running demo [miohtama]
 
+- Handle missing options file more gracefully [miohtama]
 
 0.4.2 (2012-06-30)
 ------------------
