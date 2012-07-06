@@ -19,7 +19,7 @@ from vvv import utils
 from vvv import sysdeps
 from vvv import download
 
-DEFAULT_COMMAND_LINE = "--reports=n --include-ids=y"
+DEFAULT_COMMAND_LINE = ""
 
 DEFAULT_CONFIG = """
 
@@ -57,8 +57,6 @@ class PEP8Plugin(Plugin):
         self.virtualenv_cmd = None
 
     def setup_local_options(self):
-        """ """
-
         # Extra options passed to the validator
         self.extra_options = self.options.get_string_option(self.id, "command-line", DEFAULT_COMMAND_LINE)
 
@@ -165,13 +163,7 @@ class PEP8Plugin(Plugin):
         Run installed pep8 validator against a file.
         """
 
-#        with utils.temp_config_file(self.pep8_configuration) as config_fname:
-
-#            options = self.extra_options
-#            if not "--rcfile" in options:
-#                options += " --rcfile=%s" % config_fname
-
-        options = ""
+        options = self.extra_options
 
         if self.pep8_command:
             exitcode, output = utils.shell(self.logger, '%s %s "%s"' % (self.pep8_command, options, fname))
