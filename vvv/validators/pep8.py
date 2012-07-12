@@ -5,7 +5,82 @@ Python (pep8)
 
 Validator name: ``pep8``
 
+Validate Python files using PEP8.
+
+Supported files
+----------------
+
+* \*.py
+
+Options
+-----------
+
+The default pylint checks are very strict.
+Example ``validation-options.yaml``::
+
+    pep8:
+        command-line: --ignore E501
+
+    linelength:
+        length: 250
+
+host-python-env
+++++++++++++++++
+
+If ``true`` do not create a virtualenv for running pep8, but install pep8 using
+the active ``python`` environment where vvv is run.
+
+Default is ``false``.
+
+.. note ::
+
+    If you change this you need run ``vvv --reinstall``.
+
+pep8-command
++++++++++++++++++++++
+
+A path spec pointing to used ``pep8`` command.
+
+Use this command to run pep8. This is for cases where ``host-python-env``
+is not enough to tame your Python package dependencies.
+
+If this option starts with . it is considered to be a directory reference relative to the project root.
+
+IF this option starts with / it is considered to be absolute directory reference.
+
+Otherwise normal path look behavior is used (UNIX ``which`` commmand behavior).
+
+Example::
+
+    pylint:
+      enabled: true
+      python3k: false
+      # Points to buildout/bin/pep8 command two levels below project folder
+      pylint-command: ../../bin/pep8
+
+command-line
+++++++++++++
+
+Give pylint command line options.
+
+Default is empty.
+
+python3k
+++++++++++++
+
+If true set-up pep8 for Python 3.x. The default is Python 2.x.
+
+.. note ::
+
+    If you change this you need run ``vvv --reinstall``.
+
+More info
+------------
+
+* http://pypi.python.org/pypi/pep8/
+
 """
+
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -17,13 +92,8 @@ from vvv.plugin import Plugin
 from vvv import utils
 
 from vvv import sysdeps
-from vvv import download
 
 DEFAULT_COMMAND_LINE = ""
-
-DEFAULT_CONFIG = """
-
-"""
 
 
 class PEP8Plugin(Plugin):
@@ -45,9 +115,6 @@ class PEP8Plugin(Plugin):
         self.python3k = None
 
         #: Configuration file option
-#        self.pep8_configuration = None
-
-        #: Configuration file option
         self.host_python = None
 
         #: Configuration file option
@@ -57,10 +124,10 @@ class PEP8Plugin(Plugin):
         self.virtualenv_cmd = None
 
     def setup_local_options(self):
+        """ """
+
         # Extra options passed to the validator
         self.extra_options = self.options.get_string_option(self.id, "command-line", DEFAULT_COMMAND_LINE)
-
-#        self.pep8_configuration = self.options.get_string_option(self.id, "configuration", "")
 
         if not self.hint:
             self.hint = "Python source code did not pass PEP8 validator. Please fix issues or disable warnings in .py file itself or validation-options.yaml file."
@@ -140,21 +207,8 @@ class PEP8Plugin(Plugin):
         if self.pep8_command:
             return
 
-        if self.python3k:
-            python = "python3.2"
-        else:
-            # General virtualenv'ed Python
-            python = "python"
-
-        if self.host_python:
-            # Use whatever python command is currently active
-            python = "python"
-        else:
+        if not self.host_python:
             sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, py3=self.python3k)
-
-        if self.pep8_command:
-            # Use given Python commamnd
-            python = self.pep8_command
 
         self.run_virtualenv_command("easy_install pep8", raise_error=True)
 
@@ -171,9 +225,7 @@ class PEP8Plugin(Plugin):
             exitcode, output = self.run_virtualenv_command('pep8 %s "%s"' % (options, fname))
 
         if exitcode == 0:
-            return True # Validation ok
+            return True     # Validation ok
         else:
             self.reporter.report_unstructured(self.id, output, fname=fname)
             return False
-
-
