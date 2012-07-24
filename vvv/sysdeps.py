@@ -209,7 +209,7 @@ def create_virtualenv(logger, venv_target, target, egg_spec=None, py3=True):
 
     # Install eny eggs if needed
     if egg_spec:
-        shell(logger, 'source %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
+        shell(logger, '. %s/bin/activate ; easy_install "%s"' % (target, egg_spec), raise_error=True)
 
 def run_virtualenv_command(logger, target, command, raise_error=False):
     """
