@@ -49,6 +49,7 @@ setup(name = "vvv",
       rst = vvv.validators.rst:RestructuredTextPlugin
       evil-spacebar = vvv.validators.evilspace:EvilSpacePlugin
       pep8 = vvv.validators.pep8:PEP8Plugin
+      pyflakes = vvv.validators.pyflakes:PyflakesPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point
