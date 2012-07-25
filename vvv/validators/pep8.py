@@ -15,7 +15,7 @@ Supported files
 Options
 -----------
 
-The default pylint checks are very strict.
+The default pep8 checks are very strict.
 Example ``validation-options.yaml``::
 
     pep8:
@@ -46,22 +46,22 @@ is not enough to tame your Python package dependencies.
 
 If this option starts with . it is considered to be a directory reference relative to the project root.
 
-IF this option starts with / it is considered to be absolute directory reference.
+If this option starts with / it is considered to be absolute directory reference.
 
 Otherwise normal path look behavior is used (UNIX ``which`` commmand behavior).
 
 Example::
 
-    pylint:
+    pep8:
       enabled: true
       python3k: false
       # Points to buildout/bin/pep8 command two levels below project folder
-      pylint-command: ../../bin/pep8
+      pep8-command: ../../bin/pep8
 
 command-line
 ++++++++++++
 
-Give pylint command line options.
+Give pep8 command line options.
 
 Default is empty.
 
