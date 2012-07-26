@@ -84,7 +84,7 @@ class PyflakesPlugin(Plugin):
         #: Configuration file option
         self.extra_options = None
 
-        #: Virtualenv path used to run pyflakess
+        #: Virtualenv path used to run pyflakes
         self.virtualenv = None
 
         #: Configuration file option
