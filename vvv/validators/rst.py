@@ -27,7 +27,15 @@ Supported files
 Options
 -----------
 
-None.
+python3k
+++++++++++++
+
+If true set-up pylint for Python 3.x. The default is Python 2.x.
+
+.. note ::
+
+    If you change this you need run ``vvv --reinstall``.
+
 
 More information
 ----------------
@@ -60,6 +68,9 @@ class RestructuredTextPlugin(Plugin):
         #: Location of virtualenv.py if operating system cannot supply working one
         self.virtualenv_cmd = None
 
+        #: Configuration file option
+        self.python3k = None
+
     def setup_local_options(self):
         """ """
         if not self.hint:
@@ -68,6 +79,8 @@ class RestructuredTextPlugin(Plugin):
         self.virtualenv = os.path.join(self.installation_path, "docutils-virtualenv")
 
         self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
+
+        self.python3k = self.options.get_boolean_option(self.id, "python3k", False)
 
     def get_default_matchlist(self):
         """
@@ -91,7 +104,7 @@ class RestructuredTextPlugin(Plugin):
         """
         """
         self.logger.info("Installing %s" % self.virtualenv)
-        sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, egg_spec="docutils==0.8.1")
+        sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, egg_spec="docutils==0.8.1", py3=self.python3k)
 
     def validate(self, fname):
         """
