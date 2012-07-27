@@ -255,7 +255,7 @@ def get_bin_path():
             return os.path.dirname(vvv)
 
 
-        raise RuntimeError("vvv runnable did not exist at %s" % os.path.abspath(vvv))
+        raise RuntimeError("vvv runnable did not exist at %s" % current_path)
         
     return current_path
 
