@@ -1,5 +1,5 @@
 ============================
-Extend and develop
+Develop and extend
 ============================
 
 .. contents :: :local:
