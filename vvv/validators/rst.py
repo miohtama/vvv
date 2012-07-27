@@ -76,11 +76,13 @@ class RestructuredTextPlugin(Plugin):
         if not self.hint:
             self.hint = "Restructed text files contained errors"
 
-        self.virtualenv = os.path.join(self.installation_path, "docutils-virtualenv")
-
         self.virtualenv_cmd = os.path.join(self.installation_path, "virtualenv.py")
 
         self.python3k = self.options.get_boolean_option(self.id, "python3k", False)
+
+        #: Path to the virtual env location,
+        # vary by Python version so we don't get conflicting envs
+        self.virtualenv = os.path.join(self.installation_path, "docutils-virtualenv-{}".format("python3k" if self.python3k else "python2"))
 
     def get_default_matchlist(self):
         """
@@ -99,12 +101,13 @@ class RestructuredTextPlugin(Plugin):
         """
         has_created_virtualenv =  os.path.exists(self.virtualenv)
         return has_created_virtualenv
-        
+
     def install(self):
         """
         """
         self.logger.info("Installing %s" % self.virtualenv)
         sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, egg_spec="docutils==0.8.1", py3=self.python3k)
+        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install Pygments", raise_error=True)
 
     def validate(self, fname):
         """
@@ -114,7 +117,7 @@ class RestructuredTextPlugin(Plugin):
         binloc = os.path.join(sysdeps.get_bin_path(), "vvv-validate-rst")
 
         exitcode, output = sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "%s %s" % (binloc, fname))
-    
+
         if exitcode != 0:
             self.reporter.report_unstructured(self.id, output, fname=fname)
             return False
