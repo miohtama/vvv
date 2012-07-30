@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <body>
+    <h1>Polls</h1>
+
+    <ul>
+      <li tal:repeat="poll context/values">
+        <a href="" tal:attributes="href python: view.url(poll)"
+                   tal:content="poll/question">
+          A poll
+        </a>
+      </li>
+    </ul>
+
+    <a href="" tal:attributes="href python: view.url('add')">Add a poll</a>
+  </body>
+</html>
