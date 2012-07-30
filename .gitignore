@@ -53,3 +53,9 @@ venv-py2
 __pycache__
 
 tests/test-installation-environment
+
+bin/
+distribute-*.tar.gz
+include/
+lib/
+local/
