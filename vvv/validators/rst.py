@@ -107,7 +107,7 @@ class RestructuredTextPlugin(Plugin):
         """
         self.logger.info("Installing %s" % self.virtualenv)
         sysdeps.create_virtualenv(self.logger, self.virtualenv_cmd, self.virtualenv, egg_spec="docutils==0.8.1", py3=self.python3k)
-        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install Pygments", raise_error=True)
+#        sysdeps.run_virtualenv_command(self.logger, self.virtualenv, "easy_install Pygments", raise_error=True)
 
     def validate(self, fname):
         """
