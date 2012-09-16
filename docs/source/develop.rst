@@ -117,6 +117,7 @@ Releasing egg
 
 Use ``zest.releaser`` with *Python 2*::
 
+
     virtualenv -p python2.7 venv-py2
     source venv-py2/bin/activate
     easy_install zest.releaser

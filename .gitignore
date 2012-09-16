@@ -59,3 +59,4 @@ distribute-*.tar.gz
 include/
 lib/
 local/
+virtualenv.py

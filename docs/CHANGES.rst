@@ -8,6 +8,10 @@ Changelog
 
 - Handle missing options file more gracefully [miohtama]
 
+- Added ZPT validator [matejc]
+
+- Fixes for RST validator [matejc]
+
 0.4.2 (2012-06-30)
 ------------------
 
