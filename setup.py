@@ -27,7 +27,8 @@ setup(name = "vvv",
         "PyYAML",
         "plac",
         "requests",
-        "docutils" # TODO: Could be upgraded to 0.9, but not tested
+        "docutils", # TODO: Could be upgraded to 0.9, but not tested
+        "Pygments"
     ],
     packages = find_packages(exclude=["tests"]),
     classifiers=[
