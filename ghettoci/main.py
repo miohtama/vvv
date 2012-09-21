@@ -135,8 +135,8 @@ You can receive a build status message to `a Skype chat via Sevabot <https://git
 Example::
 
     ghetto-ci -force -alwaysoutput \
-        -skypeurl "http://localhost:5000/secret/chatid" \
-        /repo \
+        -skypeurl "http://localhost:5000/zapier/87858ec5841cd97d127b642a81de1d20/secret/" \
+        src/sits-eggs \
         /tmp/status-file.ch \
         'bin/test -s Products.SitsHospital -t test_new_protocol'
 
@@ -507,14 +507,6 @@ class EmailNotifier(object):
         finally:
             smtp.close()
 
-    def print_notification(self, subject, output):
-        """
-        Dump the notification to stdout
-        """
-        print(subject)
-        print("-" * len(subject))
-        print(output)
-
     def notify(self, subject, output):
         """
         Notify about the tests status.
@@ -525,7 +517,16 @@ class EmailNotifier(object):
 
 class PrintNotifier(object):
     """
+    Print status to stdout
     """
+
+    def print_notification(self, subject, output):
+        """
+        Dump the notification to stdout
+        """
+        print(subject)
+        print("-" * len(subject))
+        print(output)
 
     def notify(self, subject, output):
         """
@@ -539,7 +540,7 @@ class SkypeNotifier(object):
     Sevabot based Skype notifications.
     """
 
-    def __init_(self, url):
+    def __init__(self, url):
         """
         """
         self.url = url
@@ -604,8 +605,8 @@ def main(
     smtpfrom=None,
     envelopefrom=None,
     receivers=None,
-    force=None,
-    alwaysoutput=None,
+    force=False,
+    alwaysoutput=False,
     skypeurl=None,
     repository=None,
     statusfile=None,
