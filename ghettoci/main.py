@@ -8,8 +8,8 @@ What it is
 
 Ghetto-CI is a Python script in 145 statements fullfilling your dirty `continuous integration <https://en.wikipedia.org/wiki/Continuous_integration>`_ needs.
 
-`Source code (one file, only 145 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
-and for your convenience the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_. 
+`Source code (one file, only 145 statements) is on Github <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_
+and for your convenience the script is bundled in `VVV package on PyPi <http://pypi.python.org/pypi/vvv>`_.
 
 What it does
 --------------
@@ -24,22 +24,22 @@ What it does
 
 4. See if the tests status since the last run has changed from success to failure or vice versa
 
-5. Send email notifications to the team that now fecal matter impacts the rotary ventlidation device 
+5. Send email notifications to the team that now fecal matter impacts the rotary ventlidation device
 
 Why to use
 ---------------
 
-To improve the quality and cost effectiveness of your little software project, 
+To improve the quality and cost effectiveness of your little software project,
 you want to detect code changes breaking your project [automated tests].
 
-You might want to do this 
+You might want to do this
 `without installing 48 MB of Java software <http://jenkins-ci.org/>`_ on your server.
-On the other hand, 
+On the other hand,
 `very good SaaS oriented alternatives are tied to public Github repositories <travis-ci.org>`_.
 Homebrew shell scripts for tasks like this are nice, but no one wants to read or touch shell scripts
-written by others.  
+written by others.
 
-*Ghetto-CI* script is mostly self-contained, 
+*Ghetto-CI* script is mostly self-contained,
 easy to understand, easy to hack into pieces, for your very own need.
 It is a solution that *scales down*. Just toss it on a corner of a server
 and it will churn happily and keep its owners proud.
@@ -52,14 +52,14 @@ Installation
 
 .. note ::
 
-    As a prerequisitement you need a working Python 3 command  
-    installed on your operating system with virtualenv package. 
+    As a prerequisitement you need a working Python 3 command
+    installed on your operating system with virtualenv package.
     For detailed instructions see `VVV installation manual <http://miohtama.github.com/vvv/installation.html#installing-locally-using-virtualenv>`_
 
 .. note ::
 
-    If you don't feel eggy you can 
-    just `grab the self-contained source file <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_ 
+    If you don't feel eggy you can
+    just `grab the self-contained source file <https://github.com/miohtama/vvv/blob/master/ghettoci/main.py>`_
     as long as you have plac package also installed for your Python.
 
 Create Python 3 virtualenv and run Ghetto-CI script using Python interpreter configured under this virtualenv::
@@ -72,8 +72,8 @@ Create Python 3 virtualenv and run Ghetto-CI script using Python interpreter con
 
     # ghetto-ci now lives in vvv-venv/bin/ghetto-ci
 
-    # Running the script, using the Python environment prepared 
-    # to see that everything works (source command above 
+    # Running the script, using the Python environment prepared
+    # to see that everything works (source command above
     # has added this to PATH)
     ghetto-ci -h
 
@@ -86,17 +86,17 @@ You need to prepare
   ghetto-ci can run ``svn up`` command.
 
 * A command to execute unit tests and such. This command must return process exit code 0 on success.
-  If you don't bother writing tests, low end alternative is just 
-  `lint and validate your source code <http://pypi.python.org/pypi/vvv>`_. 
+  If you don't bother writing tests, low end alternative is just
+  `lint and validate your source code <http://pypi.python.org/pypi/vvv>`_.
 
 * A file storing the test status. Ghetto-CI status file keeps track whether the last round
   or tests succeeded or failed. You'll get email reports only when the test status changed -
-  there is little need to get "tests succeeded" email for every commit. 
+  there is little need to get "tests succeeded" email for every commit.
 
 * Email server details to send out notifications. Gmail works perfectly if you
   are in short of SMTP servers.
 
-Example of a command for running continuous integration against ``/my/svn/repo`` checkout where 
+Example of a command for running continuous integration against ``/my/svn/repo`` checkout where
 ``bin/test`` command is used to run the unit tests::
 
     # Will print output to console because email notification details are not given
@@ -105,9 +105,9 @@ Example of a command for running continuous integration against ``/my/svn/repo``
 If the tests status have changed since the last run, or the running fails
 due to internal error, the command outputs the result. Otherwise
 command outputs nothing. Exit code 0 indicates that test succeeded.
-    
+
 Then just make Ghetto-CI to poll the repository in UNIX cron clock deamon.
-Create a dummy UNIX user which can checkout and pull updates on the source code. 
+Create a dummy UNIX user which can checkout and pull updates on the source code.
 Create file ``/etc/cron.hourly/continuous-integration-tests`` which will hourly run the tests (Ubuntu example)::
 
     #/bin/sh
@@ -127,6 +127,19 @@ test email output::
 
     ghetto-ci -force -alwaysoutput ...email settings here... /repo /tmp/status-file.ci true
 
+Skype integration example
+---------------------------
+
+You can receive a build status message to `a Skype chat via Sevabot <https://github.com/opensourcehacker/sevabot>`_.
+
+Example::
+
+    ghetto-ci -force -alwaysoutput \
+        -skypeurl "http://localhost:5000/secret/chatid" \
+        /repo \
+        /tmp/status-file.ch \
+        'bin/test -s Products.SitsHospital -t test_new_protocol'
+
 Complex usage example
 ------------------------
 
@@ -145,7 +158,7 @@ by Cron job, to poll several SVN repositories which have different tests to run.
     # Run this file in buildout main folder:
     #
     # cd ~/mybuildoutfolder
-    # src/my-repo/continuos-integration.sh 
+    # src/my-repo/continuos-integration.sh
     #
     #
 
@@ -153,7 +166,7 @@ by Cron job, to poll several SVN repositories which have different tests to run.
     RECEIVERS="person@asdf.com, person2@asdf.com, person3@example.com"
 
     # Ghetto-CI template command which is run against multiple repos / multiple test commands
-    # We use localhost 25 as the SMTP server -> assume your UNIX server has postfix 
+    # We use localhost 25 as the SMTP server -> assume your UNIX server has postfix
     # or something configured... could be gmail.com servers also here
     GHETTOCI="vvv-venv/bin/ghetto-ci \
         -smtpserver smtp.gmail.com \
@@ -167,9 +180,9 @@ by Cron job, to poll several SVN repositories which have different tests to run.
     # Note that SVN revision info is folding down in the folders
     # so you can target tests to a specific SVN repo subfolder
 
-    # Note: eval needs to be used due to shell script quotation mark fuzz 
+    # Note: eval needs to be used due to shell script quotation mark fuzz
 
-    # See that buildout completes (no changes in the external environment, like someone accidentally 
+    # See that buildout completes (no changes in the external environment, like someone accidentally
     # publishing broken packages on PyPI). We actually place buildout.cfg under this SVN repo
     # and then just symlink it
     eval $GHETTOCI src/my-repo buildout.ci 'bin/buildout'
@@ -178,14 +191,14 @@ by Cron job, to poll several SVN repositories which have different tests to run.
     eval $GHETTOCI src/my-repo/Products.Hospital hospital.ci \"bin/test -s Products.Hospital\"
 
     # Run tests against patient product
-    eval $GHETTOCI src/my-repo/Products.Patient patient.ci \"bin/test -s Products.Patient\" 
+    eval $GHETTOCI src/my-repo/Products.Patient patient.ci \"bin/test -s Products.Patient\"
 
 
 Internals
 ------------------------
 
-`plac rocks for command line parsing <http://plac.googlecode.com/hg/doc/plac.html>`_, 
-especially with Python 3. 
+`plac rocks for command line parsing <http://plac.googlecode.com/hg/doc/plac.html>`_,
+especially with Python 3.
 
 The code is pylint valid - and beautiful, Pythonic.
 
@@ -229,13 +242,19 @@ __license__ = "WTFPL"
 # pylint: disable=R0201, W0611
 
 # Python imports
-from abc import ABCMeta, abstractmethod
-from email.mime.text import MIMEText 
+#from abc import ABCMeta, abstractmethod
+from email.mime.text import MIMEText
 import pickle
 import os
 import sys
 import subprocess
-from smtplib import SMTP_SSL, SMTP 
+from smtplib import SMTP_SSL, SMTP
+import urllib
+import urllib2
+
+
+# Third party
+import plac
 
 #: Template used in email notifications
 NOTIFICATION_BODY_TEMPLATE = """
@@ -248,12 +267,14 @@ Test output:
 %(test_output)s
 """
 
+
 def split_first(line, separator):
     """
-    Split a string to (first part, remainder) 
+    Split a string to (first part, remainder)
     """
     parts = line.split(separator)
     return parts[0], separator.join(parts[1:])
+
 
 def shell(cmdline):
     """
@@ -268,11 +289,12 @@ def shell(cmdline):
     out, err = process.communicate()
 
     # :E1103: *%s %r has no %r member (but some types could not be inferred)*
-    # pylint: disable=E1103 
+    # pylint: disable=E1103
     out = out.decode("utf-8")
     err = err.decode("utf-8")
 
-    return (process.returncode, out + err)    
+    return (process.returncode, out + err)
+
 
 class Status:
     """
@@ -295,7 +317,7 @@ class Status:
         Read status file.
 
         Return fresh status if file does not exist.
-        """    
+        """
 
         if not os.path.exists(path):
             # Status file do not exist, get default status
@@ -307,19 +329,19 @@ class Status:
             return pickle.load(f)
         finally:
             f.close()
-        
+
     @classmethod
     def write(cls, path, status):
         """
         Write status file
-        """        
+        """
         f = open(path, "wb")
         pickle.dump(status, f)
         f.close()
 
 
-class Repo(metaclass=ABCMeta):
-    """ 
+class Repo(object):
+    """
     Define interface for presenting one monitored software repository in ghetto-ci.
     """
     def __init__(self, path):
@@ -328,12 +350,10 @@ class Repo(metaclass=ABCMeta):
         """
         self.path = path
 
-    @abstractmethod
     def update(self):
         """ Update repo from version control """
         pass
 
-    @abstractmethod
     def get_last_commit_info(self):
         """
         Get the last commit status.
@@ -341,6 +361,7 @@ class Repo(metaclass=ABCMeta):
         :return tuple(commit id, commiter, message, raw_output) or (None, None, None, raw_output) on error
         """
         return (None, None, None)
+
 
 class SVNRepo(Repo):
     """ Handle Subversion repository update and last commit info extraction """
@@ -375,7 +396,7 @@ class SVNRepo(Repo):
         Extract the last commit author and message.
 
 
-        :return: tuple (success, last commiter, output / last commit message) 
+        :return: tuple (success, last commiter, output / last commit message)
         """
         exit_code, output = shell("svn log -l 1 %s" % self.path)
 
@@ -389,7 +410,7 @@ class SVNRepo(Repo):
         author_line = lines[1]
         author = author_line.split("|")[1].strip()
 
-        return  (True, author, output)
+        return (True, author, output)
 
     def get_svn_info(self):
         """
@@ -406,25 +427,26 @@ class SVNRepo(Repo):
 
         return data, output
 
-class Notifier:
+
+class EmailNotifier(object):
     """
-    Intelligent spam being. Print messages to stdout and send emai if 
+    Intelligent spam being. Print messages to stdout and send emai if
     SMTP server details are available.
     """
 
     def __init__(self, server, port, username, password, receivers, from_address, envelope_from):
         """
         :param server: SMTP server
-        
+
         :param port: SMTP port, autodetects SSL
-        
-        :param username: SMTP credentials 
-        
+
+        :param username: SMTP credentials
+
         :param password: SMTP password
-        
+
         :param receivers: String, comma separated list of receivers
 
-        :param from_email: Sender's email address 
+        :param from_email: Sender's email address
         """
 
         self.server = server
@@ -451,12 +473,12 @@ class Notifier:
 
         if not self.receivers:
             raise RuntimeError("Cannot send email - no receivers given")
-    
+
         if self.port == 465:
             # SSL encryption from the start
             smtp = SMTP_SSL(self.server, self.port)
-        else: 
-            # Plain-text SMTP, or opt-in to SSL using starttls() command 
+        else:
+            # Plain-text SMTP, or opt-in to SSL using starttls() command
             smtp = SMTP(self.server, self.port)
 
         msg = MIMEText(output, "text/plain")
@@ -491,7 +513,7 @@ class Notifier:
         """
         print(subject)
         print("-" * len(subject))
-        print(output) 
+        print(output)
 
     def notify(self, subject, output):
         """
@@ -500,8 +522,51 @@ class Notifier:
         if self.server:
             self.send_email_notification(subject, output)
 
+
+class PrintNotifier(object):
+    """
+    """
+
+    def notify(self, subject, output):
+        """
+        Notify about the tests status.
+        """
         self.print_notification(subject, output)
-        
+
+
+class SkypeNotifier(object):
+    """
+    Sevabot based Skype notifications.
+    """
+
+    def __init_(self, url):
+        """
+        """
+        self.url = url
+
+    def send_skype_message(self, msg):
+        """
+        """
+
+        # Zapier hook format
+        payload = dict(data=msg)
+
+        # Construct full URL to sevabot zapier hook
+
+        post_data = urllib.urlencode(payload)
+        r = urllib2.urlopen(self.url, post_data)
+        r.read()  # Will abort on non-HTTP 200 answer
+
+    def notify(self, subject, output):
+        """
+        Notify about the tests status.
+
+        Skype gets only the subject line.
+        """
+        if self.url:
+            self.send_skype_message(subject)
+
+
 def run_tests(test_command):
     """
     Run testing command.
@@ -514,76 +579,104 @@ def run_tests(test_command):
 
 # Parsing command line with plac rocks
 # http://plac.googlecode.com/hg/doc/plac.html
-def main(smtpserver : ("SMTP server address for mail out. Required if you indent to use email notifications.", "option"), 
-         smtpport : ("SMTP server port for mail out", "option", None, int), 
-         smtpuser : ("SMTP server username", "option"),
-         smtppassword : ("SMTP server password", "option"),
-         smtpfrom : ("Notification email From address", "option"),
-         envelopefrom : ("Verbose Name <from@site.com> sender address in outgoing email", "option"),
-         receivers : ("Notification email receives as comma separated string", "option"),
-         force : ("Run tests regardless if there have been any repository updates", "flag"),
-         alwaysoutput : ("Print test run output regardless whether test status has changed since the last run", "flag"),
+@plac.annotations(
+smtpserver=("SMTP server address for mail out. Required if you indent to use email notifications.", "option"),
+smtpport=("SMTP server port for mail out", "option", None, int),
+smtpuser=("SMTP server username", "option"),
+smtppassword=("SMTP server password", "option"),
+smtpfrom=("Notification email From address", "option"),
+envelopefrom=("Verbose Name <from@site.com> sender address in outgoing email", "option"),
+receivers=("Notification email receives as comma separated string", "option"),
+force=("Run tests regardless if there have been any repository updates", "flag"),
+alwaysoutput=("Print test run output regardless whether test status has changed since the last run", "flag"),
 
-         repository : ("Monitored source control repository (SVN)", "positional"), 
-         statusfile : ("Status file to hold CI history of tests", "positional"),
-         testcommand : ("Command to run tests. Exit code 0 indicates test success", "positional"), 
-         ):
+skypeurl=("Send build status to Skype chat (Sevabot integration)", "option"),
+
+repository=("Monitored source control repository (SVN)", "positional"),
+statusfile=("Status file to hold CI history of tests", "positional"),
+testcommand=("Command to run tests. Exit code 0 indicates test success", "positional"),
+)
+def main(
+    smtpserver=None,
+    smtpport=None,
+    smtpuser=None,
+    smtppassword=None,
+    smtpfrom=None,
+    envelopefrom=None,
+    receivers=None,
+    force=None,
+    alwaysoutput=None,
+    skypeurl=None,
+    repository=None,
+    statusfile=None,
+    testcommand=None
+    ):
     """
     Ghetto-CI
 
     A simple continuous integration server.
-    
+
     Ghetto-CI will monitor the software repository.
     Give a (Subversion) software repository and a test command run test against it.
-    Make this command run regularly e.g. using UNIX cron service.    
+    Make this command run regularly e.g. using UNIX cron service.
     You will get email notification when test command status changes from exit code 0.
 
     For more information see http://pypi.python.org/pypi/vvv
     """
 
-    notifier = Notifier(server=smtpserver, port=smtpport, 
+    email_notifier = EmailNotifier(server=smtpserver, port=smtpport,
                       username=smtpuser, password=smtppassword, from_address=smtpfrom,
                       receivers=receivers, envelope_from=envelopefrom)
 
-    repo = SVNRepo(repository)    
+    skype_notifier = SkypeNotifier(url=skypeurl)
+
+    print_notifier = PrintNotifier()
+
+    notifiers = [email_notifier, skype_notifier, print_notifier]
+
+    def notify(subject, msg):
+        for n in notifiers:
+            n.notify(subject, msg)
+
+    repo = SVNRepo(repository)
     status = Status.read(statusfile)
 
     success, output = repo.update()
 
     # Handle repo update failure
     if not success:
-        notifier.notify("Could not update repository: %s. Probably not valid SVN repo?\n" % repository, output)
+        notify("Could not update repository: %s. Probably not valid SVN repo?\n" % repository, output)
         return 1
 
     commit_id, commit_author, commit_message, output = repo.get_last_commit_info()
 
     # Handle repo info failure
     if not commit_id:
-        notifier.notify("Could not get commit info: %s\n%s" % (repository, output), "Check svn info by hand")
+        notify("Could not get commit info: %s\n%s" % (repository, output), "Check svn info by hand")
         return 1
 
     # See if repository status has changed
-    if commit_id  != status.last_commit_id or force:
+    if commit_id != status.last_commit_id or force:
         test_success, output = run_tests(testcommand)
     else:
         # No new commits, nothing to do
         print("No changes in repo %s" % repository)
         return 0
-    
+
     # Test run status have changed since last run
     if (test_success != status.test_success) or alwaysoutput:
 
-        notification_body = NOTIFICATION_BODY_TEMPLATE % dict(commit = commit_id, author=commit_author, 
+        notification_body = NOTIFICATION_BODY_TEMPLATE % dict(commit=commit_id, author=commit_author,
             commit_message=commit_message, test_output=output)
 
         if test_success:
-            subject = "Test now succeed for %s" % testcommand
+            subject = "Test succeed for %s" % testcommand
         else:
-            subject = "Test now fail for %s" % testcommand
+            subject = "Test fail for %s" % testcommand
 
-        notifier.notify(subject, notification_body)
+        notify(subject, notification_body)
 
-    # Update persistent test status 
+    # Update persistent test status
     new_status = Status()
     new_status.last_commit_id = commit_id
     new_status.test_success = test_success
@@ -594,6 +687,7 @@ def main(smtpserver : ("SMTP server address for mail out. Required if you indent
     else:
         return 1
 
+
 def entry_point():
     """
     Enter the via setup.py entry_point declaration.
@@ -603,6 +697,7 @@ def entry_point():
     import plac
     exitcode = plac.call(main)
     sys.exit(exitcode)
+
 
 if __name__ == "__main__":
     entry_point()
