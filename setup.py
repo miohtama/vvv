@@ -51,6 +51,7 @@ setup(name = "vvv",
       evil-spacebar = vvv.validators.evilspace:EvilSpacePlugin
       pep8 = vvv.validators.pep8:PEP8Plugin
       pyflakes = vvv.validators.pyflakes:PyflakesPlugin
+      zptlint = vvv.validators.zptlint:ZptlintPlugin
 
       [console_scripts]
       vvv = vvv.main:entry_point
