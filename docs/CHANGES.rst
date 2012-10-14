@@ -1,7 +1,7 @@
 Changelog
 ===================
 
-0.4.3 (unreleased)
+0.4.3 (2012-10-14)
 ------------------
 
 - Better instructions for running demo [miohtama]
@@ -11,6 +11,8 @@ Changelog
 - Added ZPT validator [matejc]
 
 - Fixes for RST validator [matejc]
+
+- Ghetto CI runs on Python 2.7 [miohtama]
 
 0.4.2 (2012-06-30)
 ------------------

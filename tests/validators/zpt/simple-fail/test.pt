@@ -11,7 +11,3 @@
         </a>
       </li>
     </ul>
-
-    <a href="" tal:attributes="href python: view.url('add')">Add a poll</a>
-  </body>
-</html>
