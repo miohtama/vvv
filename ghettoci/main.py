@@ -481,7 +481,7 @@ class EmailNotifier(object):
             # Plain-text SMTP, or opt-in to SSL using starttls() command
             smtp = SMTP(self.server, self.port)
 
-        msg = MIMEText(output, "text/plain")
+        msg = MIMEText(output, "plain")
         msg['Subject'] = subject
 
         if self.envelope_from:
