@@ -625,6 +625,15 @@ def main(
     For more information see http://pypi.python.org/pypi/vvv
     """
 
+    if not repository:
+        sys.exit("No repository argument given")
+
+    if not statusfile:
+        sys.exit("No status file argument given")
+
+    if not testcommand:
+        sys.exit("No test command argument given")
+
     email_notifier = EmailNotifier(server=smtpserver, port=smtpport,
                       username=smtpuser, password=smtppassword, from_address=smtpfrom,
                       receivers=receivers, envelope_from=envelopefrom)
