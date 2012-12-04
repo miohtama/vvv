@@ -107,16 +107,32 @@ If the tests status have changed since the last run, or the running fails
 due to internal error, the command outputs the result. Otherwise
 command outputs nothing. Exit code 0 indicates that test succeeded.
 
-Then just make Ghetto-CI to poll the repository in UNIX cron clock deamon.
-Create a dummy UNIX user which can checkout and pull updates on the source code.
-Create file ``/etc/cron.hourly/continuous-integration-tests`` which will hourly run the tests (Ubuntu example)::
+Deployment on the server
+---------------------------------
 
-    #/bin/sh
-    sudo -i -u yourunixuser "ghetto-ci /my/svn/repo /tmp/status-file.ci 'cd /my/svn/repo && bin/test'
+.. note ::
 
-Naturally the command to launch the tests is specific to your software project.
+    On Windows you can accomplish this using any automator provided by your operating system vendor.
 
-On Windows you can accomplish this using any automator provided by your operating system vendor.
+
+Createa a wrapper script which executes all the CI commands (TODO example).
+
+Create a wrapper shell script which runs ghetto-ci command with 5 minute interval
+
+ci-loop.sh::
+
+    #!/bin/sh
+    #
+    # Run CI check for every 5 minutes
+    #
+
+    while true
+    do
+        continous-integration.sh
+        sleep 300
+    done
+
+Start script automatically on the server start-up (TODO).
 
 Tips
 ------------------------
