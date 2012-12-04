@@ -12,14 +12,14 @@ LONG_DESCRIPTION = open("README.rst").read() + "\n" + open(os.path.join("docs", 
 
 VERSION = "0.4.3"
 
-setup(name = "vvv",
+setup(name="vvv",
     version=VERSION,
-    long_description = LONG_DESCRIPTION,
-    description = "A convenience utility for software source code validation and linting",
-    author = "Mikko Ohtamaa",
-    author_email = "mikko@opensourcehacker.com",
-    url = "https://github.com/miohtama/vvv",
-    install_requires = ["setuptools",
+    long_description=LONG_DESCRIPTION,
+    description="A convenience utility for software source code validation and linting",
+    author="Mikko Ohtamaa",
+    author_email="mikko@opensourcehacker.com",
+    url="https://github.com/miohtama/vvv",
+    install_requires=["setuptools",
 #        "PyYAML==3.10",
 #        "plac==0.9.0",
 #        "requests==0.11.1",
@@ -27,17 +27,17 @@ setup(name = "vvv",
         "PyYAML",
         "plac",
         "requests",
-        "docutils", # TODO: Could be upgraded to 0.9, but not tested
+        "docutils",
         "Pygments"
     ],
-    packages = find_packages(exclude=["tests"]),
+    packages=find_packages(exclude=["tests"]),
     classifiers=[
         "Programming Language :: Python",
     ],
     license="GPL3+",
     # Don't install as zipped as we want to poke non-py files inside dist archive
-    zip_safe = False,
-    include_package_data = True,
+    zip_safe=False,
+    include_package_data=True,
     entry_points="""
       # -*- Entry points: -*-
       [vvv]

@@ -4,8 +4,13 @@ Changelog
 0.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed ghetto-ci running on Python 3 [miohtama]
 
+- Fixed ghetto-ci not giving help if no command line arguments given [miohtama]
+
+- Buildout installation instructions updated [miohtama]
+
+- ghetto-ci was using bad mimetype on emails [miohtama]
 
 0.4.3 (2012-10-14)
 ------------------

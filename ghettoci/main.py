@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+# -*- coding: utf-8 -*-
 """
 
 Continuous integration server, ghetto style
@@ -249,8 +250,15 @@ import os
 import sys
 import subprocess
 from smtplib import SMTP_SSL, SMTP
-import urllib
-import urllib2
+
+try:
+    # Py3k
+    from urllib.parse import urlencode
+    from urllib.request import urlopen
+except ImportError:
+    # Bearded imports
+    from urllib import urlencode
+    from urllib2 import urlopen
 
 
 # Third party
@@ -554,8 +562,8 @@ class SkypeNotifier(object):
 
         # Construct full URL to sevabot zapier hook
 
-        post_data = urllib.urlencode(payload)
-        r = urllib2.urlopen(self.url, post_data)
+        post_data = urlencode(payload)
+        r = urlopen(self.url, post_data)
         r.read()  # Will abort on non-HTTP 200 answer
 
     def notify(self, subject, output):
@@ -590,6 +598,7 @@ envelopefrom=("Verbose Name <from@site.com> sender address in outgoing email", "
 receivers=("Notification email receives as comma separated string", "option"),
 force=("Run tests regardless if there have been any repository updates", "flag"),
 alwaysoutput=("Print test run output regardless whether test status has changed since the last run", "flag"),
+alwaysfailure=("Print test run failure output regardless whether test status has changed since the last run", "flag"),
 
 skypeurl=("Send build status to Skype chat (Sevabot integration)", "option"),
 
@@ -607,6 +616,7 @@ def main(
     receivers=None,
     force=False,
     alwaysoutput=False,
+    alwaysfailure=False,
     skypeurl=None,
     repository=None,
     statusfile=None,
@@ -674,15 +684,16 @@ def main(
         return 0
 
     # Test run status have changed since last run
-    if (test_success != status.test_success) or alwaysoutput:
+    # .. or test failed and we report failures always
+    if ((test_success != status.test_success) or alwaysoutput) or (alwaysfailure and not test_success):
 
         notification_body = NOTIFICATION_BODY_TEMPLATE % dict(commit=commit_id, author=commit_author,
             commit_message=commit_message, test_output=output)
 
         if test_success:
-            subject = "Test succeed for %s" % testcommand
+            subject = "☀ Test succeed for %s" % testcommand
         else:
-            subject = "Test fail for %s" % testcommand
+            subject = "☂ Test fail for %s" % testcommand
 
         notify(subject, notification_body)
 
