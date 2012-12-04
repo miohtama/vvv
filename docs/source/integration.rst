@@ -1,20 +1,20 @@
 ===================================
- Running and integration 
+ Running and integration
 ===================================
 
 .. contents :: :local:
 
-Introduction 
+Introduction
 ===================================
 
 VVV will run and try to download, detects validators by filetype
 in your source code repository and will try to download
 needed validators automatically if they are not installed.
-Installation is on-demand - if your project does not 
+Installation is on-demand - if your project does not
 contain PHP files no PHP validator will be installed.
 
-In the case validators cannot be automatically installed due to system 
-dependencies (e.g. Java) you'll get an error message 
+In the case validators cannot be automatically installed due to system
+dependencies (e.g. Java) you'll get an error message
 with a link to friendly installation instructions for a specific validator.
 
 Automatically installed files
@@ -30,7 +30,7 @@ to purge and reinstall files in this folder if needed.
 Running by hand
 ==================
 
-Here are instructions how to execute VVV in your 
+Here are instructions how to execute VVV in your
 project folder manually.
 
 Go to your source folder::
@@ -38,7 +38,7 @@ Go to your source folder::
     cd ~/mycodeproject
 
 Execute VVV command from :doc:`your virtualenv installation </installation>`::
-    
+
     ~/vvv-venv/bin/vvv .
 
 That's it, assuming the sane defaults work for you! VVV will be run against
@@ -65,12 +65,12 @@ Please use ``--help`` switch to see up-to-date command line help::
 
     vvv --help
 
-Important command line options    
+Important command line options
 ------------------------------------
 
 Reinstall - download and reinstall all automatically
 installed software in the case you had to abort the previous run
-and incomplete files 
+and incomplete files
 
 Verbose - output a lot of troubleshooting information::
 
@@ -78,9 +78,9 @@ Verbose - output a lot of troubleshooting information::
 
 Reinstall - reinstall all automatically downloaded files in ``.vvv`` folder::
 
-    vvv --reinstall 
+    vvv --reinstall
 
-Integrating with Git 
+Integrating with Git
 ===================================
 
 Local repository
@@ -99,21 +99,21 @@ If you have :doc:`a local installation using virtualenv </installation>`::
     # Run pre-commit hook installation
     vvv-install-git-pre-commit-hook .
 
-After this git will run VVV for all local commits 
+After this git will run VVV for all local commits
 using ``vvv-git-precommit-hook`` command and aborts
 the commit if the incoming files contain validation errors.
 
 .. note ::
 
-  VVV only validates files in the staging; files which are not 
+  VVV only validates files in the staging; files which are not
   added with *git add* are not validated.
 
 You may want to skip precommit hook when you commit to Git when
 you are intentionally committing bad code or you want to skip runnign validators::
-  
+
   git commit --no-verify -m "Those validator hooks prevent me committing crappy code, damn it!"
 
-More info 
+More info
 
 * http://book.git-scm.com/5_git_hooks.html
 
@@ -145,7 +145,7 @@ which is free for open source projects to use.
 
 VVV and Travic CI can be very easily integrated to your project:
 
-* Travis CI will automatically run after you commit changes to your project on Github 
+* Travis CI will automatically run after you commit changes to your project on Github
   (as the writing of thisGithub is the only supported VCS)
 
 * Travis CI will run VVV validation checks against your source code and reports possible violations.
@@ -156,7 +156,7 @@ VVV and Travic CI can be very easily integrated to your project:
 .. note ::
 
     You don't need to install any software or set-up any infrastructure. Travis CI
-    is provided free software-as-a-service for open source projects and all you 
+    is provided free software-as-a-service for open source projects and all you
     need to do this to register in Travis CI and drop one file in your
     public source code repository.
 
@@ -166,18 +166,18 @@ All you need to do is to
 
 * Turn on Travis for your repository - Travis will automatically list all your Github projects
 
-* Then visit the GitHub service hooks page for that project and paste your GitHub username and 
-  Travis token into the settings for the Travis service if it is not already pre-filled. 
+* Then visit the GitHub service hooks page for that project and paste your GitHub username and
+  Travis token into the settings for the Travis service if it is not already pre-filled.
   (should not be needed unless your repo belongs to Github organization)
 
-* Drop ``.travis.yml`` having the option to run VVV in your repository root (example below) 
+* Drop ``.travis.yml`` having the option to run VVV in your repository root (example below)
 
 * Drop ``validation-options.yaml`` and ``validation-files.yaml`` policies in your repository root (optional, but you most likely want to tune validation error levels)
 
 * You can also `include automatically generated status image to your Github README <http://about.travis-ci.org/docs/user/status-images/>`_
 
-* After you push in ``.travis.yml`` for the first time it will trigger the build which you can 
-  see on `travis-ci.org <http://travis-ci.org/>`_ *My Repositories* tab. It should appear there in seconds. 
+* After you push in ``.travis.yml`` for the first time it will trigger the build which you can
+  see on `travis-ci.org <http://travis-ci.org/>`_ *My Repositories* tab. It should appear there in seconds.
 
 Example ``.travis.yaml`` using the latest VVV release from `pypi.python.org <http://pypi.python.org>`_::
 
@@ -221,16 +221,16 @@ More info
 
 * https://github.com/travis-ci/travis-lint
 
-Integration with buildout / Plone / Zope 
+Integration with buildout / Plone / Zope
 ============================================
 
-`Plone CMS <http://plone.org>`_ community 
+`Plone CMS <http://plone.org>`_ community
 uses `buildout <http://www.buildout.org>`_
 tool to automatically configure, compile, install, etc.
 software.
 
-Because buildout determines Python environment under 
-which ``pylint`` must be executed some special considerations 
+Because buildout determines Python environment under
+which ``pylint`` must be executed some special considerations
 are needed.
 
 Add VVV to buildout
@@ -238,23 +238,19 @@ Add VVV to buildout
 
 This will install VVV with buildout run. In ``buildout.cfg``::
 
-  parts =
+    parts =
     ...
     vvv
 
-  # Install VVV under Python 3's virtualenv vvv-venv in buildout root
-  # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date
-  # for Python 3
-  [vvv]
-  recipe = plone.recipe.command
-  stop-on-error = true
-  location = ${buildout:directory}/vvv-venv
-  update-command = true
-  command = wget --no-check-certificate "https://raw.github.com/pypa/virtualenv/master/virtualenv.py" && python3 virtualenv.py -p python3 vvv-venv && . ./vvv-venv/bin/activate && pip install vvv 
+    # Install VVV under Python 3's virtualenv vvv-venv in buildout root
+    # If you get "SyntaxError: invalid syntax" make sure your operating system's virtualenv command is up-to-date
+    # for Python 3
+    [vvv]
+    recipe = plone.recipe.command
+    eggs =
+        vvv
 
-.. note ::
-
-     This assumes your operating system is using **python3** command. You can perfectly fine use commands **python3.2** or **python3.1** too.
+After running buildout you have ``bin/vvv`` and ``bin/ghetto-ci`` commands available.
 
 Add pylint to buildout
 ------------------------
@@ -277,15 +273,15 @@ First you need to install ``pylint`` using buildout. In your ``buildout.cfg`` ad
 Automatically install git pre-commit hooks
 -------------------------------------------
 
-You are probably checking out and managing source code with 
+You are probably checking out and managing source code with
 `Mr. Developer <http://pypi.python.org/pypi/mr.developer/>`_
 and buildout.
 
-The following snippet forces VVV pre-commit hook on checked out 
-Git repositories. Never commit bad code anymore! 
+The following snippet forces VVV pre-commit hook on checked out
+Git repositories. Never commit bad code anymore!
 
 .. note ::
-  
+
     **precommit-hooks** must come after **vvv** in buildout **parts** order.
 
 Exampe ``buildout.cfg`` code::
