@@ -4,6 +4,8 @@ Changelog
 0.4.4 (unreleased)
 ------------------
 
+- ghetto-ci Skype, always note on failure and pipethrough options added [miohtama]
+
 - Fixed ghetto-ci running on Python 3 [miohtama]
 
 - Fixed ghetto-ci not giving help if no command line arguments given [miohtama]

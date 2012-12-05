@@ -265,6 +265,7 @@ import pickle
 import os
 import sys
 import subprocess
+import select
 from smtplib import SMTP_SSL, SMTP
 
 try:
@@ -300,24 +301,42 @@ def split_first(line, separator):
     return parts[0], separator.join(parts[1:])
 
 
-def shell(cmdline):
+def shell(cmdline, pipe_through=False):
     """
     Execute a shell command.
 
+    :param cmdline: Command line as you would type it in shell
+
+    :param pipe_through: Echo the command back to stdout / stderr
+
     :returns: (exitcode, stdout / stderr output as string) tuple
+
     """
 
-    process = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
-    # XXX: Support stderr interleaving
-    out, err = process.communicate()
+    output = []
 
-    # :E1103: *%s %r has no %r member (but some types could not be inferred)*
-    # pylint: disable=E1103
-    out = out.decode("utf-8")
-    err = err.decode("utf-8")
+    while True:
+        reads = [p.stdout.fileno(), p.stderr.fileno()]
+        ret = select.select(reads, [], [])
 
-    return (process.returncode, out + err)
+        for fd in ret[0]:
+            if fd == p.stdout.fileno():
+                read = p.stdout.readline()
+                if pipe_through:
+                    sys.stdout.write(read)
+                output.append(read)
+            if fd == p.stderr.fileno():
+                read = p.stderr.readline()
+                if pipe_through:
+                    sys.stderr.write(read)
+                output.append(read)
+
+        if p.poll() != None:
+            break
+
+    return (p.returncode, "".join(output))
 
 
 class Status:
@@ -592,13 +611,13 @@ class SkypeNotifier(object):
             self.send_skype_message(subject)
 
 
-def run_tests(test_command):
+def run_tests(test_command, pipethrough):
     """
     Run testing command.
 
     Assume exit code = 0 -> test success
     """
-    exitcode, output = shell(test_command)
+    exitcode, output = shell(test_command, pipethrough)
     return (exitcode == 0, output)
 
 
@@ -613,8 +632,9 @@ smtpfrom=("Notification email From address", "option"),
 envelopefrom=("Verbose Name <from@site.com> sender address in outgoing email", "option"),
 receivers=("Notification email receives as comma separated string", "option"),
 force=("Run tests regardless if there have been any repository updates", "flag"),
-alwaysoutput=("Print test run output regardless whether test status has changed since the last run", "flag"),
-alwaysfailure=("Print test run failure output regardless whether test status has changed since the last run", "flag"),
+alwaysoutput=("Result notification regardless whether test status has changed since the last run", "flag"),
+alwaysfailure=("Failed result notification regardless whether test status has changed since the last run", "flag"),
+pipethrough=("Show test command stdout and stderr as it happens", "flag"),
 
 skypeurl=("Send build status to Skype chat (Sevabot integration)", "option"),
 
@@ -633,6 +653,7 @@ def main(
     force=False,
     alwaysoutput=False,
     alwaysfailure=False,
+    pipethrough=False,
     skypeurl=None,
     repository=None,
     statusfile=None,
@@ -659,6 +680,8 @@ def main(
 
     if not testcommand:
         sys.exit("No test command argument given")
+
+    # Create notification backends
 
     email_notifier = EmailNotifier(server=smtpserver, port=smtpport,
                       username=smtpuser, password=smtppassword, from_address=smtpfrom,
@@ -693,7 +716,7 @@ def main(
 
     # See if repository status has changed
     if commit_id != status.last_commit_id or force:
-        test_success, output = run_tests(testcommand)
+        test_success, output = run_tests(testcommand, pipethrough)
     else:
         # No new commits, nothing to do
         print("No changes in repo %s" % repository)
