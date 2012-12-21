@@ -34,10 +34,10 @@ You enter the folder and run ``vvv`` against the current folder (``.``) ::
 Installation
 ==============
 
-VVV is writte in in `Python <http://www.python.org>`_ programming language and is compatible with
+VVV is written in `Python <http://www.python.org>`_ programming language and is compatible with
 **Python interpreter 2.7 or later, including 3.x series**.
 
-Installating instructions for `Windows <http://miohtama.github.com/vvv/installation.html#windows>`_ -
+Installation instructions for `Windows <http://miohtama.github.com/vvv/installation.html#windows>`_ -
 `Linux <http://miohtama.github.com/vvv/installation.html#linux-ubuntu-debian>`_ -
 `OSX <http://miohtama.github.com/vvv/installation.html#osx>`_.
 
@@ -72,7 +72,7 @@ Features
 
 * Prevent committing hard source code breakpoints, like Python's ``import pdb ; pdb.set_trace()``
 
-* Support (on its way) for Subversion, Git, Github, Travis CI, Jenkings and other popular version control and continuous integration
+* Support (on its way) for Subversion, Git, Github, Travis CI, Jenkins and other popular version control and continuous integration
   systems
 
 Documentation and code
@@ -98,6 +98,3 @@ Author
 Mikko Ohtamaa (`blog <http://opensourcehacker.com>`_, `Twitter <http://twitter.com/moo9000>`_)
 
 Please use Github issue tracker to contact the authors in the project related matters.
-
-
-
